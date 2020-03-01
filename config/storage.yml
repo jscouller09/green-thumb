@@ -1,4 +1,4 @@
-cloudinart:
+cloudinary:
   service: cloudinary
 
 test:
