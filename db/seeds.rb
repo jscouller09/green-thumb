@@ -8,9 +8,16 @@
 
 
 # set admin user
+User.destroy_all
 User.create!(email: 'admin@greenthumb.rocks', password: '123456', admin: true)
+puts "Created admin user!"
 
-# initialize weather station
+# initialize weather station (if not already in DB)
 chc_stn = { id: 7_910_036, lon: 172.745865, lat: -43.645779,
             name: 'Christchurch City', country: 'NZ' }
-WeatherStation.create!(chc_stn)
+if WeatherStation.find(chc_stn[:id]).nil?
+  WeatherStation.create!(chc_stn)
+  puts "Added Christchurch 7910036 station to DB!"
+else
+  puts "Skipping Christchurch 7910036 station as already in DB..."
+end
