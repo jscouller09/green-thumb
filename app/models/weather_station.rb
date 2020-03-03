@@ -1,15 +1,23 @@
 require 'open-uri'
 
 class WeatherStation < ApplicationRecord
+  # associations
+  has_many :measurements
+  has_many :gardens
+
+  # validations
   validates :name, presence: true
   validates :country, presence: true, format: { with: /[A-Z]{2}/ }
   validates :lat,
             numericality: { greater_than_or_equal_to: -90,
-                            less_than_or_equal_to: 90 }
+                            less_than_or_equal_to: 90,
+                            message: "must be in range (-90, +90)" }
   validates :lon,
             numericality: { greater_than_or_equal_to: -180,
-                            less_than_or_equal_to: 180 }
+                            less_than_or_equal_to: 180,
+                            message: "must be in range (-180, +180)" }
 
+  # constants
   OW_BASE_URL = 'http://api.openweathermap.org/data'
 
   WEATHER_CODES = {
@@ -127,10 +135,16 @@ class WeatherStation < ApplicationRecord
     unless data[:rain].nil?
       data_to_keep[:rain_1h_mm] = data[:rain][:"1h"]
       data_to_keep[:rain_3h_mm] = data[:rain][:"3h"]
+    else
+      data_to_keep[:rain_1h_mm] = 0.0
+      data_to_keep[:rain_3h_mm] = 0.0
     end
     unless data[:snow].nil?
       data_to_keep[:snow_1h_mm] =  data[:snow][:"1h"]
       data_to_keep[:snow_3h_mm] = data[:snow][:"3h"]
+    else
+      data_to_keep[:snow_1h_mm] = 0.0
+      data_to_keep[:snow_3h_mm] = 0.0
     end
     data_to_keep
   end
