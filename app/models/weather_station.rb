@@ -1,7 +1,7 @@
 require 'open-uri'
 
 class WeatherStation < ApplicationRecord
-validates :name, presence: true
+  validates :name, presence: true
   validates :country, presence: true, format: { with: /[A-Z]{2}/ }
   validates :lat,
             numericality: { greater_than_or_equal_to: -90,
