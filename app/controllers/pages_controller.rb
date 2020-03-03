@@ -4,4 +4,9 @@ class PagesController < ApplicationController
   def home
     redirect_to "https://jscouller09.github.io/green-thumb-landing-page/"
   end
+
+  #GET  /dashboard
+  def dashboard
+
+  end
 end

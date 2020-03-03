@@ -26,6 +26,7 @@ Rails.application.routes.draw do
 
   #MVP - Tasks index | IMPORTANT create update and destroy (the creation)
   resources 'tasks', only: [:index, :create, :update, :destroy]
+
   #MVP - Mark task as complete
   patch 'tasks/:id/complete', to: 'tasks#mark_as_complete'
 
