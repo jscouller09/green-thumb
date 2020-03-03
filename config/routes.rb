@@ -16,8 +16,10 @@ Rails.application.routes.draw do
     #MVP - create plants inside a plot
     resources 'plants', only: [:create]
   end
-  #MVP - Watering see the all the watering, one specific watering and update
+  #MVP - Watering see the all the watering, and update the amount
   resources 'waterings', only: [:index, :show, :update]
+  #MVP - Mark the plants as watered
+  patch 'waterings/:id/complete', to: 'waterings#mark_as_complete'
 
   # MVP - Destroy plants
   resources 'plants', only: [:destroy]
@@ -25,10 +27,10 @@ Rails.application.routes.draw do
   #MVP - Tasks index | IMPORTANT create update and destroy (the creation)
   resources 'tasks', only: [:index, :create, :update, :destroy]
   #MVP - Mark task as complete
-  patch 'tasks/:id', to: 'tasks#mark_as_complete'
+  patch 'tasks/:id/complete', to: 'tasks#mark_as_complete'
 
   #IMPORTANT - mark a plot as watered
-  patch 'plots/:id', to: 'plots#complete_watering'
+  patch 'plots/:id/complete_waterings', to: 'plots#complete_watering'
 
   #IMPORTANT - See current weather, forecast and alerts
   resources 'weather_stations', only: [:show]
