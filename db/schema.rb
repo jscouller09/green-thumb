@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_01_183227) do
+ActiveRecord::Schema.define(version: 2020_03_03_121127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,31 @@ ActiveRecord::Schema.define(version: 2020_03_01_183227) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "measurements", force: :cascade do |t|
+    t.datetime "timestamp"
+    t.datetime "sunrise"
+    t.datetime "sunset"
+    t.string "timezone_UTC_offset"
+    t.float "temp_c"
+    t.integer "humidity_perc"
+    t.integer "pressure_hPa"
+    t.float "wind_speed_mps"
+    t.integer "wind_direction_deg"
+    t.integer "cloudiness_perc"
+    t.float "rain_1h_mm"
+    t.float "rain_3h_mm"
+    t.float "snow_1h_mm"
+    t.float "snow_3h_mm"
+    t.integer "code"
+    t.string "main"
+    t.string "description"
+    t.string "icon"
+    t.bigint "weather_station_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["weather_station_id"], name: "index_measurements_on_weather_station_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -47,6 +72,15 @@ ActiveRecord::Schema.define(version: 2020_03_01_183227) do
     t.boolean "admin", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "weather_stations", force: :cascade do |t|
+    t.string "name"
+    t.string "country"
+    t.float "lat"
+    t.float "lon"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
