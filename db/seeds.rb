@@ -15,7 +15,9 @@ puts "Created admin user!"
 # initialize weather station (if not already in DB)
 chc_stn = { id: 7_910_036, lon: 172.745865, lat: -43.645779,
             name: 'Christchurch City', country: 'NZ' }
-if WeatherStation.find(chc_stn[:id]).nil?
+begin
+  WeatherStation.find(chc_stn[:id]).nil?
+rescue ActiveRecord::RecordNotFound
   WeatherStation.create!(chc_stn)
   puts "Added Christchurch 7910036 station to DB!"
 else
