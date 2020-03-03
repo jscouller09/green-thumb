@@ -15,11 +15,12 @@ class User < ApplicationRecord
   has_many :gardens
   has_many :tasks
   has_many :messages
+  has_many :user_conversations
   has_many :conversations, through: :user_conversations
 
 
   #method to access user full name
   def full_name
-    "#{first_name} #{last_name}"
+    "#{first_name.capitalize} #{last_name.capitalize}"
   end
 end
