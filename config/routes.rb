@@ -35,7 +35,7 @@ Rails.application.routes.draw do
   #IMPORTANT - See current weather, forecast and alerts
   resources 'weather_stations', only: [:show]
 
-  #NICE TO HAVE - Display all conversations ans create a message
+  #NICE TO HAVE - Display all conversations and create a message
   resources 'conversations', only: [:index, :show] do
     resources 'messages', only:[:create]
   end
