@@ -1,0 +1,2 @@
+class Converation < ApplicationRecord
+end
