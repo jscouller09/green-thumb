@@ -1,6 +1,6 @@
 class PlantType < ApplicationRecord
   #associations
-  belongs_to :plant
+  has_many :plants
 
   #a plant type as a name
   validates :name, presence: true
