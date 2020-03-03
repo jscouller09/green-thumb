@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_03_165929) do
+ActiveRecord::Schema.define(version: 2020_03_03_175100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_165929) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "converations", force: :cascade do |t|
+  create_table "conversations", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -203,4 +203,6 @@ ActiveRecord::Schema.define(version: 2020_03_03_165929) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "messages", "conversations"
+  add_foreign_key "messages", "users"
 end
