@@ -2,7 +2,7 @@ class WateringsController < ApplicationController
 
   # GET /waterings  waterings#index
   def index
-    authorize Watering
+    authorize @watering
     @waterings = policy_scope(Watering)
   end
 
