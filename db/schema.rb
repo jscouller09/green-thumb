@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 
-ActiveRecord::Schema.define(version: 2020_03_04_124439) do
+ActiveRecord::Schema.define(version: 2020_03_04_134420) do
 
 
   # These are extensions that must be enabled in order to support this database
@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(version: 2020_03_04_124439) do
     t.bigint "plant_id"
     t.string "description"
     t.date "due_date"
-    t.boolean "completed", default: false
+    t.boolean "completed", default: false, null: false
     t.string "priority"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -181,17 +181,17 @@ ActiveRecord::Schema.define(version: 2020_03_04_124439) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "admin", default: false
+    t.boolean "admin", default: false, null: false
     t.string "first_name"
     t.string "last_name"
-    t.boolean "mentor", default: false
+    t.boolean "mentor", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   create_table "waterings", force: :cascade do |t|
     t.bigint "plant_id"
-    t.boolean "done", default: false
+    t.boolean "done", default: false, null: false
     t.float "ammount_L", default: 0.0, null: false
     t.float "ammount_mm", default: 0.0, null: false
     t.datetime "created_at", null: false
