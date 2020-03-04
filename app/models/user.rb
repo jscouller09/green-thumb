@@ -12,10 +12,10 @@ class User < ApplicationRecord
   validates :last_name, presence: true
 
   #user associations
-  has_many :gardens
-  has_many :tasks
-  has_many :messages
-  has_many :user_conversations
+  has_many :gardens, dependent: :destroy
+  has_many :tasks, dependent: :destroy
+  has_many :messages, dependent: :destroy
+  has_many :user_conversations, dependent: :destroy
   has_many :conversations, through: :user_conversations
 
 

@@ -3,7 +3,7 @@ class Garden < ApplicationRecord
   belongs_to: weather_station
   belongs_to: climate_zone
   belongs_to: user
-  has_many: plots
+  has_many: plots, dependent: :destroy
   has_many: plants, through: :plots
   has_many: waterings, through: :plants
   has_many: plant_types, through: :plants
