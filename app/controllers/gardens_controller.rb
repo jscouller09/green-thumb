@@ -1,9 +1,24 @@
 class GardensController < ApplicationController
 
+  #GET  /gardens
+  def index
+    @gardens = policy_scope(Garden)
+    if @gardens.empty?
+      # render the index page with an option to create a new garden
+      render :index
+    else
+      # go to show page of first garden
+      # may add more gardens later but for now 1 garden per user
+      redirect_to garden_path(@gardens.first)
+    end
+  end
+
   #GET  /gardens/:id
   def show
     @garden = Garden.find(params[:id])
+    @plots = @garden.plots
     authorize @garden
+    # authorize @plots
   end
 
   #GET  /gardens/new

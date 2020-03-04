@@ -1,5 +1,9 @@
 class PlotsController < ApplicationController
 
+  # GET /plots/:id
+  def show
+  end
+
   # GET /gardens/:garden_id/plots/new
   def new
   end
@@ -11,6 +15,7 @@ class PlotsController < ApplicationController
   # GET /plots/:id/edit
   def edit
   end
+
   # PATCH /plots/:id/
   def update
   end
