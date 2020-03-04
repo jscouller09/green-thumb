@@ -1,6 +1,6 @@
 class PlantType < ApplicationRecord
   #associations
-  has_many :plants
+  has_many :plants, dependent: :destroy
 
   #a plant type as a name
   validates :name, presence: true

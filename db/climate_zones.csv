@@ -1,0 +1,9 @@
+zone,hemisphere,growing_season_days,start_of_growing_season
+Polar/subpolar,northern,30,01/06/2020
+Temperate,northern,120,01/05/2020
+Subtropical,northern,180,01/03/2020
+Tropical,northern,365,01/01/2020
+Tropical,southern,365,01/01/2020
+Subtropical,southern,180,01/09/2020
+Temperate,southern,120,01/11/2020
+Polar/subpolar,southern,30,01/01/2020
