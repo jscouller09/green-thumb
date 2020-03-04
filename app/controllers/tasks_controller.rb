@@ -10,8 +10,12 @@ class TasksController < ApplicationController
     @task = Task.new(task_params)
     authorize @task
     @task.user = current_user
-    @task.save
+    if @task.save
+      flash[:notice] = "Your new task has been added."
     redirect_to tasks_path
+    else
+      render "index"
+    end
   end
 
   # PATCH /tasks/:id
@@ -27,7 +31,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     authorize @task
     @task.destroy
-    redirect_to dashboard_path
+    redirect_to tasks_path
 
   end
 

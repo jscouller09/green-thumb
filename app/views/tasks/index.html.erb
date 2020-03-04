@@ -1,8 +1,12 @@
 <h1>Tasks</h1>
 <% @tasks.each do |task| %>
   <h2><%= task.description %></h2>
-
+  <% if current_user %>
+    <%= link_to "delete task", task_path(task),
+        method: "DELETE",
+        data: { confirm: "Are You Sure You Want to Destroy #{task.description}?"}, class: "btn-rounded" %>
+  <% end %>
 <% end %>
 
-<p>add a task</p>
+<p>Add a task</p>
 <%= render "task_form", task: Task.new %>
