@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get 'dashboard', to: 'pages#dashboard'
 
   # MVP - Create a garden and plots into the garden
-  resources 'gardens', only: [:new, :create] do
+  resources 'gardens', only: [:new, :create, :show] do
     resources 'plots', only: [:new, :create]
   end
 
