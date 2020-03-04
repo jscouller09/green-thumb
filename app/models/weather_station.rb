@@ -105,6 +105,30 @@ class WeatherStation < ApplicationRecord
     forecast
   end
 
+  def self.find_by_coords(lat, lon)
+    # build url
+    url = "#{OW_BASE_URL}/2.5/weather?lat=#{lat}&lon=#{lon}"
+    url += "&appid=#{ENV['OW_API_KEY']}&units=metric"
+    # send query
+    # query API and return JSON
+    serialised_data = URI.open(url).read
+    data = JSON.parse(serialised_data, symbolize_names: true)
+    # check if this station exists in the DB or not
+    begin
+      WeatherStation.find(data[:id])
+    rescue ActiveRecord::RecordNotFound
+      # build weather station instance, save to DB and return it
+      return WeatherStation.create(id: data[:id],
+                                   name: data[:name],
+                                   country: data[:sys][:country],
+                                   lat: data[:coord][:lat],
+                                   lon: data[:coord][:lon])
+    else
+      # weather station exists, use it
+      return WeatherStation.find(data[:id])
+    end
+  end
+
   private
 
   def send_query(url)
