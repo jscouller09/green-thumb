@@ -2,6 +2,7 @@ class Plant < ApplicationRecord
   # associations
   belongs_to :plot
   has_many :tasks, dependent: :destroy
+  has_many :waterings, dependent: :destroy
   belongs_to :plant_type
 
   # validations

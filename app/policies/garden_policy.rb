@@ -1,7 +1,12 @@
 class GardenPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.all
+      if user.admin?
+        scope.all
+      else
+        # user can only have access to their own gardens
+        user.gardens
+      end
     end
   end
 
