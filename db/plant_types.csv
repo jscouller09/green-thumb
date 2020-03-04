@@ -1,3 +1,3 @@
-name,scientific_name,spacing_mm,height_mm,earliest_plant_day,sunshine,kc_ini,kc_mid,kc_end,L_ini_days,L_dev_days,L_mid_days,L_end_days,icon,photo_url
-Tomatoes,Solanum lycopersicum,600,1200,01/11/2020,full sun,,1.15,0.8,35,40,50,30,,https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325515/green-thumb/tomato_hgte3q.jpg
-Courgette,Cucurbita pepo,800,600,01/11/2020,full sun,,0.95,0.76,25,35,25,15,,https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325509/green-thumb/zuchinni_ift9bx.jpg
+name,scientific_name,spacing_mm,height_mm,earliest_plant_day,sunshine,kc_ini,kc_mid,kc_end,l_ini_days,l_dev_days,l_mid_days,l_end_days,icon,photo_url
+Tomatoes,Solanum lycopersicum,600,1200,01/11/2020,full sun,1,1.15,0.8,35,40,50,30,,https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325515/green-thumb/tomato_hgte3q.jpg
+Courgette,Cucurbita pepo,800,600,01/11/2020,full sun,1,0.95,0.76,25,35,25,15,,https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325509/green-thumb/zuchinni_ift9bx.jpg

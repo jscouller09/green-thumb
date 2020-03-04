@@ -21,13 +21,13 @@ def generate_model_from_csv(model_class, csv_file)
     begin
       valid = model.save
     rescue ActiveRecord::RecordNotUnique
-      puts "Couldn't create row #{i} from #{csv_file}. Already in DB!"
+      puts "Couldn't create row #{i+1} from #{csv_file}. Already in DB!"
     else
       unless valid
-        puts "Couldn't create row #{i} from #{csv_file}. Validation error?"
+        puts "Couldn't create row #{i+1} from #{csv_file}. Validation error?"
         model.errors.messages.each { |k, v| puts "\t#{k}: #{v}"}
       else
-        puts "Made model for row #{i} from #{csv_file}."
+        puts "Made model for row #{i+1} from #{csv_file}."
       end
     end
   end
@@ -39,5 +39,6 @@ generate_model_from_csv(User, 'users.csv')
 generate_model_from_csv(ClimateZone, 'climate_zones.csv')
 generate_model_from_csv(Garden, 'gardens.csv')
 generate_model_from_csv(Plot, 'plots.csv')
-generate_model_from_csv(PlantTypes, 'plant_types.csv')
+generate_model_from_csv(PlantType, 'plant_types.csv')
 generate_model_from_csv(Plant, 'plants.csv')
+generate_model_from_csv(Task, 'tasks.csv')
