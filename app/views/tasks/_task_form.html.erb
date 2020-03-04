@@ -1,5 +1,6 @@
 
-<%= simple_form_for [task], html: { hidden: true}, method: "post" do |form| %>
+<%= simple_form_for (task) do |form| %>
   <%= form.input :description, as: :text %>
   <%= form.button :submit %>
 <% end %>
+
