@@ -105,6 +105,12 @@ class WeatherStation < ApplicationRecord
     forecast
   end
 
+  def self.find_by_coords(lat, lon)
+    # build url
+    url = "#{OW_BASE_URL}/2.5/weather?lat=#{lat}&lon=#{lon}"
+    url += "&appid=#{ENV['OW_API_KEY']}&units=metric"
+  end
+
   private
 
   def send_query(url)

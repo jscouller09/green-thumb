@@ -1,8 +1,12 @@
 source 'https://rubygems.org'
 ruby '2.6.5'
 
+# custom setup
+gem 'geocoder'
 gem 'pundit'
 gem 'cloudinary', '~> 1.12.0'
+
+# from template
 gem 'bootsnap', require: false
 gem 'devise'
 gem 'jbuilder', '~> 2.0'

@@ -1,7 +1,7 @@
 class Garden < ApplicationRecord
   # associations
   belongs_to :weather_station
-  belongs_to :climate_zone
+  belongs_to :climate_zone, optional: true
   belongs_to :user
   has_many :plots, dependent: :destroy
   has_many :plants, through: :plots
@@ -23,4 +23,8 @@ class Garden < ApplicationRecord
                                        allow_nil: true }
   validates :center_y, numericality: { only_integer: true,
                                        allow_nil: true }
+
+  # geocode address
+  geocoded_by :address
+  after_validation :geocode, if: :will_save_change_to_address?
 end
