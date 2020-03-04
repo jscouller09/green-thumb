@@ -1,0 +1,4 @@
+email,password,first_name,last_name,admin,mentor
+admin@greenthumb.rocks,123456,Garden,Guru,1,0
+tom.bombadil@LOTR.com,123456,Tom,Bombadil,0,1
+sam.gamgee@LOTR.com,123456,Samwise,Gamgee,0,0

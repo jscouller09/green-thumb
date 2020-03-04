@@ -10,7 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_03_190116) do
+
+ActiveRecord::Schema.define(version: 2020_03_04_124439) do
+
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,11 +39,12 @@ ActiveRecord::Schema.define(version: 2020_03_03_190116) do
   end
 
   create_table "climate_zones", force: :cascade do |t|
-    t.string "zone_number"
+    t.string "zone"
     t.integer "growing_season_days"
     t.date "start_of_growing_season"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "hemisphere"
   end
 
   create_table "conversations", force: :cascade do |t|
