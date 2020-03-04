@@ -33,8 +33,11 @@ def generate_model_from_csv(model_class, csv_file)
   end
 end
 
-# generate weather stations
+# generate seeds for different models
 generate_model_from_csv(WeatherStation, 'weather_stations.csv')
-
-# generate users
-generate_model_from_csv(WeatherStation, 'users.csv')
+generate_model_from_csv(User, 'users.csv')
+generate_model_from_csv(ClimateZone, 'climate_zones.csv')
+generate_model_from_csv(Garden, 'gardens.csv')
+generate_model_from_csv(Plot, 'plots.csv')
+generate_model_from_csv(PlantTypes, 'plant_types.csv')
+generate_model_from_csv(Plant, 'plants.csv')
