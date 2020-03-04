@@ -1,12 +1,20 @@
 <h1>Tasks</h1>
 <% @tasks.each do |task| %>
   <h2><%= task.description %></h2>
-  <% if current_user %>
+  <% if current_user && policy(task).destroy? %>
     <%= link_to "delete task", task_path(task),
         method: "DELETE",
-        data: { confirm: "Are You Sure You Want to Destroy #{task.description}?"}, class: "btn-rounded" %>
+        data: { confirm: "Are You Sure You Want to Destroy #{task.description}?"} %>
+  <% end %>
+  <% if current_user && policy(task).update? %>
+    <%= link_to "edit", edit_task_path(task) %>
+  <% end %>
+  <% if current_user && policy(task).mark_as_complete? %>
+    <%= link_to "complete?", "/tasks/#{task.id}/complete",
+        method: "PATCH",
+        data: { confirm: "Are You Sure You Want to complete this task? #{task.description}?"} %>
   <% end %>
 <% end %>
 
 <p>Add a task</p>
-<%= render "task_form", task: Task.new %>
+<%= render "task_form", task: @task %>

@@ -2,7 +2,8 @@ class TasksController < ApplicationController
 
   # GET /tasks
   def index   #Task.all
-    @tasks = policy_scope(Task)
+    @tasks = policy_scope(Task).where(completed: false)
+    @task = Task.new
   end
 
   # POST  /tasks/
@@ -12,17 +13,29 @@ class TasksController < ApplicationController
     @task.user = current_user
     if @task.save
       flash[:notice] = "Your new task has been added."
-    redirect_to tasks_path
+      redirect_to tasks_path
     else
       render "index"
     end
+  end
+  # GET /tasks/:id/edit
+  def edit
+    @tasks = policy_scope(Task).where(completed: false)
+    @task = Task.find(params[:id])
+    authorize @task
+    render 'index'
   end
 
   # PATCH /tasks/:id
   def update
     @task = Task.find(params[:id])
     authorize @task
-    @task.save
+    @task.update(task_params)
+    if @task.update(task_params)
+      redirect_to tasks_path
+    else
+      render 'index'
+    end
   end
 
 
@@ -31,19 +44,24 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     authorize @task
     @task.destroy
+    flash[:notice] = "Your task has been deleted."
     redirect_to tasks_path
 
   end
 
   # PATCH tasks/:id/complete
   def mark_as_complete
+    @task = Task.find(params[:id])
+    authorize @task
+    @task.update(completed: true)
+    redirect_to tasks_path
   end
 
 private
 
 def task_params
     params.require(:task).permit(:description)
-  end
+end
 
 end
 
