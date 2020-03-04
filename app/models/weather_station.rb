@@ -109,6 +109,11 @@ class WeatherStation < ApplicationRecord
     # build url
     url = "#{OW_BASE_URL}/2.5/weather?lat=#{lat}&lon=#{lon}"
     url += "&appid=#{ENV['OW_API_KEY']}&units=metric"
+    # send query
+    data = send_query(url)
+    binding.pry
+    # build weather station instance and return it
+
   end
 
   private

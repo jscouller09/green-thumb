@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_04_191517) do
+ActiveRecord::Schema.define(version: 2020_03_04_202905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,8 +63,8 @@ ActiveRecord::Schema.define(version: 2020_03_04_191517) do
     t.bigint "climate_zone_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.float "latitude"
-    t.float "longitude"
+    t.float "lat"
+    t.float "lon"
     t.index ["climate_zone_id"], name: "index_gardens_on_climate_zone_id"
     t.index ["user_id"], name: "index_gardens_on_user_id"
     t.index ["weather_station_id"], name: "index_gardens_on_weather_station_id"

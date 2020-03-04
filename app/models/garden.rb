@@ -26,5 +26,20 @@ class Garden < ApplicationRecord
 
   # geocode address
   geocoded_by :address
-  after_validation :geocode, if: :will_save_change_to_address?
+  validates_with AddressValidator, fields: [:address, :lat, :lon]
+
+  def geocode_address!
+    # takes a garden instance and adds values for lat/lon using geocoder
+    # first make sure we have an address
+    return false unless self.address
+    # lookup the address
+    results = Geocoder.search(self.address)
+    # if no results found, return false
+    return false if results.empty?
+    # take the first result and assign coordinates
+    self.lat = results.first.coordinates[0]
+    self.lon = results.first.coordinates[1]
+    return true
+  end
+
 end
