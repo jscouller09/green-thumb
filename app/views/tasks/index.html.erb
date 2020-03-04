@@ -1,6 +1,8 @@
 <h1>Tasks</h1>
 <% @tasks.each do |task| %>
   <h2><%= task.description %></h2>
+  <p><%= task.due_date %></p>
+  <span><%= task.priority %></span>
   <% if current_user && policy(task).destroy? %>
     <%= link_to "delete task", task_path(task),
         method: "DELETE",

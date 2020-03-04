@@ -30,7 +30,6 @@ class TasksController < ApplicationController
   def update
     @task = Task.find(params[:id])
     authorize @task
-    @task.update(task_params)
     if @task.update(task_params)
       redirect_to tasks_path
     else
@@ -60,7 +59,7 @@ class TasksController < ApplicationController
 private
 
 def task_params
-    params.require(:task).permit(:description)
+    params.require(:task).permit(:description, :due_date, :priority)
 end
 
 end
