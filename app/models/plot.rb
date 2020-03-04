@@ -3,8 +3,8 @@ class Plot < ApplicationRecord
   belongs_to :garden
   has_many :plants, dependent: :destroy
   has_many :waterings, through: :plants
-  has_many: plant_types, through: :plants
-  has_many: tasks, through: :plants
+  has_many :plant_types, through: :plants
+  has_many :tasks, through: :plants
 
   # validations
   validates_associated :garden

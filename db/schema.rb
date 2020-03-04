@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_04_134420) do
+ActiveRecord::Schema.define(version: 2020_03_04_163857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,13 +110,13 @@ ActiveRecord::Schema.define(version: 2020_03_04_134420) do
     t.integer "height_mm"
     t.date "earliest_plant_day"
     t.string "sunshine"
-    t.float "kc_ini"
-    t.float "kc_mid"
-    t.float "kc_end"
-    t.integer "L_ini_days"
-    t.integer "L_dev_days"
-    t.integer "L_mid_days"
-    t.integer "L_end_days"
+    t.float "kc_ini", default: 1.0
+    t.float "kc_mid", default: 1.0
+    t.float "kc_end", default: 1.0
+    t.integer "l_ini_days"
+    t.integer "l_dev_days"
+    t.integer "l_mid_days"
+    t.integer "l_end_days"
     t.string "photo_url"
     t.string "icon"
     t.datetime "created_at", null: false
