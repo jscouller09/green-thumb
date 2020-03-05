@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get 'dashboard', to: 'pages#dashboard'
 
   # MVP - Create a garden and plots into the garden
-  resources 'gardens', only: [:new, :create, :show] do
+  resources 'gardens', only: [:new, :create, :show, :index] do
     resources 'plots', only: [:new, :create]
   end
 
@@ -36,7 +36,7 @@ Rails.application.routes.draw do
   #IMPORTANT - mark a plot as watered
 
   #IMPORTANT - See current weather, forecast and alerts
-  resources 'weather_stations', only: [:show]
+  resources 'weather_stations', only: [:index, :show]
 
   #NICE TO HAVE - Display all conversations and create a message
   resources 'conversations', only: [:index, :show] do

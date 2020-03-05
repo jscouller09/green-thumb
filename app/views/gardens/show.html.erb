@@ -1,1 +1,19 @@
 <h1><%= @garden.name %></h1>
+
+
+<% if @plots.empty? %>
+  <!-- Let the user know they don't have any plots -->
+  <p>Sorry! You don't have any plots yet</p>
+<% else %>
+  <!-- display all the users plots as cards -->
+  <ul>
+    <% @plots.each do |plot| %>
+      <li><%= link_to plot.name, plot_path(plot) %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<!-- Links -->
+<%= link_to "Make a new plot", new_garden_plot_path(@garden) %>
+<br>
+<%= link_to "Back to dashboard", dashboard_path %>

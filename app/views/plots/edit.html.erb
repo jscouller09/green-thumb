@@ -1,0 +1,9 @@
+<h1>Edit your plot</h1>
+
+<%= simple_form_for @plot, method: 'patch' do |f| %>
+  <%= f.input :name %>
+  <%= f.input :length_mm, label: 'Length (m)' %>
+  <%= f.input :width_mm, label: 'Width (m)' %>
+  <%= f.button :submit, value = 'Edit', class: 'btn btn-primary' %>
+<% end %>
+

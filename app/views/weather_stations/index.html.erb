@@ -1,0 +1,9 @@
+<h1>Weather Stations</h1>
+<ul>
+  <% @weather_stations.each do |station| %>
+    <% link_text = "#{station.name}, #{station.country}" %>
+    <li>
+      <%= link_to link_text, weather_station_path(station) %>
+    </li>
+  <% end %>
+</ul>

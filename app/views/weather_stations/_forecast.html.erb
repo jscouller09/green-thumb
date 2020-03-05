@@ -1,0 +1,17 @@
+<div>
+  <h3><%= day %></h3>
+  <ul>
+    <li><%= "Avg temp (°C): #{data[:temp_c_avg].round(1)}" %></li>
+    <li><%= "Min temp (°C): #{data[:temp_c_min].round(1)}" %></li>
+    <li><%= "Avg temp (°C): #{data[:temp_c_max].round(1)}" %></li>
+    <li><%= "Rain (mm): #{data[:rain_mm_tot].round(1)}" %></li>
+    <% unless data[:snow_mm_tot].nil? %>
+      <li><%= "Snow (mm): #{data[:snow_mm_tot].round(1)}" %></li>
+    <% end %>
+    <li><%= "Avg humidity (%): #{data[:humidity_perc_avg].round(0)}" %></li>
+    <li><%= "Wind (km/h): #{data[:wind_direction]} #{(data[:wind_speed_mps_avg]*3.6).round(0)}" %></li>
+    <li><%= "Description: #{data[:description]}" %></li>
+    <li><%= image_tag "weather_icons/#{data[:icon]}.png" %></li>
+  </ul>
+</div>
+

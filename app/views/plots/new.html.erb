@@ -1,0 +1,9 @@
+<h1>Add a new plot to your garden</h1>
+
+<%= simple_form_for [@garden, @plot] do |f| %>
+  <%= f.input :name %>
+  <%= f.input :length_mm, as: :float, label: 'Length (m)' %>
+  <%= f.input :width_mm, as: :float, label: 'Width (m)' %>
+  <%= f.button :submit, value = 'Add', class: 'btn btn-primary' %>
+<% end %>
+
