@@ -15,14 +15,17 @@ class WateringsController < ApplicationController
 
   # GET plots/:plot_id/waterings
   def watering_plot
-
-    @waterings =policy_scope(Watering)
+    @waterings = policy_scope(Watering)
     authorize @waterings
-
+    @plot = Plot.new
+    @plot['id'] = params[:id]
+    @user = current_user
+    @plants = @user.gardens.first.plants
   end
 
   #PATCH waterings/:id
   def update
+
   end
 
   #PATCH waterings/:id/complete
