@@ -113,7 +113,7 @@ class WeatherStation < ApplicationRecord
     # get forecast data
     forecast = download_3hrly_5d_forecast
     # seperate data into measurements for different days
-    today = summary[:now][:timestamp].to_date
+    summary[:today] = summary[:now][:timestamp].to_date
     data = {}
     forecast.each do |prediction|
         # get the full name of the day

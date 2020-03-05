@@ -22,6 +22,15 @@ class WeatherStationsController < ApplicationController
     @station = WeatherStation.find(params[:id])
     authorize @station
     # get the current weather and forecast summary
-    @weather = @station.weather_summary
+    weather = @station.weather_summary
+    raise
+    # unpack current weather and forecast
+    @current = weather[:now]
+    # note forecast shown is only next 3 days (excluding today)
+    # could change later so forecast for remainder of today is shown also?
+    @forecast = {}
+    3.times do |d|
+      @forecast[] weather[weather[:today]+1
+    end
   end
 end
