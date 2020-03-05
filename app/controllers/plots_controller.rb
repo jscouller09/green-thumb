@@ -2,6 +2,8 @@ class PlotsController < ApplicationController
 
   # GET /plots/:id
   def show
+    @plot = Plot.find(params[:id])
+    authorize @plot
   end
 
   # GET /gardens/:garden_id/plots/new
@@ -28,4 +30,9 @@ class PlotsController < ApplicationController
   def complete_watering
   end
 
+  private
+
+  def plot_params
+    params.require(:plot).permit(:name, :garden)
+  end
 end
