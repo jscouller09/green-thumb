@@ -3,6 +3,7 @@ class WateringsController < ApplicationController
   # GET /waterings
   def watering_overview
     @waterings = policy_scope(Watering)
+    authorize @waterings
     @watering = Watering.new
     @garden = policy_scope(Garden).first
     @plots = []

@@ -1,5 +1,5 @@
 <h1>Watering board</h1>
 <% @plots.each do |plot| %>
   <%= plot.name %>
-  <%= link_to "watering task", watering_path(plot)%>
+  <%= link_to "watering task", plot_waterings_path(plot)%>
 <% end %>
