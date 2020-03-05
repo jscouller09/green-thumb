@@ -53,7 +53,6 @@ class PlotsController < ApplicationController
     else
       render 'edit'
     end
-
   end
 
   # DELETE  /plots/:id
