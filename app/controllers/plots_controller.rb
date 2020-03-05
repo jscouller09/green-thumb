@@ -20,6 +20,8 @@ class PlotsController < ApplicationController
   def create
     @garden = Garden.find(params[:garden_id])
     @plot = Plot.new(plot_params)
+    authorize @plot
+    authorize @garden
     # turn the width and length into mm
     @plot.length_mm = ((params[:plot][:length_mm].to_f)* 1000).to_i
     @plot.width_mm = ((params[:plot][:width_mm].to_f)* 1000).to_i
@@ -34,8 +36,6 @@ class PlotsController < ApplicationController
       else
         render :new
       end
-    authorize @plot
-    authorize @garden
   end
 
   # GET /plots/:id/edit
@@ -59,8 +59,8 @@ class PlotsController < ApplicationController
   # DELETE  /plots/:id
   def destroy
     @plot = Plot.find(params[:id])
-    @garden = @plot.garden
     authorize @plot
+    @garden = @plot.garden
     @plot.destroy
     flash[:notice] = "Your plot has been deleted."
     redirect_to garden_path(@garden)
