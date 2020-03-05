@@ -1,15 +1,23 @@
 class WateringsController < ApplicationController
 
-  # GET /waterings  waterings#index
-  def index
-    authorize @watering
+  # GET /waterings
+  def watering_overview
     @waterings = policy_scope(Watering)
+    @watering = Watering.new
+    @garden = policy_scope(Garden).first
+    @plots = []
+    @garden.plots.each do |plot|
+      @plots << plot unless plot.waterings.empty?
+    end
+
   end
 
-  # GET /waterings/:id  waterings#show
-  def show
-    authorize @watering
-    @watering = Watering.find(params[:id])
+  # GET plots/:plot_id/waterings
+  def watering_plot
+
+    @waterings =policy_scope(Watering)
+    authorize @waterings
+
   end
 
   #PATCH waterings/:id

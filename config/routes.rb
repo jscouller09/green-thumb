@@ -13,13 +13,15 @@ Rails.application.routes.draw do
 
   # MVP- Update and destroy plots
   resources 'plots', only: [:update, :edit, :destroy] do
+    get '/waterings', to: "waterings#watering_plot"
     #MVP - create plants inside a plot
     resources 'plants', only: [:create]
   end
   #MVP - Watering see the all the watering, and update the amount
-  resources 'waterings', only: [:index, :show, :update]
+  get 'waterings', to: "waterings#watering_overview"
   #MVP - Mark the plants as watered
   patch 'waterings/:id/complete', to: 'waterings#mark_as_complete'
+
 
   # MVP - Destroy plants
   resources 'plants', only: [:destroy]

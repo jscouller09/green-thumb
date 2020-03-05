@@ -6,16 +6,17 @@ class WateringPolicy < ApplicationPolicy
         scope.all
         # Normal user can only see their own waterings
       else
-        scope.where(user: user)
+        # the User can see only the first garden for now but later maybe more
+        user.gardens.first.waterings
       end
     end
   end
   # only the current user can see his watering board.
-  def index?
+  def watering_overview?
     user.present?
   end
 
-  def show?
+  def watering_plot?
     user.present?
   end
     # Only and admin or the current user can update a task
