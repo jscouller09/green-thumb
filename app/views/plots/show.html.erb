@@ -1,6 +1,12 @@
 <h1><%= @plot.name %></h1>
 
+<!-- List all the plant in the plot -->
 <p> <% @plot.plants.each do|plant| %>
     <p><%=plant.plant_type.name  %></p>
   <% end %>
 </p>
+
+<!-- Links -->
+<%= link_to "Edit Plot", edit_plot_path(@plot) %>
+<%= link_to "Delete plot", plot_path(@plot), method: 'delete',
+  data: { confirm: "Are you sure you want to delete #{@plot.name}?"} %>

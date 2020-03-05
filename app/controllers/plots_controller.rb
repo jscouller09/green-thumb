@@ -40,14 +40,31 @@ class PlotsController < ApplicationController
 
   # GET /plots/:id/edit
   def edit
+    @plot = Plot.find(params[:id])
+    authorize @plot
   end
 
   # PATCH /plots/:id/
   def update
+    @plot = Plot.find(params[:id])
+    authorize @plot
+    if @plot.update(plot_params)
+      redirect_to plot_path
+    else
+      render 'edit'
+    end
+
   end
 
   # DELETE  /plots/:id
   def destroy
+    @plot = Plot.find(params[:id])
+    @garden = @plot.garden
+    authorize @plot
+    @plot.destroy
+    flash[:notice] = "Your plot has been deleted."
+    redirect_to garden_path(@garden)
+
   end
 
   # # PATCH plots/:id/complete_waterings
