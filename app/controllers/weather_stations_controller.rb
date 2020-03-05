@@ -23,6 +23,5 @@ class WeatherStationsController < ApplicationController
     authorize @station
     # get the current weather and forecast summary
     @weather = @station.weather_summary
-    binding.pry
   end
 end
