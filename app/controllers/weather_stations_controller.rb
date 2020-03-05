@@ -23,14 +23,14 @@ class WeatherStationsController < ApplicationController
     authorize @station
     # get the current weather and forecast summary
     weather = @station.weather_summary
-    raise
     # unpack current weather and forecast
     @current = weather[:now]
     # note forecast shown is only next 3 days (excluding today)
     # could change later so forecast for remainder of today is shown also?
     @forecast = {}
-    3.times do |d|
-      @forecast[] weather[weather[:today]+1
+    for i in 1..3 do
+      current_d = (weather[:today] + i).strftime('%A')
+      @forecast[current_d] = weather[current_d]
     end
   end
 end

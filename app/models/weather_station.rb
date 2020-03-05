@@ -78,10 +78,10 @@ class WeatherStation < ApplicationRecord
     781 => { main: 'Tornado', description: 'tornado', icon: '50d' },
 
     800 => { main: 'Clear', description: 'clear sky', icon: '01d', icon_night: '01n' },
-    801 => { main: 'Clouds', description: 'few clouds (11-25%)', icon: '02d', icon_night: '02n' },
-    802 => { main: 'Clouds', description: 'scattered clouds (25-50%)', icon: '03d', icon_night: '03n' },
-    803 => { main: 'Clouds', description: 'broken clouds (50-85%)', icon: '04d', icon_night: '04n' },
-    804 => { main: 'Clouds', description: 'overcast clouds (85-100%)', icon: '04d', icon_night: '04n' },
+    801 => { main: 'Clouds', description: 'few clouds', icon: '02d', icon_night: '02n' }, # (11-25%)
+    802 => { main: 'Clouds', description: 'scattered clouds', icon: '03d', icon_night: '03n' }, # (25-50%)
+    803 => { main: 'Clouds', description: 'broken clouds', icon: '04d', icon_night: '04n' }, # (50-85%)
+    804 => { main: 'Clouds', description: 'overcast clouds', icon: '04d', icon_night: '04n' }, # (85-100%)
   }
 
   def download_current_weather
@@ -129,7 +129,7 @@ class WeatherStation < ApplicationRecord
       summary[day] = {}
       num_meas = vals[:timestamp].count
       # do min, max and avg temp
-      summary[day][:temp_c_avg] = vals[:temp_c].sum / num_meas
+      summary[day][:temp_c_avg] = vals[:temp_c].sum.fdiv(num_meas)
       summary[day][:temp_c_min] = vals[:temp_c].min
       summary[day][:temp_c_max] = vals[:temp_c].max
       # do total rainfall
@@ -138,10 +138,11 @@ class WeatherStation < ApplicationRecord
       snow = vals[:snow_3h_mm].sum
       summary[day][:snow_mm_tot] = snow if snow > 0
       # do average humidity
-      summary[day][:humidity_perc_avg] = vals[:humidity_perc].sum / num_meas
+      summary[day][:humidity_perc_avg] = vals[:humidity_perc].sum.fdiv(num_meas)
       # do average wind speed and direction
-      summary[day][:wind_speed_mps_avg] = vals[:wind_speed_mps].sum / num_meas
-      summary[day][:wind_direction_deg_avg] = vals[:wind_direction_deg].sum / num_meas
+      summary[day][:wind_speed_mps_avg] = vals[:wind_speed_mps].sum.fdiv(num_meas)
+      summary[day][:wind_direction_deg_avg] = vals[:wind_direction_deg].sum.fdiv(num_meas)
+      summary[day][:wind_direction] = wind_direction(summary[day][:wind_direction_deg_avg])
       # do most frequently occurring weather code to get description/icon
       summary[day][:code] = vals[:code].max_by { |i| vals[:code].count(i) }
       summary[day][:main] = WEATHER_CODES[summary[day][:code]][:main]
@@ -177,6 +178,26 @@ class WeatherStation < ApplicationRecord
 
   private
 
+  def wind_direction(deg)
+    # convert wind direction in degrees to cardinal direction
+    return 'N' if deg <= 11.25 || deg > 348.75
+    return 'NNE' if deg > 11.25 && deg <= 33.75
+    return 'NE' if deg > 33.75 && deg <= 56.25
+    return 'ENE' if deg > 56.25 && deg <= 78.75
+    return 'E' if deg > 78.75 && deg <= 101.25
+    return 'ESE' if deg > 101.25 && deg <= 123.75
+    return 'SE' if deg > 123.75 && deg <= 146.25
+    return 'SSE' if deg > 146.25 && deg <= 168.75
+    return 'S' if deg > 168.75 && deg <= 191.25
+    return 'SSW' if deg > 191.25 && deg <= 213.75
+    return 'SW' if deg > 213.75 && deg <= 236.25
+    return 'WSW' if deg > 236.25 && deg <= 258.75
+    return 'W' if deg > 258.75 && deg <= 281.25
+    return 'WNW' if deg > 281.25 && deg <= 303.75
+    return 'NW' if deg > 303.75 && deg <= 326.25
+    return 'NNW' if deg > 326.25 && deg <= 348.75
+  end
+
   def send_query(url)
     # query API and return JSON
     serialised_data = URI.open(url).read
@@ -193,10 +214,12 @@ class WeatherStation < ApplicationRecord
     data_to_keep[:timestamp] = DateTime.strptime((data[:dt] + tz).to_s,'%s')
     data_to_keep[:timezone_UTC_offset] = DateTime.strptime(tz.to_s,'%s').strftime("#{tz.negative? ? '-' : '+'}%H%M")
     data_to_keep[:temp_c] = data[:main][:temp]
+    data_to_keep[:temp_feels_like_c] = data[:main][:feels_like]
     data_to_keep[:humidity_perc] = data[:main][:humidity]
     data_to_keep[:pressure_hPa] = data[:main][:pressure]
     data_to_keep[:wind_speed_mps] = data[:wind][:speed]
     data_to_keep[:wind_direction_deg] = data[:wind][:deg]
+    data_to_keep[:wind_direction] = wind_direction(data[:wind][:deg])
     data_to_keep[:cloudiness_perc] = data[:clouds][:all]
     data_to_keep[:code] = data[:weather].first[:id]
     data_to_keep[:main] = data[:weather].first[:main]
