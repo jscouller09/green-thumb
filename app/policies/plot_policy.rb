@@ -1,35 +1,27 @@
 class PlotPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.all
+      if user.admin?
+        scope.all
+      else
+        user.plots
+      end
     end
   end
 
   def show?
-    true
-  end
-
-  def new?
-    true
+    user.admin? || record.garden.user == user
   end
 
   def create?
-    true
-  end
-
-  def edit?
-    true
+    user.present?
   end
 
   def update?
-    true
+    show?
   end
 
   def destroy?
-    true
-  end
-
-  def complete_watering?
-    true
+    show?
   end
 end

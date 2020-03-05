@@ -4,6 +4,8 @@ class PlotsController < ApplicationController
   def show
     @plot = Plot.find(params[:id])
     authorize @plot
+    raise
+    plots = policy_scope(Plot)
   end
 
   # GET /gardens/:garden_id/plots/new
@@ -18,12 +20,10 @@ class PlotsController < ApplicationController
   def create
     @garden = Garden.find(params[:garden_id])
     @plot = Plot.new(plot_params)
-
-    #turn the width and length into mm
-    @plot.length_mm = plot_params['length_mm'].to_i * 1000
-    @plot.width_mm = plot_params['length_mm'].to_i * 1000
-
-    #set a garden and a shape for the plot
+    # turn the width and length into mm
+    @plot.length_mm = ((params[:plot][:length_mm].to_f)* 1000).to_i
+    @plot.width_mm = ((params[:plot][:width_mm].to_f)* 1000).to_i
+    # set a garden and a shape for the plot
     @plot.garden = @garden
     @plot.shape = 'rectangle'
       if @plot.save
@@ -64,12 +64,7 @@ class PlotsController < ApplicationController
     @plot.destroy
     flash[:notice] = "Your plot has been deleted."
     redirect_to garden_path(@garden)
-
   end
-
-  # # PATCH plots/:id/complete_waterings
-  # def complete_watering
-  # end
 
   private
 
