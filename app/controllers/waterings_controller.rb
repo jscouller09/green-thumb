@@ -25,11 +25,19 @@ class WateringsController < ApplicationController
 
   #PATCH waterings/:id
   def update
-
+    @watering = Watering.find(params[:id])
+    authorize @watering
+    if @watering.update(watering_params)
+      redirect_to waterings_path
+    else
+      render 'watering_plot'
+    end
   end
 
   #PATCH waterings/:id/complete
   def mark_as_complete
+    authorize @watering
+    watering[:done] = true
   end
 
   private

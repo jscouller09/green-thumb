@@ -2,4 +2,9 @@
 
     <% @plants.each do |plant| %>
     <p><%= plant.plant_type.name %></p>
+    <% if current_user && policy(@waterings).mark_as_complete? %>
+    <%= link_to "done?", waterings_path,
+        method: "PATCH",
+        data: { confirm: "Are You Sure You Want to complete this watering task?"} %>
+  <% end %>
     <% end %>
