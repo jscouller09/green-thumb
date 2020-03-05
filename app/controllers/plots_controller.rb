@@ -2,9 +2,10 @@ class PlotsController < ApplicationController
 
   # GET /plots/:id
   def show
+    @plant_types = PlantType.all
+    @plant = Plant.new
     @plot = Plot.find(params[:id])
     authorize @plot
-    raise
     plots = policy_scope(Plot)
   end
 

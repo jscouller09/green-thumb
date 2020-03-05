@@ -2,7 +2,8 @@
 
 <!-- List all the plant in the plot -->
 <p> <% @plot.plants.each do|plant| %>
-    <p><%=plant.plant_type.name  %></p>
+    <p><%=plant.plant_type.name  %> <%= link_to "x", plant_path(plant), method: 'delete',
+  data: { confirm: "Are you sure you want to remove this plant?"} %> </p>
   <% end %>
 </p>
 
@@ -10,3 +11,10 @@
 <%= link_to "Edit Plot", edit_plot_path(@plot) %>
 <%= link_to "Delete plot", plot_path(@plot), method: 'delete',
   data: { confirm: "Are you sure you want to delete #{@plot.name}?"} %>
+
+
+<h2>Add a plant</h2>
+<%= simple_form_for [@plot, @plant], method: 'post' do |f| %>
+<%= f.association :plant_type, collection: @plant_types %>
+<%= f.button :submit, value = 'Plant!'%>
+<% end %>
