@@ -16,9 +16,8 @@ class GardensController < ApplicationController
   #GET  /gardens/:id
   def show
     @garden = Garden.find(params[:id])
-    @plots = @garden.plots
     authorize @garden
-    # authorize @plots
+    @plots = @garden.plots
   end
 
   #GET  /gardens/new
