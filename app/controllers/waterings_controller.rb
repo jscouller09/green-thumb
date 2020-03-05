@@ -4,7 +4,6 @@ class WateringsController < ApplicationController
   def watering_overview
     @waterings = policy_scope(Watering)
     authorize @waterings
-    @watering = Watering.new
     @garden = policy_scope(Garden).first
     @plots = []
     @garden.plots.each do |plot|
@@ -15,16 +14,21 @@ class WateringsController < ApplicationController
 
   # GET plots/:plot_id/waterings
   def watering_plot
-    @waterings = policy_scope(Watering)
+    @plot = Plot.find(params[:plot_id])
+    @plot.plant_types.each do |type|
+
+
+    end
+
+    @waterings = @plot.waterings
+    @plants = @plot.plants
     authorize @waterings
-    @plot = Plot.new
-    @plot['id'] = params[:id]
-    @user = current_user
-    @plants = @user.gardens.first.plants
   end
 
   #PATCH waterings/:id
   def update
+    @plot = Plot.new
+    @plot['id'] = params[:id]
     @watering = Watering.find(params[:id])
     authorize @watering
     if @watering.update(watering_params)
@@ -36,13 +40,14 @@ class WateringsController < ApplicationController
 
   #PATCH waterings/:id/complete
   def mark_as_complete
+    @watering = Watering.find(params[:id])
     authorize @watering
     watering[:done] = true
   end
 
   private
 
-  def planet_params
+  def watering_params
     params.require(:watering).permit(:ammount_L)
   end
 

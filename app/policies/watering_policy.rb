@@ -21,7 +21,7 @@ class WateringPolicy < ApplicationPolicy
   end
     # Only and admin or the current user can update a task
   def update?
-    user.admin? || user.present?
+    user.admin? || record.user == user
   end
     # Same policies as update
   def mark_as_complete?

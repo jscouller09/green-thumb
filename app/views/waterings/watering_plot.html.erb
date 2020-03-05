@@ -1,10 +1,13 @@
-   <h1><%= @plot.name %></h1>
+<h1><%= @plot.name %></h1>
 
-    <% @plants.each do |plant| %>
-    <p><%= plant.plant_type.name %></p>
-    <% if current_user && policy(@waterings).mark_as_complete? %>
-    <%= link_to "done?", waterings_path,
+<% @plant_types.each do |plant_type| %>
+  <p>
+    <%= plant_type.name %>
+  </p>
+  <% end %>
+  <% if true %>
+    <%= link_to "done?", "/plots/#{@plot[:id]}/waterings",
         method: "PATCH",
         data: { confirm: "Are You Sure You Want to complete this watering task?"} %>
   <% end %>
-    <% end %>
+<% end %>

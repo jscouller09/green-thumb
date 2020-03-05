@@ -13,6 +13,7 @@ class PlotsController < ApplicationController
   end
   # PATCH /plots/:id/
   def update
+    @Plots = policy_scope(Plot)
   end
 
   # DELETE  /plots/:id
