@@ -1,13 +1,20 @@
 <h1><%= @plot.name %></h1>
 
-<% @plant_types.each do |plant_type| %>
+<% @watering_groups.each do |plant_type, plants| %>
   <p>
     <%= plant_type.name %>
   </p>
-  <% end %>
-  <% if true %>
-    <%= link_to "done?", "/plots/#{@plot[:id]}/waterings",
-        method: "PATCH",
-        data: { confirm: "Are You Sure You Want to complete this watering task?"} %>
-  <% end %>
+  <ul>
+    <% plants.each do |plant| %>
+      <li>
+        <% waterings_to_do = plant.waterings.where(done: false) %>
+        <% waterings_to_do.each do |watering| %>
+          <p><%= watering.ammount_L %></p>
+          <%= link_to "done?", complete_watering_path(watering),
+              method: "PATCH",
+              data: { confirm: "Are You Sure You Want to complete this watering task?"} %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
 <% end %>

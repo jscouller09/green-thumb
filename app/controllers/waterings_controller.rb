@@ -1,4 +1,5 @@
 class WateringsController < ApplicationController
+  skip_after_action :verify_authorized, only: [:watering_plot]
 
   # GET /waterings
   def watering_overview
@@ -15,14 +16,15 @@ class WateringsController < ApplicationController
   # GET plots/:plot_id/waterings
   def watering_plot
     @plot = Plot.find(params[:plot_id])
+    @watering_groups = {}
     @plot.plant_types.each do |type|
-
-
+      # get the plants of this type, in this plot
+      plants = @plot.plants.where(plant_type: type)
+      # pick the ones that need water (waterings that are incomplete)
+      water_plants = plants.joins(:waterings).where('waterings.done' => false)
+      @watering_groups[type] = water_plants unless water_plants.empty?
     end
 
-    @waterings = @plot.waterings
-    @plants = @plot.plants
-    authorize @waterings
   end
 
   #PATCH waterings/:id
@@ -40,9 +42,11 @@ class WateringsController < ApplicationController
 
   #PATCH waterings/:id/complete
   def mark_as_complete
-    @watering = Watering.find(params[:id])
-    authorize @watering
-    watering[:done] = true
+    watering = Watering.find(params[:id])
+    plot = watering.plant.plot
+    authorize watering
+    watering.update(done: true)
+    redirect_to plot_waterings_path(plot)
   end
 
   private

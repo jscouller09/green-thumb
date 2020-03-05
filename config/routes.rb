@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   #MVP - Watering see the all the watering, and update the amount
   get 'waterings', to: "waterings#watering_overview"
   #MVP - Mark the plants as watered
-  patch 'waterings/:id/complete', to: 'waterings#mark_as_complete'
+  patch 'waterings/:id/complete', to: 'waterings#mark_as_complete', as: :complete_watering
 
 
   # MVP - Destroy plants
