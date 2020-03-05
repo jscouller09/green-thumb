@@ -1,0 +1,6 @@
+<%= simple_form_for [@garden, @plot] do |f| %>
+  <%= f.input :name %>
+  <%= f.number_field :length_mm, label: 'Length (m)' %>
+  <%= f.number_field :width_mm, label: 'Width (m)' %>
+  <%= f.button :submit, value = 'Add', class: 'btn btn-primary' %>
+<% end %>
