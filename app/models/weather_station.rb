@@ -4,6 +4,7 @@ class WeatherStation < ApplicationRecord
   # associations
   has_many :measurements
   has_many :gardens
+  has_many :users, through: :gardens
 
   # validations
   validates :name, presence: true
@@ -76,11 +77,11 @@ class WeatherStation < ApplicationRecord
     771 => { main: 'Squall', description: 'squalls', icon: '50d' },
     781 => { main: 'Tornado', description: 'tornado', icon: '50d' },
 
-    800 => { main: 'Clear', description: 'clear sky', icon: ['01d', '01n'] },
-    801 => { main: 'Clouds', description: 'few clouds (11-25%)', icon: ['02d', '02n'] },
-    802 => { main: 'Clouds', description: 'scattered clouds (25-50%)', icon: ['03d', '03n'] },
-    803 => { main: 'Clouds', description: 'broken clouds (50-85%)', icon: ['04d', '04n'] },
-    804 => { main: 'Clouds', description: 'overcast clouds (85-100%)', icon: ['04d', '04n'] },
+    800 => { main: 'Clear', description: 'clear sky', icon: '01d', icon_night: '01n' },
+    801 => { main: 'Clouds', description: 'few clouds (11-25%)', icon: '02d', icon_night: '02n' },
+    802 => { main: 'Clouds', description: 'scattered clouds (25-50%)', icon: '03d', icon_night: '03n' },
+    803 => { main: 'Clouds', description: 'broken clouds (50-85%)', icon: '04d', icon_night: '04n' },
+    804 => { main: 'Clouds', description: 'overcast clouds (85-100%)', icon: '04d', icon_night: '04n' },
   }
 
   def download_current_weather
@@ -103,6 +104,51 @@ class WeatherStation < ApplicationRecord
       format_response(timestep)
     end
     forecast
+  end
+
+  def weather_summary
+    # get current data
+    summary = {}
+    summary[:now] = download_current_weather
+    # get forecast data
+    forecast = download_3hrly_5d_forecast
+    # seperate data into measurements for different days
+    today = summary[:now][:timestamp].to_date
+    data = {}
+    forecast.each do |prediction|
+        # get the full name of the day
+        day = prediction[:timestamp].to_date.strftime('%A')
+        data[day] = {} if data[day].nil?
+        # for each of the measurement in the prediction, append to array
+        prediction.each do |key, val|
+          data[day][key] = data[day][key].nil? ? [val] : data[day][key] << val
+        end
+    end
+    # generate daily summary of forecast
+    data.each do |day, vals|
+      summary[day] = {}
+      num_meas = vals[:timestamp].count
+      # do min, max and avg temp
+      summary[day][:temp_c_avg] = vals[:temp_c].sum / num_meas
+      summary[day][:temp_c_min] = vals[:temp_c].min
+      summary[day][:temp_c_max] = vals[:temp_c].max
+      # do total rainfall
+      summary[day][:rain_mm_tot] = vals[:rain_3h_mm].sum
+      # do total snowfall only if there is any snow
+      snow = vals[:snow_3h_mm].sum
+      summary[day][:snow_mm_tot] = snow if snow > 0
+      # do average humidity
+      summary[day][:humidity_perc_avg] = vals[:humidity_perc].sum / num_meas
+      # do average wind speed and direction
+      summary[day][:wind_speed_mps_avg] = vals[:wind_speed_mps].sum / num_meas
+      summary[day][:wind_direction_deg_avg] = vals[:wind_direction_deg].sum / num_meas
+      # do most frequently occurring weather code to get description/icon
+      summary[day][:code] = vals[:code].max_by { |i| vals[:code].count(i) }
+      summary[day][:main] = WEATHER_CODES[summary[day][:code]][:main]
+      summary[day][:description] = WEATHER_CODES[summary[day][:code]][:description]
+      summary[day][:icon] = WEATHER_CODES[summary[day][:code]][:icon]
+    end
+    summary
   end
 
   def self.find_by_coords(lat, lon)

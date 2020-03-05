@@ -34,7 +34,7 @@ Rails.application.routes.draw do
   patch 'plots/:id/complete_waterings', to: 'plots#complete_watering'
 
   #IMPORTANT - See current weather, forecast and alerts
-  resources 'weather_stations', only: [:show]
+  resources 'weather_stations', only: [:index, :show]
 
   #NICE TO HAVE - Display all conversations and create a message
   resources 'conversations', only: [:index, :show] do
