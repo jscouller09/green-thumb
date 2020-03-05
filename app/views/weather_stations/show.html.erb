@@ -1,0 +1,15 @@
+<h1>Weather</h1>
+
+<!-- Station name and country -->
+<h3><%= "#{@station.name}, #{@station.country}" %></h3>
+
+<!-- Current forecast -->
+<%= render "current", data: @current %>
+
+<!-- Render a forecast partial for each day of the 3 day forecast -->
+<% @forecast.each do |day, data| %>
+  <%= render "forecast", day: day, data: data %>
+<% end %>
+
+<!-- Links -->
+<%= link_to "Back to dashboard", dashboard_path %>
