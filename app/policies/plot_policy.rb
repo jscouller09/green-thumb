@@ -24,14 +24,14 @@ class PlotPolicy < ApplicationPolicy
   end
   # PATCH /plots/:id/
   def update?
-    user.admin? || record.user == user
+    user.admin? || record.garden.user == user
   end
 
   # DELETE  /plots/:id
   def destroy?
   end
-
-  # PATCH plots/:id/complete_waterings
-  def complete_watering?
+  # This method is in the waterings controller
+  def watering_plot?
+    update?
   end
 end

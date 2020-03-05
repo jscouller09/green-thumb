@@ -1,10 +1,9 @@
 class WateringsController < ApplicationController
-  skip_after_action :verify_authorized, only: [:watering_plot]
+  skip_after_action :verify_authorized, only: [:complete_plot_watering, :watering_overview]
 
   # GET /waterings
   def watering_overview
     @waterings = policy_scope(Watering)
-    authorize @waterings
     @garden = policy_scope(Garden).first
     @plots = []
     @garden.plots.each do |plot|
@@ -16,6 +15,7 @@ class WateringsController < ApplicationController
   # GET plots/:plot_id/waterings
   def watering_plot
     @plot = Plot.find(params[:plot_id])
+    authorize @plot
     @watering_groups = {}
     @plot.plant_types.each do |type|
       # get the plants of this type, in this plot
@@ -29,8 +29,6 @@ class WateringsController < ApplicationController
 
   #PATCH waterings/:id
   def update
-    @plot = Plot.new
-    @plot['id'] = params[:id]
     @watering = Watering.find(params[:id])
     authorize @watering
     if @watering.update(watering_params)
@@ -43,16 +41,26 @@ class WateringsController < ApplicationController
   #PATCH waterings/:id/complete
   def mark_as_complete
     watering = Watering.find(params[:id])
-    plot = watering.plant.plot
     authorize watering
+    plot = watering.plant.plot
     watering.update(done: true)
     redirect_to plot_waterings_path(plot)
+  end
+
+  # PATCH plots/:id/complete_waterings
+  def complete_plot_watering
+    plot = Plot.find(params[:plot_id])
+    waterings = policy_scope(plot.waterings)
+    waterings.each do |watering|
+      watering.update(done: true)
+    end
+      redirect_to plot_waterings_path
   end
 
   private
 
   def watering_params
-    params.require(:watering).permit(:ammount_L)
+    params.require(:watering).permit(:ammount_L, :ammount_mm, :done)
   end
 
 

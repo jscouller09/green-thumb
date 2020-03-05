@@ -20,8 +20,4 @@ class PlotsController < ApplicationController
   def destroy
   end
 
-  # PATCH plots/:id/complete_waterings
-  def complete_watering
-  end
-
 end

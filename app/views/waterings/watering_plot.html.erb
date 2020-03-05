@@ -16,5 +16,8 @@
         <% end %>
       </li>
     <% end %>
+      <%= link_to "all done?", plot_complete_waterings_path(@plot),
+                  method: "PATCH",
+                  data: { confirm: "Are You Sure You Want to complete all the watering's tasks?"} %>
   </ul>
 <% end %>

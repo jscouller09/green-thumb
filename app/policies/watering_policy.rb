@@ -11,14 +11,6 @@ class WateringPolicy < ApplicationPolicy
       end
     end
   end
-  # only the current user can see his watering board.
-  def watering_overview?
-    user.present?
-  end
-
-  def watering_plot?
-    user.present?
-  end
     # Only and admin or the current user can update a task
   def update?
     user.admin? || record.plant.plot.garden.user == user
@@ -27,4 +19,5 @@ class WateringPolicy < ApplicationPolicy
   def mark_as_complete?
     update?
   end
+
 end
