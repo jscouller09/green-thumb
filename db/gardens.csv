@@ -1,7 +1,7 @@
-﻿user_id;weather_station_id;name;address;length_mm;width_mm;climate_zone_id
-2;7910036;The Old Forest;900 Cashmere Road, Halswell, Christchurch 8025, New Zealand;5000;5000;7
-3;7910036;The Shire;900 Cashmere Road, Halswell, Christchurch 8025, New Zealand;5000;5000;7
-4;6077251;The Magic Garden;4141 Avenue Pierre-De Coubertin, Montr√©al, QC H1V 3N7;10000;15000;2
-5;6077251;Color Garden;4142 Avenue Pierre-De Coubertin, Montr√©al, QC H1V 3N7;14000;13000;2
-6;7535661;Tea Herbal;24-26 Headstone Dr, Wealdstone, Harrow HA3 5QH, Royaume-Uni;6500;6500;2
-7;7535661;Cloudy Sky;24-26 Headstone Dr, Wealdstone, Harrow HA3 5QH, Royaume-Uni;4500;5000;2
+user_id,weather_station_id,name,address,length_mm,width_mm,climate_zone_id
+2,7910036,The Old Forest,"900 Cashmere Road, Halswell, Christchurch 8025, New Zealand",5000,5000,7
+3,7910036,The Shire,"900 Cashmere Road, Halswell, Christchurch 8025, New Zealand",5000,5000,7
+4,6077251,The Magic Garden,"4141 Avenue Pierre-De Coubertin, Montreal, QC H1V 3N7",10000,15000,2
+5,6077251,Color Garden,"4142 Avenue Pierre-De Coubertin, Montreal, QC H1V 3N7",14000,13000,2
+6,7535661,Tea Herbal,"24-26 Headstone Dr, Wealdstone, Harrow HA3 5QH, Royaume-Uni",6500,6500,2
+7,7535661,Cloudy Sky,"24-26 Headstone Dr, Wealdstone, Harrow HA3 5QH, Royaume-Uni",4500,5000,2
