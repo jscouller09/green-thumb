@@ -12,9 +12,8 @@
   <% end %>
 </ul>
 
-<div id='plot-container' style="margin: 0 auto; border: 2px solid black" data-plants=<%= @plants_json %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
+<div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= 100 %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
 </div>
-
 
 <!-- Links -->
 <%= link_to "Edit Plot", edit_plot_path(@plot) %>
