@@ -1,0 +1,21 @@
+<div class="container">
+  <h1>Don't forget to water!</h1>
+  <br>
+  <br>
+
+  <% @plots.each do |plot| %>
+
+  <%= link_to plot_waterings_path(plot) do %>
+      <% unless plot.waterings.empty? %>
+        <div class="watering-card">
+          <div class="plot-card-content">
+            <h2><%= plot.name %></h2>
+          </div>
+        </div>
+      <% end %>
+  <% end %>
+
+
+
+  <% end %>
+</div>
