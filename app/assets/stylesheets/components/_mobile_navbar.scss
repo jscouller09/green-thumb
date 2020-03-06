@@ -1,3 +1,4 @@
+// alphabetize for ease of reference later
 .mobile-navbar {
   // align-items: center;
   background-color: $brown;
@@ -9,6 +10,9 @@
   padding: 16px;
   position: fixed;
   width: 100%;
+  a {
+    color: $cream;
+  }
 }
 
 .navbar-menu-items {
