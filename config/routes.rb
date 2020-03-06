@@ -12,14 +12,17 @@ Rails.application.routes.draw do
   end
 
   # MVP- Update and destroy plots
-  resources 'plots', only: [:show, :update, :edit, :destroy] do
+  resources 'plots', only: [:update, :edit, :destroy, :show] do
+    get '/waterings', to: "waterings#watering_plot"
+    patch '/complete_waterings', to: 'waterings#complete_plot_watering'
     #MVP - create plants inside a plot
     resources 'plants', only: [:create]
   end
   #MVP - Watering see the all the watering, and update the amount
-  resources 'waterings', only: [:index, :show, :update]
+  get 'waterings', to: "waterings#watering_overview"
   #MVP - Mark the plants as watered
-  patch 'waterings/:id/complete', to: 'waterings#mark_as_complete'
+  patch 'waterings/:id/complete', to: 'waterings#mark_as_complete', as: :complete_watering
+
 
   # MVP - Destroy plants
   resources 'plants', only: [:destroy]
@@ -31,10 +34,9 @@ Rails.application.routes.draw do
   patch 'tasks/:id/complete', to: 'tasks#mark_as_complete'
 
   #IMPORTANT - mark a plot as watered
-  patch 'plots/:id/complete_waterings', to: 'plots#complete_watering'
 
   #IMPORTANT - See current weather, forecast and alerts
-  resources 'weather_stations', only: [:show]
+  resources 'weather_stations', only: [:index, :show]
 
   #NICE TO HAVE - Display all conversations and create a message
   resources 'conversations', only: [:index, :show] do

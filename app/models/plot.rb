@@ -11,10 +11,14 @@ class Plot < ApplicationRecord
   validates :name, presence: true
   validates :shape, inclusion: { in: %w(rectangle circle),
                                  message: "%{value} is not a valid shape" }
+  validates :length_m, numericality: { greater_than: 0 }
   validates :length_mm, numericality: { only_integer: true,
-                                        greater_than: 0 }
+                                        greater_than: 0,
+                                        allow_nil: true }
+  validates :width_m, numericality: { greater_than: 0 }
   validates :width_mm, numericality: { only_integer: true,
-                                       greater_than: 0 }
+                                      greater_than: 0,
+                                      allow_nil: true }
   validates :center_x, numericality: { only_integer: true,
                                        allow_nil: true }
   validates :center_y, numericality: { only_integer: true,
@@ -22,4 +26,14 @@ class Plot < ApplicationRecord
   validates :rooting_depth_mm, numericality: { only_integer: true,
                                                greater_than: 0,
                                                allow_nil: true }
+
+  #after_create :calculate_dimensions_in_mm
+  after_validation :calculate_dimensions_in_mm
+
+  private
+
+  def calculate_dimensions_in_mm
+    self.length_mm = (self.length_m * 1000).to_i
+    self.width_mm = (self.width_m * 1000).to_i
+  end
 end
