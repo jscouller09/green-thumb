@@ -4,6 +4,7 @@ class TasksController < ApplicationController
   def index   #Task.all
     @tasks = policy_scope(Task).where(completed: false)
     @task = Task.new
+    @user = @task.user_id
   end
 
   # POST  /tasks/

@@ -1,0 +1,20 @@
+.mobile-navbar {
+  // align-items: center;
+  background-color: $brown;
+  bottom: 0;
+  color: $cream;
+  display: flex;
+  height: 80px;
+  justify-content: space-around;
+  padding: 16px;
+  position: fixed;
+  width: 100%;
+}
+
+.navbar-menu-items {
+  align-content: space-around;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
