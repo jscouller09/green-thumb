@@ -20,10 +20,11 @@
 <%= link_to "Delete plot", plot_path(@plot), method: 'delete',
     data: { confirm: "Are you sure you want to delete #{@plot.name}?"} %>
 
-
-<h2>Add a plant</h2>
-<%= simple_form_for [@plot, @plant], method: 'post' do |f| %>
-  <%= f.association :plant_type, collection: @plant_types %>
-  <%= f.input :plant_date %>
-  <%= f.button :submit, value = 'Plant!'%>
-<% end %>
+<div class="container pb-5 mb-5">
+  <h2>Add a plant</h2>
+  <%= simple_form_for [@plot, @plant], method: 'post' do |f| %>
+    <%= f.association :plant_type, collection: @plant_types %>
+    <%= f.input :plant_date %>
+    <%= f.button :submit, value = 'Plant!'%>
+  <% end %>
+</div>
