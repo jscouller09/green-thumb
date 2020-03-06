@@ -1,7 +1,11 @@
 class PlantPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.all
+      if user.admin?
+        scope.all
+      else
+        user.plants
+      end
     end
   end
 

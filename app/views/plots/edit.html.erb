@@ -2,8 +2,8 @@
 
 <%= simple_form_for @plot, method: 'patch' do |f| %>
   <%= f.input :name %>
-  <%= f.input :length_mm, label: 'Length (m)' %>
-  <%= f.input :width_mm, label: 'Width (m)' %>
+  <%= f.input :length_m, label: 'Length (m)' %>
+  <%= f.input :width_m, label: 'Width (m)' %>
   <%= f.button :submit, value = 'Edit', class: 'btn btn-primary' %>
 <% end %>
 
