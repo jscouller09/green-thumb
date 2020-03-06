@@ -12,7 +12,7 @@ class WeatherStationsController < ApplicationController
       render :index
     else
       # user has 1 garden, go to show page for the associated weather station
-      redirect_to weather_station_path(weather_stations.first)
+      redirect_to weather_station_path(@weather_stations.first)
     end
   end
 
