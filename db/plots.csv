@@ -1,4 +1,4 @@
-garden_id,name,shape,length_mm,width_mm
-1,Front garden,rectangle,3000,6000
-1,Back garden,rectangle,1500,500
-2,Veggie patch,rectangle,1500,1000
+garden_id,name,shape,length_m,width_m
+1,Front garden,rectangle,6,3
+1,Back garden,rectangle,1.5,1
+2,Veggie patch,rectangle,1.5,4
