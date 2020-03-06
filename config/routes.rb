@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   end
 
   # MVP- Update and destroy plots
-  resources 'plots', only: [:update, :edit, :destroy] do
+  resources 'plots', only: [:update, :edit, :destroy, :show] do
     get '/waterings', to: "waterings#watering_plot"
     patch '/complete_waterings', to: 'waterings#complete_plot_watering'
     #MVP - create plants inside a plot

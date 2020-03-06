@@ -14,6 +14,7 @@ class User < ApplicationRecord
   #user associations
   has_many :gardens, dependent: :destroy
   has_many :plots, through: :gardens
+  has_many :plants, through: :plots
   has_many :tasks, dependent: :destroy
   has_many :messages, dependent: :destroy
   has_many :user_conversations, dependent: :destroy

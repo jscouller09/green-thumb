@@ -2,9 +2,10 @@ class PlotsController < ApplicationController
 
   # GET /plots/:id
   def show
+    @plant_types = PlantType.all
+    @plant = Plant.new
     @plot = Plot.find(params[:id])
     authorize @plot
-    raise
     plots = policy_scope(Plot)
   end
 
@@ -22,9 +23,6 @@ class PlotsController < ApplicationController
     @plot = Plot.new(plot_params)
     authorize @plot
     authorize @garden
-    # turn the width and length into mm
-    @plot.length_mm = ((params[:plot][:length_mm].to_f)* 1000).to_i
-    @plot.width_mm = ((params[:plot][:width_mm].to_f)* 1000).to_i
     # set a garden and a shape for the plot
     @plot.garden = @garden
     @plot.shape = 'rectangle'
@@ -68,6 +66,6 @@ class PlotsController < ApplicationController
   private
 
   def plot_params
-    params.require(:plot).permit(:name, :garden_id, :length_mm, :width_mm)
+    params.require(:plot).permit(:name, :garden_id, :length_m, :width_m)
   end
 end
