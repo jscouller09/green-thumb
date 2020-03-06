@@ -1,18 +1,45 @@
-#plot-card-icon img {
-  height: auto;
-  left: -35px;
-  max-height: 40px;
-  max-width: 40px;
-  object-fit: fill;
-  position: relative;
-  width: auto;
-}
-
+// this is useless at the moment, but attempts will continue to use .svg for icons
 #navbar-droplet {
   height: 100%;
 }
+
+#plot-card-icon {
+  height: auto;
+  left: 40px;
+  max-height: 40px;
+  max-width: 40px;
+  object-fit: fill;
+  position: absolute;
+  width: auto;
+}
+
+
+.lg-task-icon {
+  font-size: 42px;
+}
+ .task-icon {
+  color: $gray;
+  font-size: 30px;
+  &:hover {
+    text-decoration: none;
+    color: $turquoise;
+  }
+ }
+
 #task-icons {
   display: flex;
-  flex-direction: column;
+  justify-content: flex-end;
+}
+
+@media screen and (max-width: 600px) {
+  .task-icon {
+    font-size: 12px;
+  }
+  #task-icons {
+    font-size: 12px;
+  }
+  .lg-task-icon {
+    font-size: 20px;
+  }
 }
 

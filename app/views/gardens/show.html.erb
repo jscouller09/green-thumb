@@ -2,35 +2,22 @@
   <h1><%= @garden.name %></h1>
 </div>
 
-<div>
+<div class="list">
   <% if @plots.empty? %>
     <!-- Let the user know they don't have any plots -->
     <p>Sorry! You don't have any plots yet</p>
   <% else %>
     <!-- display all the users plots as cards -->
-    <div class="list">
-        <% @plots.each do |plot| %>
-        <div class="plot-card">
-          <div class="plot-card-content">
-            <div id="plot-card-icon">
-              <img src="https://purepng.com/public/uploads/medium/two-red-tomatoes-hbq.png" alt="a small picture of vegetables">
-            </div>
-            <div>
-              <%= link_to plot.name, plot_path(plot) %>
-            </div>
-          </div>
-          <% end %>
-        </div>
-        <% end %>
+      <% @plots.each_with_index do |plot, i| %>
+      <div class="plot-card">
+          <div><%= link_to plot.name, plot_path(plot) %></div>
+          <!-- accesses cloudinary .png for the Main Plant of the plot -->
+          <%= image_tag @main_plant_img[i], id: "plot-card-icon" %>
+      </div>
+      <% end %>
+  </div>
+<% end %>
+    <div class="garden-buttons-group">
+        <%= link_to "New Plot", new_garden_plot_path(@garden), class: 'garden-button' %>
+        <%= link_to "Back to Dashboard", dashboard_path, class: 'garden-button' %>
     </div>
-</div>
-
-<!-- Links -->
-<div class="garden-buttons-group">
-  <div class="garden-button">
-    <%= link_to "New plot", new_garden_plot_path(@garden) %>
-  </div>
-  <div class="garden-button">
-    <%= link_to "Back to dashboard", dashboard_path %>
-  </div>
-</div>
