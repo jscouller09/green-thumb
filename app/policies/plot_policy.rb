@@ -24,4 +24,8 @@ class PlotPolicy < ApplicationPolicy
   def destroy?
     show?
   end
+
+  def watering_plot?
+    show?
+  end
 end
