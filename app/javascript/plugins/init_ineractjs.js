@@ -1,4 +1,4 @@
-import interact from 'interactjs'
+import interact from 'interactjs';
 
 
 const init_ineractjs=(plant, mm_per_pixel, grid_snap) => {
