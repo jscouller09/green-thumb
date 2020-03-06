@@ -18,6 +18,15 @@ class GardensController < ApplicationController
     @garden = Garden.find(params[:id])
     authorize @garden
     @plots = @garden.plots
+    # Display image for the plant that the plot has the most of
+    @main_plant_img = @plots.map do |plot|
+      unless plot.plant_types.empty?
+        main_plant = plot.plant_types.group(:id).count.max.first
+        PlantType.find(main_plant).photo_url
+      else
+        "logo.png"
+      end
+    end
   end
 
   #GET  /gardens/new

@@ -4,39 +4,50 @@
   </div>
 <div class="list">
   <% @tasks.each do |task| %>
-  <div class="task-card">
-      <div id="task-plus-date">
-        <div id="Task-desc"><%= task.description %></div>
-        <div><%= task.due_date %></div>
-        <div><% task.priority %></div>
-      </div>
+  <!-- changes color of border-left according to level of priority -->
+    <% case task.priority %>
+      <% when "high" %>
+        <% border_color = "#FA520A" %>
+      <% when "medium" %>
+        <% border_color = "#FA9E0A" %>
+      <% when "low" %>
+        <% border_color = "#8FD694" %>
+      <% else %>
+        <% border_color = "#B9F5F2" %>
+    <% end %>
+    <div class="task-card" style="border-left: 16px solid <%= border_color %>">
+        <div id="task-plus-date">
+          <div id="task-desc"><%= task.description %></div>
+          <div><%= task.due_date %></div>
+          <div><% task.priority %></div>
+        </div>
         <div id="task-icons">
-          <% if current_user && policy(task).destroy? %>
-            <%= link_to task_path(task),
-                method: "DELETE",
-                data: { confirm: "Are You Sure You Want to Destroy #{task.description}?"} do %>
-                <i class="far fa-trash-alt"></i>
-              <% end %>
-          <% end %>
+            <% if current_user && policy(task).destroy? %>
+              <%= link_to task_path(task),
+                  method: "DELETE",
+                  data: { confirm: "Are You Sure You Want to Destroy #{task.description}?"} do %>
+                  <i class="far fa-trash-alt task-icon"></i>
+                <% end %>
+            <% end %>
 
-          <% if current_user && policy(task).update? %>
-            <%= link_to edit_task_path(task) do %>
-            <i class="fas fa-pencil-alt"></i>
-            <% end %>
-          <% end %>
-          </div>
-          <div>
-            <% if current_user && policy(task).mark_as_complete? %>
-              <%= link_to "/tasks/#{task.id}/complete",
-                  method: "PATCH",
-                  data: { confirm: "Are You Sure You Want to complete this task? #{task.description}?"} do %>
-                  <i class="far fa-square"></i>
+            <% if current_user && policy(task).update? %>
+              <%= link_to edit_task_path(task) do %>
+              <i class="fas fa-pencil-alt task-icon"></i>
               <% end %>
             <% end %>
-          </div>
+            </div>
+            <div>
+            </div>
+              <% if current_user && policy(task).mark_as_complete? %>
+                <%= link_to "/tasks/#{task.id}/complete",
+                    method: "PATCH",
+                    data: { confirm: "Are You Sure You Want to complete this task? #{task.description}?"} do %>
+                    <i class="far fa-square lg-task-icon"></i>
+                <% end %>
+              <% end %>
         </div>
   <% end %>
-  </div>
+  <!-- </div> -->
 </div>
 
 <!-- <div>

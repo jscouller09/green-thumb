@@ -3,15 +3,26 @@
   border-radius: 5px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   background-color: $md-green;
-  height: 48px;
-  padding: 24px 60px;
-  width: 142px;
+  flex-grow: 0;
+  font-size: 20px;
+  height: 75px;
+  padding: 24px;
+  text-align: center;
+  text-decoration: none;
+  margin-top: 24px;
+  min-width: 250px;
+  width: auto;
+  &:hover {
+    color: $cream;
+    text-decoration: none;
+  }
 }
 
 .garden-buttons-group {
-  align-items: flex;
+  align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-bottom: 16px;
   padding: 50px;
 }
