@@ -1,12 +1,23 @@
 class PlotsController < ApplicationController
 
+  # for validations of plant positions
+  # render json: { sucess: true, errors: [....]}
+
   # GET /plots/:id
   def show
     @plant_types = PlantType.all
     @plant = Plant.new
     @plot = Plot.find(params[:id])
     authorize @plot
-    plots = policy_scope(Plot)
+    @plants = @plot.plants
+    plants_to_json = @plants.map do |plant|
+      { id: plant.id,
+        x: plant.x,
+        y: plant.y,
+        radius_mm: plant.radius_mm,
+        picture_url: plant.plant_type.photo_url }
+    end
+    @plants_json = plants_to_json.to_json.html_safe
   end
 
   # GET /gardens/:garden_id/plots/new

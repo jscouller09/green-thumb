@@ -12,9 +12,17 @@ class Plant < ApplicationRecord
                                         greater_than: 0,
                                         allow_nil: true }
   validates :x, numericality: { only_integer: true,
-                                       allow_nil: true }
+                                allow_nil: true }
   validates :y, numericality: { only_integer: true,
-                                       allow_nil: true }
+                                allow_nil: true }
   validates :water_deficit_mm, numericality: { greater_than_or_equal_to: 0 }
   validates :plant_date, presence: true
+
+  after_create :add_radius
+
+  private
+
+  def add_radius
+    self.update(radius_mm: self.plant_type.spacing_mm / 2)
+  end
 end
