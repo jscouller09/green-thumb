@@ -1,7 +1,0 @@
-<h1>Don't forget to water!</h1>
-<% @plots.each do |plot| %>
-  <% unless plot.waterings.empty? %>
-       <%= plot.name %>
-       <%= link_to "watering task", plot_waterings_path(plot)%>
-  <% end %>
-<% end %>
