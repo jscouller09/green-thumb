@@ -6,8 +6,6 @@ import { init_ineractjs } from "../plugins/init_ineractjs";
 initAutocomplete('garden_address');
 
 
-
-
 const setup_plant_plot=() => {
   // check if we have a plant plot on the page
   const plants_container = document.getElementById('plot-container');
@@ -20,7 +18,6 @@ const setup_plant_plot=() => {
     const length = parseInt(plants_container.dataset.length);
     const width = parseInt(plants_container.dataset.width);
     const mm_per_pixel = width / intViewportWidth;
-    console.log(mm_per_pixel);
     // set container style and dimensions
     plants_container.style.height = `${length / mm_per_pixel}px`;
     plants_container.style.width = `${width / mm_per_pixel}px`;

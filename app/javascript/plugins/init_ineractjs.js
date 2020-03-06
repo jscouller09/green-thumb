@@ -46,9 +46,10 @@ const init_ineractjs=(plant, mm_per_pixel, grid_snap) => {
           endOnly: true
         })
       ],
-      inertia: true
+      inertia: true,
       listeners: {
         end: (event) => {
+          console.log(event);
           // convert x and y to grid cells
 
           // send x and y with fetch
