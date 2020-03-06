@@ -9,12 +9,15 @@ class PlantPolicy < ApplicationPolicy
     end
   end
 
-    def create?
-      user.present?
-    end
+  def create?
+    user.present?
+  end
 
-  # DELETE  /plants/:id
   def destroy?
     user.admin? || record.plot.garden.user == user
+  end
+
+  def update?
+    destroy?
   end
 end

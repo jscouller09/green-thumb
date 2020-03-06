@@ -24,8 +24,8 @@ Rails.application.routes.draw do
   patch 'waterings/:id/complete', to: 'waterings#mark_as_complete', as: :complete_watering
 
 
-  # MVP - Destroy plants
-  resources 'plants', only: [:destroy]
+  # MVP - Destroy plants and update (location)
+  resources 'plants', only: [:destroy, :update]
 
   #MVP - Tasks index | IMPORTANT create update and destroy (the creation)
   resources 'tasks', only: [:index, :create, :edit, :update, :destroy]

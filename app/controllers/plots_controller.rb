@@ -15,7 +15,7 @@ class PlotsController < ApplicationController
         x: plant.x,
         y: plant.y,
         radius_mm: plant.radius_mm,
-        picture_url: plant.plant_type.photo_url }
+        photo_url: plant.plant_type.photo_url }
     end
     @plants_json = plants_to_json.to_json.html_safe
   end
