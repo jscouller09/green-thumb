@@ -1,5 +1,8 @@
 class PlotsController < ApplicationController
 
+  # for validations of plant positions
+  # render json: { sucess: true, errors: [....]}
+
   # GET /plots/:id
   def show
     @plot = Plot.find(params[:id])

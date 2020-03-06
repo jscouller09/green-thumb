@@ -1,7 +1,7 @@
 import interact from 'interactjs'
 
 
-const init_ineractjs=(plant, mm_per_pixel, grid_snap, reverse_xy) => {
+const init_ineractjs=(plant, mm_per_pixel, grid_snap) => {
 
   // generate a plant div with a nested thumbnail image
   const plant_div = document.createElement('div');
@@ -26,13 +26,8 @@ const init_ineractjs=(plant, mm_per_pixel, grid_snap, reverse_xy) => {
   plants_container.appendChild(plant_div)
 
   var element = plant_div;
-  if (reverse_xy) {
-    var x = plant.y * mm_per_pixel;
-    var y = plant.x * mm_per_pixel;
-  } else {
-    var x = plant.x * mm_per_pixel;
-    var y = plant.y * mm_per_pixel;
-  }
+  var x = plant.x * grid_snap;
+  var y = plant.y * grid_snap;
   element.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
 
   interact(element)
@@ -52,6 +47,17 @@ const init_ineractjs=(plant, mm_per_pixel, grid_snap, reverse_xy) => {
         })
       ],
       inertia: true
+      listeners: {
+        end: (event) => {
+          // convert x and y to grid cells
+
+          // send x and y with fetch
+
+          // if response ok, update plant x/y
+
+          // if response not ok, return to initial position-> if not ok
+        }
+      }
     })
     .on('dragmove', function (event) {
       x += event.dx
