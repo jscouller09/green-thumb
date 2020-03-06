@@ -1,8 +1,18 @@
-#task-icons {
-  display: flex;
-  flex-direction: column;
+#plot-card-icon img {
+  height: auto;
+  left: -35px;
+  max-height: 40px;
+  max-width: 40px;
+  object-fit: fill;
+  position: relative;
+  width: auto;
 }
 
 #navbar-droplet {
   height: 100%;
 }
+#task-icons {
+  display: flex;
+  flex-direction: column;
+}
+

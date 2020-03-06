@@ -1,0 +1,34 @@
+// alphabetize for ease of reference later
+.plot-card {
+  align-items: center;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  color: $dk-green;
+  display:flex;
+  font-family: merriweather;
+  font-weight: bold;
+  height: 90px;
+  justify-content: center;
+  line-height: 20px;
+  margin-bottom: 24px;
+  padding: 35px;
+  position: absolute;
+  max-width: 500px;
+  width: 75%;
+  a {
+    color: $gray;
+    font-family: special elite;
+    font-size: 24px;
+    text-decoration: none;
+  }
+}
+
+.plot-card-content {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  max-width: 240px;
+  max-height: 88px;
+  width: 100%;
+}

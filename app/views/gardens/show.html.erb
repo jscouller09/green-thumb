@@ -1,19 +1,36 @@
-<h1><%= @garden.name %></h1>
+<div class="menu-headline">
+  <h1><%= @garden.name %></h1>
+</div>
 
-
-<% if @plots.empty? %>
-  <!-- Let the user know they don't have any plots -->
-  <p>Sorry! You don't have any plots yet</p>
-<% else %>
-  <!-- display all the users plots as cards -->
-  <ul>
-    <% @plots.each do |plot| %>
-      <li><%= link_to plot.name, plot_path(plot) %></li>
-    <% end %>
-  </ul>
-<% end %>
+<div>
+  <% if @plots.empty? %>
+    <!-- Let the user know they don't have any plots -->
+    <p>Sorry! You don't have any plots yet</p>
+  <% else %>
+    <!-- display all the users plots as cards -->
+    <div class="list">
+        <% @plots.each do |plot| %>
+        <div class="plot-card">
+          <div class="plot-card-content">
+            <div id="plot-card-icon">
+              <img src="https://purepng.com/public/uploads/medium/two-red-tomatoes-hbq.png" alt="a small picture of vegetables">
+            </div>
+            <div>
+              <%= link_to plot.name, plot_path(plot) %>
+            </div>
+          </div>
+          <% end %>
+        </div>
+        <% end %>
+    </div>
+</div>
 
 <!-- Links -->
-<%= link_to "Make a new plot", new_garden_plot_path(@garden) %>
-<br>
-<%= link_to "Back to dashboard", dashboard_path %>
+<div class="garden-buttons-group">
+  <div class="garden-button">
+    <%= link_to "New plot", new_garden_plot_path(@garden) %>
+  </div>
+  <div class="garden-button">
+    <%= link_to "Back to dashboard", dashboard_path %>
+  </div>
+</div>

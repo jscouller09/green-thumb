@@ -1,0 +1,17 @@
+// alphabetize for ease of reference later
+.garden-button {
+  border-radius: 5px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  background-color: $md-green;
+  height: 48px;
+  padding: 24px 60px;
+  width: 142px;
+}
+
+.garden-buttons-group {
+  align-items: flex;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 50px;
+}
