@@ -1,32 +1,28 @@
-<div class="container">
+<div class="container-fluid">
   <h1><%= @plot.name %></h1>
-    <div class="watering-plot-card">
-      <% @watering_groups.each do |plant_type, plants| %>
-          <p>
-            <%= plant_type.name %>
-          </p>
-          <ul>
-            <% plants.each do |plant| %>
-
+    <% @watering_groups.each do |plant_type, plants| %>
+      <div class="watering-plot-card-content">
+        <p><%= plant_type.name %></p>
+        <ul>
+          <% plants.each do |plant| %>
+            <div class="watering-plot-card-content">
               <li>
                 <% waterings_to_do = plant.waterings.where(done: false) %>
                 <% waterings_to_do.each do |watering| %>
-                  <p><%= watering.ammount_L %>L</p>
-                  <%= link_to "done?", complete_watering_path(watering),
+                <div class="watering-plot-card-info">
+                  <p><%= watering.ammount_L %>L</p><%= link_to "done?", complete_watering_path(watering),
                       method: "PATCH",
                       data: { confirm: "Are You Sure You Want to complete this watering task?"} %>
+                </div>
                 <% end %>
               </li>
+            </div>
+          <% end %>
+        </ul>
 
-
-            <% end %>
-              <%= link_to "all done?", plot_complete_waterings_path(@plot),
-                          method: "PATCH",
-                          data: { confirm: "Are You Sure You Want to complete all the watering's tasks?"} %>
-          </ul>
-
-
-      <% end %>
-    </div>
-
+      </div>
+    <% end %>
+          <%= link_to "all done?", plot_complete_waterings_path(@plot),
+                      method: "PATCH",
+                      data: { confirm: "Are You Sure You Want to complete all the watering's tasks?"} %>
 </div>
