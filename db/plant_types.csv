@@ -1,3 +1,29 @@
 name,scientific_name,spacing_mm,height_mm,earliest_plant_day,sunshine,kc_ini,kc_mid,kc_end,l_ini_days,l_dev_days,l_mid_days,l_end_days,icon,photo_url
-Tomatoes,Solanum lycopersicum,600,1200,01/11/2020,full sun,1,1.15,0.8,35,40,50,30,,https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325515/green-thumb/tomato_hgte3q.jpg
-Courgette,Cucurbita pepo,800,600,01/11/2020,full sun,1,0.95,0.76,25,35,25,15,,https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325509/green-thumb/zuchinni_ift9bx.jpg
+Asparagus,Asparagus officinalis,304,254,01/02/2020,Full sun,0.5,0.95,0.30,50,30,100,50,,green-thumb/asparagus
+Carrots,Daucus carota subsp. sativus,100,304,01/01/2020,Sun or partial afternoon shade.,0.7,1.05,0.95,20,30,30,20,,green-thumb/carrot
+Squash,Cucurbita,457,381,01/04/2020,,0.5,0.95,0.75,25,35,25,15,,green-thumb/squash
+Celery,Apium graveolens,203,457,01/10/2020,,0.7,1.05,1.00,25,40,95,20,,green-thumb/celery
+Courgette,Cucurbita pepo,800,600,01/11/2020,full sun,1,0.95,0.76,25,35,25,15,,green-thumb/zucchini
+Garlic,Allium sativum,150,609,01/04/2020,,0.7,1.00,0.70,25,30,10,5,,green-thumb/garlic
+Pumpkin,Cucurbita,900,760,01/03/2020,,0.5,1.00,0.80,20,30,30,20,,green-thumb/pumpkin
+Broccoli,Brassica oleracea var. italica,450,762,01/09/2020,Full sun,0.7,1.05,0.95,35,45,40,15,,green-thumb/broccoli
+Egg plant,Solanum melongena,457,762,01/10/2020,,0.6,1.05,0.90,30,40,40,20,,green-thumb/eggplant
+Potato,Solanum tuberosum,304,762,01/05/2020,,0.5,1.15,0.754,25,30,45,30,,green-thumb/potato
+Bell peppers,Capsicum annuum Group,350,914,01/04/2020,Full sun,0.6,1.050,0.90,25,35,40,20,,green-thumb/bell-pepper
+Cabbage,Brassica oleracea var. capitata,500,914,01/09/2020,Full sun,0.7,1.05,0.95,40,60,50,15,,green-thumb/cabbage
+Artichoke,Cynara scolymus,1200,915,01/04/2020,Full sun,0.5,1.00,0.95,40,40,250,30,,green-thumb/artichoke
+Tomatoes,Solanum lycopersicum,600,1200,01/11/2020,full sun,1,1.15,0.8,35,40,50,30,,green-thumb/tomato
+Cantaloupe,Cucumis melo var. cantalupensis,900,2438,01/08/2020,Full sun,0.5,0.85,0.60,10,60,25,25,,green-thumb/cantaloupe
+Lemon,Citrus × limon,5000,6096,01/01/2020,,0.65,0.60,0.65,60,90,120,95,,green-thumb/lemon
+Green onion,Allium fistulosum,100,152,01/04/2020,,0.7,1.00,1.00,25,30,10,5,,green-thumb/green-onion
+Spinach,Spinacia oleracea,304,152,01/04/2020,,0.7,1.00,0.95,20,20,15/25,5,,green-thumb/spinach
+Radish,Raphanus sativus,50,152,01/03/2020,,0.7,0.90,0.85,5,10,15,5,,green-thumb/radish
+Raspberry,Rubus idaeus,914,152,01/03/2020,,0.30,1.05,0.50,20,50,75,60,,green-thumb/raspberry
+Cucumber,Cucumis sativus,304,304,01/06/2020,,0.6,1.00,0.75,20,30,40,15,,green-thumb/cucumber
+Lettuce,Lactuca sativa,304,304,01/04/2020,,0.7,1.00,0.95,20,30,15,10,,green-thumb/lettuce
+Strawberry,Fragaria × ananassa,304,304,01/03/2020,,0.40,0.85,0.75,20,50,75,60,,green-thumb/strawberry
+Kale,Brassica oleracea var. sabellica,457,457,01/04/2020,,0.7,1.05,0.95,40,60,50,15,,green-thumb/kale
+Beet,Beta vulgaris,150,609,01/03/2020,,0.35,1.20,0.705,30,45,90,15,,green-thumb/sugar-beet
+Green beans,Phaseolus vulgaris,250,609,01/02/2020,,0.5,1.050,0.90,20,30,30,10,,green-thumb/green-bean
+Cauliflower,Brassica oleracea var. botrytis,500,609,01/09/2020,Full sun,0.7,1.05,0.95,35,50,40,15,,green-thumb/cauliflower
+Water melons,Citrullus lanatus,609,609,01/04/2020,,0.4,1.00,0.75,20,30,30,30,,green-thumb/watermelon
