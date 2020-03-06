@@ -15,6 +15,7 @@ class WateringPolicy < ApplicationPolicy
   def update?
     user.admin? || record.plant.plot.garden.user == user
   end
+
     # Same policies as update
   def mark_as_complete?
     update?

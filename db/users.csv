@@ -2,3 +2,7 @@ email,password,first_name,last_name,admin,mentor
 admin@greenthumb.rocks,123456,Garden,Guru,1,0
 tom.bombadil@LOTR.com,123456,Tom,Bombadil,0,1
 sam.gamgee@LOTR.com,123456,Samwise,Gamgee,0,0
+frodon.sacquet@LOTR.com,123456,Frodon,Sacquet,0,1
+merry.brandybuck@lotr.com,123456,Merry,Brandybuck,0,0
+john.mclane@die.com,123456,John,Mclane,1,1
+brad.pitt@hollywood.com,123456,Brad,Pitt,0,0
