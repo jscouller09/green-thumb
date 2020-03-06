@@ -19,9 +19,11 @@ class Plot < ApplicationRecord
   validates :width_mm, numericality: { only_integer: true,
                                       greater_than: 0,
                                       allow_nil: true }
-  validates :center_x, numericality: { only_integer: true,
+  validates :grid_cell_size_mm, numericality: { only_integer: true,
+                                                greater_than: 0 }
+  validates :x, numericality: { only_integer: true,
                                        allow_nil: true }
-  validates :center_y, numericality: { only_integer: true,
+  validates :y, numericality: { only_integer: true,
                                        allow_nil: true }
   validates :rooting_depth_mm, numericality: { only_integer: true,
                                                greater_than: 0,

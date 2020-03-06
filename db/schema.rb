@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 2020_03_06_124330) do
+ActiveRecord::Schema.define(version: 2020_03_06_185347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,11 +55,10 @@ ActiveRecord::Schema.define(version: 2020_03_06_124330) do
     t.bigint "weather_station_id"
     t.string "name"
     t.string "address"
-    t.integer "grid_cell_size_mm"
     t.integer "length_mm"
     t.integer "width_mm"
-    t.integer "center_x"
-    t.integer "center_y"
+    t.integer "x"
+    t.integer "y"
     t.bigint "climate_zone_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -146,8 +144,8 @@ ActiveRecord::Schema.define(version: 2020_03_06_124330) do
     t.string "shape"
     t.integer "length_mm"
     t.integer "width_mm"
-    t.integer "center_x"
-    t.integer "center_y"
+    t.integer "x"
+    t.integer "y"
     t.string "shady_spots"
     t.integer "rooting_depth_mm"
     t.string "soil_type"
@@ -155,6 +153,7 @@ ActiveRecord::Schema.define(version: 2020_03_06_124330) do
     t.datetime "updated_at", null: false
     t.float "length_m", null: false
     t.float "width_m", null: false
+    t.integer "grid_cell_size_mm"
     t.index ["garden_id"], name: "index_plots_on_garden_id"
   end
 
