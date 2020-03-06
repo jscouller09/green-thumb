@@ -13,7 +13,8 @@ def generate_model_from_csv(model_class, csv_file)
                   quote_char: '"',
                   headers: :first_row,
                   converters: :numeric,
-                  header_converters: :symbol }
+                  header_converters: lambda { |h| h.to_sym }
+                }
   CSV.read("db/#{csv_file}", csv_options).each_with_index do |row, i|
     # grab all columns and generate instance of the model
     args = row.to_h
@@ -42,3 +43,4 @@ generate_model_from_csv(Plot, 'plots.csv')
 generate_model_from_csv(PlantType, 'plant_types.csv')
 generate_model_from_csv(Plant, 'plants.csv')
 generate_model_from_csv(Task, 'tasks.csv')
+generate_model_from_csv(Watering, 'waterings.csv')
