@@ -27,12 +27,13 @@ class Plot < ApplicationRecord
                                                greater_than: 0,
                                                allow_nil: true }
 
-  after_create :calculate_dimensions_in_mm
+  #after_create :calculate_dimensions_in_mm
+  after_validation :calculate_dimensions_in_mm
 
   private
 
   def calculate_dimensions_in_mm
-    self.update(length_mm: (self.length_m * 1000).to_i,
-                width_mm: (self.width_m * 1000).to_i)
+    self.length_mm = (self.length_m * 1000).to_i
+    self.width_mm = (self.width_m * 1000).to_i
   end
 end
