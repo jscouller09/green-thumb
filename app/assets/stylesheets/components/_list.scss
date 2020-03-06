@@ -1,0 +1,17 @@
+.list {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+#dashboard-list {
+  display: flex;
+  justify-content: space-around;
+  i {
+    padding-right: 50px;
+    font-size: 16px;
+    color: $gray;
+  }
+}

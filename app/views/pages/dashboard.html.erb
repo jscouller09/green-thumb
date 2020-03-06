@@ -1,12 +1,37 @@
-<h1>Dashboard</h1>
+<div class="menu-headline">
+  <h1>Dashboard</h1>
+</div>
 
 <!-- Links -->
-<%= link_to "My garden", gardens_path %>
-<br>
-<%= link_to "Tasks", tasks_path %>
-<br>
-<%= link_to "Watering", waterings_path %>
-<br>
-<%= link_to "Weather", tasks_path %>
-<br>
-<%= link_to "Conversations", conversations_path %>
+<div class="list" id="dashboard-list">
+  <div class="dashboard-card">
+    <div class="dashboard-card-content">
+      <i class="fas fa-seedling"></i>
+      <%= link_to "My Garden", gardens_path %>
+    </div>
+  </div>
+  <div class="dashboard-card">
+    <div class="dashboard-card-content">
+      <i class="fas fa-clipboard-list"></i>
+      <%= link_to "Tasks", tasks_path %>
+    </div>
+  </div>
+  <div class="dashboard-card">
+    <div class="dashboard-card-content">
+      <i class="fas fa-tint"></i>
+      <%= link_to "Watering", waterings_path %>
+    </div>
+  </div>
+  <div class="dashboard-card">
+    <div class="dashboard-card-content">
+      <i class="fas fa-cloud-sun"></i>
+      <%= link_to "Weather", tasks_path %>
+    </div>
+  </div>
+  <div class="dashboard-card">
+    <div class="dashboard-card-content">
+      <i class="far fa-comments"></i>
+      <%= link_to "Conversations", conversations_path %>
+    </div>
+  </div>
+</div>

@@ -1,24 +1,48 @@
-<h1>Tasks</h1>
-<% @tasks.each do |task| %>
-  <h2><%= task.description %></h2>
-  <p><%= task.due_date %></p>
-  <span><%= task.priority %></span>
-  <% if current_user && policy(task).destroy? %>
-    <%= link_to "delete task", task_path(task),
-        method: "DELETE",
-        data: { confirm: "Are You Sure You Want to Destroy #{task.description}?"} %>
-  <% end %>
-  <% if current_user && policy(task).update? %>
-    <%= link_to "edit", edit_task_path(task) %>
-  <% end %>
-  <% if current_user && policy(task).mark_as_complete? %>
-    <%= link_to "complete?", "/tasks/#{task.id}/complete",
-        method: "PATCH",
-        data: { confirm: "Are You Sure You Want to complete this task? #{task.description}?"} %>
-  <% end %>
-<% end %>
+  <div class="menu-headline">
+    <h1>Hello, <%= @tasks.first.user.first_name %>!</h1>
+    <div class="weather-card" id="weather-text">7°C</div>
+  </div>
+<div class="list">
+  <% @tasks.each do |task| %>
+  <div class="task-card">
+      <div id="task-plus-date">
+        <div id="Task-desc"><%= task.description %></div>
+        <div><%= task.due_date %></div>
+        <div><% task.priority %></div>
+      </div>
+        <div id="task-icons">
+          <% if current_user && policy(task).destroy? %>
+            <%= link_to task_path(task),
+                method: "DELETE",
+                data: { confirm: "Are You Sure You Want to Destroy #{task.description}?"} do %>
+                <i class="far fa-trash-alt"></i>
+              <% end %>
+          <% end %>
 
-<p>Add a task</p>
-<%= render "task_form", task: @task %>
+          <% if current_user && policy(task).update? %>
+            <%= link_to edit_task_path(task) do %>
+            <i class="fas fa-pencil-alt"></i>
+            <% end %>
+          <% end %>
+          </div>
+          <div>
+            <% if current_user && policy(task).mark_as_complete? %>
+              <%= link_to "/tasks/#{task.id}/complete",
+                  method: "PATCH",
+                  data: { confirm: "Are You Sure You Want to complete this task? #{task.description}?"} do %>
+                  <i class="far fa-square"></i>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+  <% end %>
+  </div>
+</div>
 
-<%= link_to "Back to dashboard", dashboard_path %>
+<!-- <div>
+  <p>Add a task</p>
+  <%= render "task_form", task: @task %>
+
+  <%= link_to "Back to dashboard", dashboard_path %>
+</div> -->
+

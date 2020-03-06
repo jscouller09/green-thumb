@@ -1,0 +1,23 @@
+.menu-headline {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 24px 0 24px 0;
+  position: relative;
+  width: 100%;
+  h1 {
+    margin-left: 80px;
+    font-size: 36px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .menu-headline {
+    margin-left: 0;
+    h1 {
+    margin-left: 12px;
+    font-size: 30px;
+    font-weight: bold;
+    }
+  }
+}
