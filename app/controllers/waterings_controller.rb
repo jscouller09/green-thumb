@@ -7,9 +7,11 @@ class WateringsController < ApplicationController
     @garden = policy_scope(Garden).first
     @plots = []
     @garden.plots.each do |plot|
-      @plots << plot unless plot.waterings.empty?
+      plot.waterings.map do |watering|
+        @plots << plot unless watering.done?
+      end
+      @plots.uniq!
     end
-
   end
 
   # GET plots/:plot_id/waterings
@@ -50,7 +52,7 @@ class WateringsController < ApplicationController
   # PATCH plots/:id/complete_waterings
   def complete_plot_watering
     plot = Plot.find(params[:plot_id])
-    waterings = policy_scope(plot.waterings)
+    waterings = plot.waterings
     waterings.each do |watering|
       watering.update(done: true)
     end

@@ -20,5 +20,4 @@ class WateringPolicy < ApplicationPolicy
   def mark_as_complete?
     update?
   end
-
 end
