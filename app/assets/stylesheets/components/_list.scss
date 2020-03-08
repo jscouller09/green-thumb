@@ -4,7 +4,8 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  overflow: scroll;
+  padding-bottom: 160px;
   width: 100%;
 }
 

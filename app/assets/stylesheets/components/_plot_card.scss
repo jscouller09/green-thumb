@@ -5,18 +5,25 @@
   border-radius: 5px;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
   color: $dk-green;
-  display:flex;
+  display: flex;
   height: 90px;
-  justify-content: center;
+  justify-content: space-between;
   line-height: 20px;
   margin-bottom: 24px;
-  max-width: 500px;
-  padding: 35px;
+  max-width: 480px;
+  padding: 16px 24px;
   position: relative;
   width: 75%;
   a {
     color: $gray;
+    // justify-content: flex-end;
     font-size: 24px;
     text-decoration: none;
   }
+}
+
+.plot-card-inner-wrapper {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid $red;
 }
