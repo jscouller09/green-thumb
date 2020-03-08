@@ -18,7 +18,17 @@ class WateringsController < ApplicationController
   def watering_plot
     @plot = Plot.find(params[:plot_id])
     authorize @plot
+    @plant = Plant.new
     @watering_groups = {}
+    @plants = @plot.plants
+    plants_to_json = @plants.map do |plant|
+      { id: plant.id,
+        x: plant.x,
+        y: plant.y,
+        radius_mm: plant.radius_mm,
+        photo_url: plant.plant_type.photo_url }
+    end
+    @plants_json = plants_to_json.to_json.html_safe
     @plot.plant_types.each do |type|
       # get the plants of this type, in this plot
       plants = @plot.plants.where(plant_type: type)
