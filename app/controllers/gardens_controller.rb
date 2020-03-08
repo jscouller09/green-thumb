@@ -41,7 +41,6 @@ class GardensController < ApplicationController
     @garden = Garden.new(safe_params)
     authorize @garden
     @garden.user = current_user
-    @garden.grid_cell_size_mm = 100
     # check the garden address gives valid coordinates
     # this is done using custom validation function which attempts to geocode it
     @garden.valid?

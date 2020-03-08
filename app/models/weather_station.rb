@@ -17,9 +17,24 @@ class WeatherStation < ApplicationRecord
             numericality: { greater_than_or_equal_to: -180,
                             less_than_or_equal_to: 180,
                             message: "must be in range (-180, +180)" }
+  validates :elevation_m,
+            numericality: { allow_nil: true }
+  validates :tot_rain_24hr_mm,
+            numericality: { allow_nil: true, greater_than_or_equal_to: 0.0 }
+  validates :min_temp_24_hr_c,
+            numericality: { allow_nil: true }
+  validates :max_temp_24_hr_c,
+            numericality: { allow_nil: true }
+  validates :avg_humidity_24_hr_perc,
+            numericality: { allow_nil: true, greater_than_or_equal_to: 0.0 }
+  validates :avg_wind_speed_24_hr_mps,
+            numericality: { allow_nil: true, greater_than_or_equal_to: 0.0 }
+  validates :avg_pressure_24_hr_hPa,
+            numericality: { allow_nil: true, greater_than_or_equal_to: 0.0 }
 
   # constants
   OW_BASE_URL = 'http://api.openweathermap.org/data'
+  OPEN_TOPO_URL = 'https://api.opentopodata.org/v1/aster30m?locations='
 
   WEATHER_CODES = {
     200 => { main: 'Thunderstorm', description: 'thunderstorm with light rain', icon: '11d' },
@@ -106,6 +121,22 @@ class WeatherStation < ApplicationRecord
     forecast
   end
 
+  def calculate_24hr_stats
+    # get all measurements for the current station from last 24 hrs
+    yesterday = DateTime.now.utc - 24.hours
+    self.tot_rain_24hr_mm = self.measurements.where("created_at >= ?", yesterday).sum(:rain_1h_mm)
+    self.min_temp_24_hr_c = self.measurements.where("created_at >= ?", yesterday).minimum(:temp_c)
+    self.avg_temp_24_hr_c = self.measurements.where("created_at >= ?", yesterday).average(:temp_c)
+    self.max_temp_24_hr_c = self.measurements.where("created_at >= ?", yesterday).maximum(:temp_c)
+    self.avg_humidity_24_hr_perc = self.measurements.where("created_at >= ?", yesterday).average(:humidity_perc)
+    self.avg_wind_speed_24_hr_mps = self.measurements.where("created_at >= ?", yesterday).average(:wind_speed_mps)
+    self.avg_pressure_24_hr_hPa = self.measurements.where("created_at >= ?", yesterday).average(:pressure_hPa)
+  end
+
+  def calculate_24hr_pet
+    # add calcs for PET measurements
+  end
+
   def weather_summary
     # get current data
     summary = {}
@@ -164,12 +195,15 @@ class WeatherStation < ApplicationRecord
     begin
       WeatherStation.find(data[:id])
     rescue ActiveRecord::RecordNotFound
+      # download elevation data for the station coords from open topo
+      z = download_elevation(data[:coord][:lat], data[:coord][:lon])
       # build weather station instance, save to DB and return it
       return WeatherStation.create(id: data[:id],
                                    name: data[:name],
                                    country: data[:sys][:country],
                                    lat: data[:coord][:lat],
-                                   lon: data[:coord][:lon])
+                                   lon: data[:coord][:lon],
+                                   elevation_m: z)
     else
       # weather station exists, use it
       return WeatherStation.find(data[:id])
@@ -177,6 +211,15 @@ class WeatherStation < ApplicationRecord
   end
 
   private
+
+  def self.download_elevation(lat, lon)
+    # download elevation of coordinates from open topo
+    # https://www.opentopodata.org/
+    elevation_url = "#{OPEN_TOPO_URL}#{lat},#{lon}"
+    serialised_data = URI.open(elevation_url).read
+    elev_data = JSON.parse(serialised_data, symbolize_names: true)
+    elev_data[:results].first[:elevation]
+  end
 
   def wind_direction(deg)
     # convert wind direction in degrees to cardinal direction
