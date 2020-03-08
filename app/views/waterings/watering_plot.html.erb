@@ -19,10 +19,11 @@
             </div>
           <% end %>
         </ul>
-
       </div>
     <% end %>
           <%= link_to "all done?", plot_complete_waterings_path(@plot),
                       method: "PATCH",
                       data: { confirm: "Are You Sure You Want to complete all the watering's tasks?"} %>
+  <div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= 100 %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
+  </div>
 </div>
