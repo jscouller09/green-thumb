@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_08_184829) do
+ActiveRecord::Schema.define(version: 2020_03_08_220815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -211,7 +211,7 @@ ActiveRecord::Schema.define(version: 2020_03_08_184829) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.float "elevation_m"
-    t.float "tot_rain_24hr_mm"
+    t.float "tot_rain_24_hr_mm"
     t.float "tot_pet_24_hr_mm"
     t.float "min_temp_24_hr_c"
     t.float "max_temp_24_hr_c"
@@ -219,6 +219,7 @@ ActiveRecord::Schema.define(version: 2020_03_08_184829) do
     t.float "avg_wind_speed_24_hr_mps"
     t.float "avg_pressure_24_hr_hPa"
     t.float "avg_temp_24_hr_c"
+    t.datetime "timestamp"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

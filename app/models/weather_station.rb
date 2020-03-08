@@ -19,7 +19,9 @@ class WeatherStation < ApplicationRecord
                             message: "must be in range (-180, +180)" }
   validates :elevation_m,
             numericality: { allow_nil: true }
-  validates :tot_rain_24hr_mm,
+  validates :tot_rain_24_hr_mm,
+            numericality: { allow_nil: true, greater_than_or_equal_to: 0.0 }
+  validates :tot_pet_24_hr_mm,
             numericality: { allow_nil: true, greater_than_or_equal_to: 0.0 }
   validates :min_temp_24_hr_c,
             numericality: { allow_nil: true }
@@ -124,17 +126,76 @@ class WeatherStation < ApplicationRecord
   def calculate_24hr_stats
     # get all measurements for the current station from last 24 hrs
     yesterday = DateTime.now.utc - 24.hours
-    self.tot_rain_24hr_mm = self.measurements.where("created_at >= ?", yesterday).sum(:rain_1h_mm)
+    self.timestamp = self.measurements.where("created_at >= ?", yesterday).select(:timestamp).last[:timestamp]
+    self.tot_rain_24_hr_mm = self.measurements.where("created_at >= ?", yesterday).sum(:rain_1h_mm)
     self.min_temp_24_hr_c = self.measurements.where("created_at >= ?", yesterday).minimum(:temp_c)
     self.avg_temp_24_hr_c = self.measurements.where("created_at >= ?", yesterday).average(:temp_c)
     self.max_temp_24_hr_c = self.measurements.where("created_at >= ?", yesterday).maximum(:temp_c)
     self.avg_humidity_24_hr_perc = self.measurements.where("created_at >= ?", yesterday).average(:humidity_perc)
     self.avg_wind_speed_24_hr_mps = self.measurements.where("created_at >= ?", yesterday).average(:wind_speed_mps)
     self.avg_pressure_24_hr_hPa = self.measurements.where("created_at >= ?", yesterday).average(:pressure_hPa)
+    self.save
   end
 
   def calculate_24hr_pet
-    # add calcs for PET measurements
+    # TEMP
+    t_max = self.max_temp_24_hr_c
+    t_min = self.min_temp_24_hr_c
+    t = (t_max + t_min) / 2.0
+
+    # VAPOR PRESSURE DEFICIT
+    vapour_p = lambda { |x| 0.6108 * Math.exp(17.27 * x / (x + 237.3)) }
+    e_t_min = vapour_p.call(t_min)
+    e_t_max = vapour_p.call(t_max)
+    e_s = (e_t_min + e_t_max) / 2.0
+    e_a = e_s * (self.avg_humidity_24_hr_perc / 100.0)
+    vpd = e_s - e_a
+
+    # WIND
+    # calculate 2m high windspeed assuming measured at 10m from surface
+    adj_windspeed = lambda { |u, y| u * (4.87 / Math.log(67.8*y - 5.42)) }
+    u_2 = adj_windspeed.call(self.avg_wind_speed_24_hr_mps, 10.0)
+
+    # NET RADIATION
+    # julian day
+    j = ((275 * (self.timestamp.month / 9.0) - 30 + self.timestamp.day) - 2).to_i
+    # inverse relative distance earth-sun
+    d_r = 1 + (0.333 * Math.cos(2.0 * Math::PI * j / 365))
+    # latitude (radians)
+    phi = Math::PI * self.lat / 180.0
+    # solar declination (radians)
+    delta = 0.409 * Math::sin((2.0 * Math::PI * j / 365) - 1.39)
+    # sunset hour angle (radians)
+    omega_s = Math.acos(-Math.tan(phi)*Math.tan(delta))
+    # extr terrestrial radiation
+    r_a = (24*60 / Math::PI) * 0.082 * d_r * (omega_s*Math.sin(phi)*Math.sin(delta) + Math.cos(phi)*Math.cos(delta)*Math.sin(omega_s))
+    # solar radiation
+    # assume interior locations Krs = 0.16 for now (0.19 for coastal)
+    r_s = 0.16 * Math.sqrt(t_max - t_min) * r_a
+    # clear sky solar radiation
+    r_s0 = (0.75 + 2.0e-5 * self.elevation_m) * r_a
+    # net solar radiation
+    r_ns = (1 - 0.23) * r_s
+    # net long wave radiation
+    r_nl = 4.903e-9*((t_max + 237.16)**4 + (t_min + 237.16)**4) * (0.34 - 0.14*Math.sqrt(e_a)) * ((1.35*r_s/r_s0) - 0.35)/ 2.0
+    # net radiation
+    r_n = r_ns - r_nl
+
+    # SLOPE OF VAPOUR PRESSURE CURVE
+    delta_caps = 4098 * vapour_p.call(t) / ((t + 237.13)**2)
+
+    # PSYCHOMETRIC CONSTANT
+    # assume can be calculated based off average pressure instead of elevation
+    gamma = 0.665e-3 * self.avg_pressure_24_hr_hPa / 10.0
+
+    # REFERENCE PET
+    # note for daily calcs assume G = soil heat flux density = 0
+    et_0_numerator = 0.408*delta_caps*r_n + gamma*900.0*u_2*vpd/(t+273.0)
+    et_0_denomenator = delta_caps + gamma*(1.0 + 0.34*u_2)
+    et_0 = et_0_numerator / et_0_denomenator
+
+    self.tot_pet_24_hr_mm = et_0
+    self.save
   end
 
   def weather_summary
