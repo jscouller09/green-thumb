@@ -56,6 +56,9 @@ class WateringsController < ApplicationController
     authorize watering
     plot = watering.plant.plot
     watering.update(done: true)
+    # after watering, update the plant water deficit
+    watering.update_plant_water_deficit
+    # redirect to plot waterings
     redirect_to plot_waterings_path(plot)
   end
 
@@ -65,6 +68,8 @@ class WateringsController < ApplicationController
     waterings = plot.waterings
     waterings.each do |watering|
       watering.update(done: true)
+      # after watering, update the plant water deficit
+      watering.update_plant_water_deficit
     end
       redirect_to plot_waterings_path
   end

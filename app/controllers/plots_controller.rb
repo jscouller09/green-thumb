@@ -37,14 +37,15 @@ class PlotsController < ApplicationController
     # set a garden and a shape for the plot
     @plot.garden = @garden
     @plot.shape = 'rectangle'
-      if @plot.save
-        flash[:notice] = "#{@plot.name} successfully added to your garden!"
-          # go to garden show page
-          redirect_to plot_path(@plot)
+    @plot.grid_cell_size_mm = 100
+    if @plot.save
+      flash[:notice] = "#{@plot.name} successfully added to your garden!"
+        # go to garden show page
+        redirect_to plot_path(@plot)
 
-      else
-        render :new
-      end
+    else
+      render :new
+    end
   end
 
   # GET /plots/:id/edit

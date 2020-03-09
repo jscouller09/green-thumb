@@ -7,8 +7,12 @@
 <%= render "current", data: @current %>
 
 <!-- Render a forecast partial for each day of the 3 day forecast -->
-<% @forecast.each do |day, data| %>
-  <%= render "forecast", day: day, data: data %>
+<% @forecast.each_with_index do |(day, data), index| %>
+  <% if index == 0 %>
+    <%= render "forecast", day: day, data: data, class: "carousel-active" %>
+  <% else %>
+    <%= render "forecast", day: day, data: data, class: "" %>
+  <% end %>
 <% end %>
 
 <!-- Links -->
