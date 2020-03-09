@@ -2,10 +2,40 @@
   padding: 0;
   margin: 0 auto;
   box-shadow: 0 0 8px black;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+  border: 8px solid $brown;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
                     url("https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583523873/green-thumb/1_d8DyNLUIa8xo5rGrO-2FSg_v7kggg.jpg");
   background-position: center;
   background-size: cover;
+  position: relative;
+}
+
+.plot-plant {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .plot-plant-thumbnail {
+    height: 50%;
+    width: 50%;
+    background-size: cover;
+    background-position: center;
+    // md-green equivalent with filters
+    filter: invert(93%) sepia(51%) saturate(503%) hue-rotate(52deg) brightness(92%) contrast(81%);
+  }
+  .plot-plant-border {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    border: 1px dashed $cream;
+    &:hover {
+      border: 1px dashed $cream;
+    }
+  }
 }
 
 .cards {
@@ -45,3 +75,9 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+@media screen and (max-width: 600px) {
+  .cards {
+    border: none;
+    }
+  }

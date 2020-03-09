@@ -15,6 +15,7 @@ class PlotsController < ApplicationController
         x: plant.x,
         y: plant.y,
         radius_mm: plant.radius_mm,
+        icon: ActionController::Base.helpers.asset_path("icons/#{plant.plant_type.icon}"),
         photo_url: plant.plant_type.photo_url }
     end
     @plants_json = plants_to_json.to_json.html_safe
@@ -37,7 +38,7 @@ class PlotsController < ApplicationController
     # set a garden and a shape for the plot
     @plot.garden = @garden
     @plot.shape = 'rectangle'
-    @plot.grid_cell_size_mm = 100
+    @plot.grid_cell_size_mm = 10
     if @plot.save
       flash[:notice] = "#{@plot.name} successfully added to your garden!"
         # go to garden show page
