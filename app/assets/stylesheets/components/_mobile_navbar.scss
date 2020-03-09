@@ -21,7 +21,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  p{
+    font-size: 12px;
+
+  }
   i {
     color: $cream;
+    font-size: 40px;
   }
 }
