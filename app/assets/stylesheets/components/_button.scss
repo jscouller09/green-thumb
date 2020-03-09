@@ -34,3 +34,25 @@
   margin-bottom: 16px;
   padding: 50px;
 }
+
+.garden-button-small {
+  align-items: right;
+  border-radius: 5px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  background-color: $md-green;
+  display: flex;
+  flex-grow: 0;
+  font-size: 20px;
+  justify-content: right;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 28px;
+  // line-height: 8px;
+  text-align: right;
+  text-decoration: none;
+  &:hover {
+    color: $lt-green;
+    text-decoration: none;
+  }
+}
