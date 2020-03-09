@@ -8,19 +8,19 @@
     <p>Sorry! You don't have any plots yet</p>
   <% else %>
     <!-- display all the users plots as cards -->
-      <% @plots.each_with_index do |plot, i| %>
+    <% @plots.each_with_index do |plot, i| %>
       <div class="plot-card">
         <div class="plot-card-inner-wrapper">
           <div class="plot-card-content">
             <div><%= link_to plot.name, plot_path(plot) %></div>
             <!-- accesses cloudinary .png for the Main Plant of the plot -->
-            <div><%= image_tag @main_plant_img[i], id: "plot-card-icon" %></div>
+            <div><%= cl_image_tag @main_plant_img[i], id: "plot-card-icon" %></div>
           </div>
         </div>
       </div>
-      <% end %>
+    <% end %>
   <% end %>
-    <div>
-        <%= link_to "New Plot", new_garden_plot_path(@garden), class: 'garden-button' %>
-    </div>
+  <div>
+      <%= link_to "New Plot", new_garden_plot_path(@garden), class: 'garden-button' %>
+  </div>
 </div>

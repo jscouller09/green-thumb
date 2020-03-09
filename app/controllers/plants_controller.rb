@@ -40,10 +40,17 @@ class PlantsController < ApplicationController
     # check this is the users plant
     authorize @plant
     # update the location
-    if @plant.update(plant_params)
+    cur_x = @plant.x
+    cur_y = @plant.y
+    @plant.update(plant_params)
+    if plant_space_ok?(@plant)
       render json: { accepted: true, status: 201 }
     else
-      render json: { x: @plant.x, y: @plant.y, accepted: false, status: 500, errors: @plant.errors.messages }
+      # return to original location
+      errors = @plant.errors.messages
+      render json: { x: cur_x, y: cur_y, accepted: false, status: 500, errors: errors }
+      flash.now[:error] = errors.first
+      @plant.update(x: cur_x, y: cur_y)
     end
   end
 
@@ -51,5 +58,39 @@ class PlantsController < ApplicationController
 
   def plant_params
     params.require(:plant).permit(:plant_type_id, :plot_id, :plant_date, :x, :y)
+  end
+
+  def plant_space_ok?(current_plant)
+    # go through all plants in the current plot
+    current_plant.plot.plants.each do |plant|
+      unless plant == current_plant
+        # check the moved plant does not overlap with another plant
+        if plants_overlap?(current_plant, plant)
+          # return false if it intersects any plant
+          msg = "The #{current_plant.plant_type.name.downcase} you just tried to move is too close to a neighboring #{plant.plant_type.name.downcase} plant. Try nudge it to the side a bit!"
+          current_plant.errors.add(:base, msg)
+          return false
+        end
+      end
+    end
+    return true
+  end
+
+  def plants_overlap?(plant_1, plant_2)
+    x1 = plant_1.x
+    y1 = plant_1.y
+    x2 = plant_2.x
+    y2 = plant_2.y
+    r1 = plant_1.radius_mm.fdiv(plant_1.plot.grid_cell_size_mm)
+    r2 = plant_2.radius_mm.fdiv(plant_2.plot.grid_cell_size_mm)
+    center_distance = Math.sqrt((x1 - x2)**2 + (y1 - y2)**2);
+    radius_sum = (r1 + r2);
+    if center_distance >= radius_sum
+      # circles don't intersect or just touch each other
+      return false
+    elsif center_distance < radius_sum
+      # circles intersect
+      return true
+    end
   end
 end

@@ -1,59 +1,77 @@
-<div class="container">
+<div class="container mb-5">
 
-<h1><%= @plot.name %></h1>
+  <h1><%= @plot.name %></h1>
 
-<!-- List all the plant in the plot -->
-<ul>
-  <% @plot.plants.each do|plant| %>
-    <li>
-      <%= plant.plant_type.name %>
-      <%= plant.plant_date %>
-      <%= link_to "x", plant_path(plant), method: 'delete',
-          data: { confirm: "Are you sure you want to remove this plant?"} %>
-    </li>
-  <% end %>
-</ul>
+  <!-- List all the plant in the plot -->
+  <ul>
+    <% @plot.plants.each do|plant| %>
+      <li>
+        <%= plant.plant_type.name %>
+        <%= plant.plant_date %>
+        <%= link_to "x", plant_path(plant), method: 'delete',
+            data: { confirm: "Are you sure you want to remove this plant?"} %>
+      </li>
+    <% end %>
+  </ul>
 
-<div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= 100 %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
 </div>
 
-<!-- Links -->
-<%= link_to "Edit Plot", edit_plot_path(@plot) %>
-<%= link_to "Delete plot", plot_path(@plot), method: 'delete',
-    data: { confirm: "Are you sure you want to delete #{@plot.name}?"} %>
+<div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= @plot.grid_cell_size_mm %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
+  <!-- Plants will be added here by the JS plugin-->
+</div>
 
-    <h2 >Add a plant</h2>
-  <div class="container-cards">
+<div class="container">
+  <!-- Links -->
+  <%= link_to "Edit Plot", edit_plot_path(@plot) %>
+  <%= link_to "Delete plot", plot_path(@plot), method: 'delete',
+      data: { confirm: "Are you sure you want to delete #{@plot.name}?"} %>
+
+  <!-- Add plant form -->
+  <%= simple_form_for [@plot, @plant], method: 'post' do |f| %>
+      <%= f.association :plant_type, collection: @plant_types %>
+      <%= f.input :plant_date %>
+      <%= f.button :submit, value = 'Plant!'%>
+  <% end %>
+
+  <h2 >Add a plant</h2>
+  <div class="container-cards mb-5">
     <div class="cards">
-        <% @plant_types.each do |plant_type| %>
+      <% @plant_types.each do |plant_type| %>
         <div class="card">
-
           <img src="<%= cl_image_path plant_type.photo_url, height: 150, width: 70, crop: :scale %>" alt="<%= plant_type.name %>">
-
         </div>
       <% end %>
     </div>
   </div>
+
+
 </div>
 
 
 
-<%= simple_form_for [@plot, @plant], method: 'post' do |f| %>
-    <%= f.association :plant_type, collection: @plant_types %>
-    <%= f.input :plant_date %>
-    <%= f.button :submit, value = 'Plant!'%>
-<% end %>
-
-
 <!-- TEST!!! -->
 <!-- Trigger/Open The Modal -->
-<button id="myBtn">Test Plant Warning Button</button>
+<button hidden id="error-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#error-modal">
+  Launch demo modal
+</button>
 
 <!-- The Modal -->
-<div id="myModal" class="modal">
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p>Whoops! You don't have enough space to plant that in that spot, try again!</p>
+<div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="error-modal-body" class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
   </div>
 </div>
