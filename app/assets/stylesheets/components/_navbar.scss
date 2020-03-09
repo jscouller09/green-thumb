@@ -10,3 +10,17 @@
 .navbar-lewagon .navbar-brand img {
   width: 56px;
 }
+.navbar-nav .dropdown-menu {
+  position: absolute;
+}
+
+.dropdown-menu{
+  background-color: none;
+  color: $dk-green;
+  border: 0px;
+  text-align: right;
+}
+.dropdown-item{
+  padding: 0px;
+  color: $dk-green;
+}
