@@ -42,14 +42,17 @@ class PlantsController < ApplicationController
     # update the location
     cur_x = @plant.x
     cur_y = @plant.y
-    @plant.update(plant_params)
-    if plant_space_ok?(@plant)
+    update_ok = @plant.update(plant_params)
+    if update_ok && plant_space_ok?(@plant)
       render json: { accepted: true, status: 201 }
     else
       # return to original location
+      unless update_ok
+        msg = "Something went wrong moving that plant!"
+        @plant.errors.add(:base, msg)
+      end
       errors = @plant.errors.messages
       render json: { x: cur_x, y: cur_y, accepted: false, status: 500, errors: errors }
-      flash.now[:error] = errors.first
       @plant.update(x: cur_x, y: cur_y)
     end
   end
@@ -63,7 +66,7 @@ class PlantsController < ApplicationController
   def plant_space_ok?(current_plant)
     # go through all plants in the current plot
     current_plant.plot.plants.each do |plant|
-      unless plant == current_plant
+      unless plant == current_plant || (plant.x.nil? && plant.y.nil?)
         # check the moved plant does not overlap with another plant
         if plants_overlap?(current_plant, plant)
           # return false if it intersects any plant

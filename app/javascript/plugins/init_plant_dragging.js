@@ -1,6 +1,33 @@
 import interact from 'interactjs';
 
 
+const add_plant_to_wheelbarrow=(plant, plants_container, mm_per_pixel) => {
+  // generate a plant div with a nested thumbnail image
+  const plant_div = document.createElement('div');
+  const thumbnail = document.createElement('div');
+
+  // set plant div id and css properties
+  plant_div.classList.add('plot-plant');
+  plant_div.setAttribute('data-id', plant.id);
+  plant_div.style.width = '50px';
+  plant_div.style.height = '50px';
+
+  // style thumbnail image
+  thumbnail.classList.add('plot-plant-thumbnail');
+  // thumbnail.style.backgroundImage = `url("https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325509/${plant.photo_url}")`;
+  thumbnail.style.backgroundImage = `url("${plant.icon}")`;
+
+  // insert the thumbnail/border into the plant div
+  plant_div.appendChild(thumbnail);
+
+  // insert the plant div into the plot container
+  plants_container.appendChild(plant_div);
+
+  return plant_div;
+}
+
+
+
 const add_plant_to_plot=(plant, plants_container, mm_per_pixel) => {
   // generate a plant div with a nested thumbnail image
   const plant_div = document.createElement('div');
@@ -10,8 +37,6 @@ const add_plant_to_plot=(plant, plants_container, mm_per_pixel) => {
   // set plant div id and css properties
   plant_div.classList.add('plot-plant');
   plant_div.setAttribute('data-id', plant.id);
-  plant_div.removeAttribute('hidden');
-  plant_div.style.width = `${plant.radius_mm * 2 / mm_per_pixel}px`;
   plant_div.style.width = `${plant.radius_mm * 2 / mm_per_pixel}px`;
   plant_div.style.height = `${plant.radius_mm * 2 / mm_per_pixel}px`;
 
@@ -33,7 +58,34 @@ const add_plant_to_plot=(plant, plants_container, mm_per_pixel) => {
   return plant_div;
 }
 
-const init_ineractjs=(plant, element, mm_per_pixel, grid_size) => {
+const init_ineractjs=(plant, element, mm_per_pixel, grid_size, grid_cols) => {
+  const wheelbarrow = document.getElementById('wheelbarrow');
+  // set wheelbarrow dimensions based on any unplaced plants (negative coordinates)
+  if ((plant.y < 0 || plant.y == null) || (plant.x < 0 || plant.x == null)) {
+    wheelbarrow.innerHTML = "Drag the plant onto the plot..."
+    // plant dimensions
+    let plant_size = 2*plant.radius_mm/mm_per_pixel;
+    // plant is in the wheelbarrow, resize it if necessary to fit the plant
+    let current_height = wheelbarrow.clientHeight;
+    let current_width = wheelbarrow.clientWidth;
+    if (current_height < plant_size) {
+      wheelbarrow.style.height = `${plant_size}px`;
+      current_height = plant_size;
+    }
+    if (current_width < plant_size) {
+      wheelbarrow.style.width = `${plant_size}px`;
+      current_width = plant_size;
+    }
+    // position plant in center of wheelbarrow area
+    plant.y = Math.round(-current_height/grid_size);
+    // console.log(grid_size, grid_cols, plant_size/grid_size, Math.round(current_width/2/grid_size));
+    plant.x = Math.round(grid_cols - (plant_size/grid_size));
+  }
+  // store inital positions
+  plant.initial_x = plant.x
+  plant.initial_y = plant.y
+
+
   let x = plant.x * grid_size;
   let y = plant.y * grid_size;
   element.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
@@ -71,12 +123,22 @@ const init_ineractjs=(plant, element, mm_per_pixel, grid_size) => {
               if (data.accepted) {
                 // if response ok, keep updated plant x/y
                 console.log(`plant ${plant.id} moved to x:${plant.x} y:${plant.y}`);
+                // if the plant moved was a new one, add a copy to the wheelbarrow area
+                if (plant.initial_y < 0) {
+                  console.log("Adding new plant...");
+                  // create plant div and add it to the plot
+                  const plants_container = document.getElementById('plot-container');
+                  const new_element = add_plant_to_plot(plant, plants_container, mm_per_pixel);
+                  // attach the interact plugin to the plant
+                  init_ineractjs(plant, new_element, mm_per_pixel, grid_size, grid_cols);
+                  // update the list of plants in the garden
+                }
               } else {
-                // move it back to where it was
-                plant.x = data.x
-                plant.y = data.y
-                x = data.x * grid_size;
-                y = data.y * grid_size;
+                // move it back to where it was or the initial position
+                (data.x == null) ? plant.x = plant.initial_x : plant.x = data.x;
+                (data.y == null) ? plant.y = plant.initial_y : plant.y = data.y;
+                x = plant.x * grid_size;
+                y = plant.y * grid_size;
                 event.target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
                 console.log(data.errors.base[0]);
                 // modal
@@ -110,7 +172,9 @@ const init_plant_dragging=() => {
     plants_container.innerHTML = "";
     // determine grid spacing based of viewport size and plot size
     const intViewportHeight = window.innerHeight;
-    const intViewportWidth = window.innerWidth * 0.8;
+    // const intViewportWidth = window.innerWidth * 0.9;
+    const container = document.querySelector('.container');
+    const intViewportWidth = container.clientWidth * 0.95;
     const length = parseInt(plants_container.dataset.length);
     const width = parseInt(plants_container.dataset.width);
     // set the grid scale (i.e. each grid cell is how many mm?
@@ -131,7 +195,7 @@ const init_plant_dragging=() => {
       // create plant div and add it to the plot
       const element = add_plant_to_plot(plant, plants_container, mm_per_pixel);
       // attach the interact plugin to the plant
-      init_ineractjs(plant, element, mm_per_pixel, grid_size);
+      init_ineractjs(plant, element, mm_per_pixel, grid_size, grid_cols);
     });
   }
 }

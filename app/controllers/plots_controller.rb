@@ -9,11 +9,13 @@ class PlotsController < ApplicationController
     @plant = Plant.new
     @plot = Plot.find(params[:id])
     authorize @plot
-    @plants = @plot.plants
-    plants_to_json = @plants.map do |plant|
+    @plants = @plot.plants.where("x > 0 AND y > 0")
+    plants_to_json = @plot.plants.map do |plant|
+      # on plants without a position, move to wheelbarrow (negative x and y)
       { id: plant.id,
-        x: plant.x,
-        y: plant.y,
+        x: plant.x.nil? ? -1 : plant.x,
+        y: plant.y.nil? ? -1 : plant.y,
+        planted: plant.planted,
         radius_mm: plant.radius_mm,
         icon: ActionController::Base.helpers.asset_path("icons/#{plant.plant_type.icon}"),
         photo_url: plant.plant_type.photo_url }
