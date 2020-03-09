@@ -24,18 +24,18 @@ class Plant < ApplicationRecord
     # if water deficit exceeds 2 mm, generate a watering
     if self.water_deficit_mm > 2.0
       # assume maximum watering per event is 20.0 mm for drainage reasons
-      mm_irrig = self.water_deficit_mm, 20.0].min
+      mm_irrig = [self.water_deficit_mm, 20.0].min
       # first check if there is already an incomplete watering we want to add to
       if self.waterings.where(done: false).first
         # add to previous watering
         water = self.waterings.where(done: false).first
         water.ammount_mm += mm_irrig
-        water.ammount_L = (water.ammount_mm * MATH::PI * self.radius_mm**2)/1e6
+        water.ammount_L = (water.ammount_mm * Math::PI * self.radius_mm**2)/1e6
         return water.save
       else
         # generate new watering
-        water = Watering.new(ammount_mm: mm_irrig
-                             ammount_L: (mm_irrig * MATH::PI * self.radius_mm**2)/1e6)
+        water = Watering.new(ammount_mm: mm_irrig,
+                             ammount_L: (mm_irrig * Math::PI * self.radius_mm**2)/1e6)
         water.plant = self
         return water.save
       end
@@ -72,7 +72,7 @@ class Plant < ApplicationRecord
       kc = (self.plant_type.kc_end - self.plant_type.kc_mid) * perc
       self.kc = self.plant_type.kc_mid + kc
     else
-      self.kc = kc_end
+      self.kc = self.plant_type.kc_end
     end
     self.save
   end

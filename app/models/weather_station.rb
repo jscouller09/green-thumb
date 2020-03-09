@@ -34,6 +34,8 @@ class WeatherStation < ApplicationRecord
   validates :avg_pressure_24_hr_hPa,
             numericality: { allow_nil: true, greater_than_or_equal_to: 0.0 }
 
+  after_create :download_elevation
+
   # constants
   OW_BASE_URL = 'http://api.openweathermap.org/data'
   OPEN_TOPO_URL = 'https://api.opentopodata.org/v1/aster30m?locations='
@@ -256,15 +258,12 @@ class WeatherStation < ApplicationRecord
     begin
       WeatherStation.find(data[:id])
     rescue ActiveRecord::RecordNotFound
-      # download elevation data for the station coords from open topo
-      z = download_elevation(data[:coord][:lat], data[:coord][:lon])
       # build weather station instance, save to DB and return it
       return WeatherStation.create(id: data[:id],
                                    name: data[:name],
                                    country: data[:sys][:country],
                                    lat: data[:coord][:lat],
-                                   lon: data[:coord][:lon],
-                                   elevation_m: z)
+                                   lon: data[:coord][:lon])
     else
       # weather station exists, use it
       return WeatherStation.find(data[:id])
@@ -273,13 +272,14 @@ class WeatherStation < ApplicationRecord
 
   private
 
-  def self.download_elevation(lat, lon)
+  def download_elevation
     # download elevation of coordinates from open topo
     # https://www.opentopodata.org/
-    elevation_url = "#{OPEN_TOPO_URL}#{lat},#{lon}"
+    elevation_url = "#{OPEN_TOPO_URL}#{self.lat},#{self.lon}"
     serialised_data = URI.open(elevation_url).read
     elev_data = JSON.parse(serialised_data, symbolize_names: true)
-    elev_data[:results].first[:elevation]
+    self.elevation_m = elev_data[:results].first[:elevation]
+    self.save
   end
 
   def wind_direction(deg)
@@ -330,15 +330,15 @@ class WeatherStation < ApplicationRecord
     data_to_keep[:description] = data[:weather].first[:description]
     data_to_keep[:icon] = data[:weather].first[:icon]
     unless data[:rain].nil?
-      data_to_keep[:rain_1h_mm] = data[:rain][:"1h"]
-      data_to_keep[:rain_3h_mm] = data[:rain][:"3h"]
+      data_to_keep[:rain_1h_mm] = data[:rain][:"1h"].nil? ? 0.0 : data[:rain][:"1h"]
+      data_to_keep[:rain_3h_mm] = data[:rain][:"3h"].nil? ? 0.0 : data[:rain][:"3h"]
     else
       data_to_keep[:rain_1h_mm] = 0.0
       data_to_keep[:rain_3h_mm] = 0.0
     end
     unless data[:snow].nil?
-      data_to_keep[:snow_1h_mm] =  data[:snow][:"1h"]
-      data_to_keep[:snow_3h_mm] = data[:snow][:"3h"]
+      data_to_keep[:snow_1h_mm] =  data[:snow][:"1h"].nil? ? 0.0 : data[:snow][:"1h"]
+      data_to_keep[:snow_3h_mm] = data[:snow][:"3h"].nil? ? 0.0 : data[:snow][:"3h"]
     else
       data_to_keep[:snow_1h_mm] = 0.0
       data_to_keep[:snow_3h_mm] = 0.0
