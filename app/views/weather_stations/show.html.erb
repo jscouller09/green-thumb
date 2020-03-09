@@ -1,19 +1,23 @@
-<h1>Weather</h1>
+<h1 id="weather-headline">Your Weather</h1>
 
 <!-- Station name and country -->
-<h3><%= "#{@station.name}, #{@station.country}" %></h3>
+<h3 id="weather-station-headline"><%= "#{@station.name}, #{@station.country}" %></h3>
 
 <!-- Current forecast -->
 <%= render "current", data: @current %>
-
+<!-- This should become a carousel as soon as I figure it out with someone who knows -Cricket -->
+<h1 id="weather-headline">3-Day Forecast</h1>
 <!-- Render a forecast partial for each day of the 3 day forecast -->
-<% @forecast.each_with_index do |(day, data), index| %>
-  <% if index == 0 %>
-    <%= render "forecast", day: day, data: data, class: "carousel-active" %>
-  <% else %>
-    <%= render "forecast", day: day, data: data, class: "" %>
-  <% end %>
-<% end %>
-
-<!-- Links -->
-<%= link_to "Back to dashboard", dashboard_path %>
+<div class="weather-carousel-container pr-0 pl-0">
+  <div id="weather-carousel" class="carousel slide">
+    <div class="carousel-inner">
+      <% @forecast.each_with_index do | (day, data), index | %>
+        <% if index == 0 %>
+          <%= render "forecast", day: day, data: data, class_add: "carousel-item active" %>
+        <% else %>
+          <%= render "forecast", day: day, data: data, class_add: "carousel-item" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -38,12 +38,22 @@
 
 
 
-
-<!-- <div>
-
 <%= simple_form_for [@plot, @plant], method: 'post' do |f| %>
     <%= f.association :plant_type, collection: @plant_types %>
     <%= f.input :plant_date %>
     <%= f.button :submit, value = 'Plant!'%>
-  <% end %>
-</div> -->
+<% end %>
+
+
+<!-- TEST!!! -->
+<!-- Trigger/Open The Modal -->
+<button id="myBtn">Test Plant Warning Button</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Whoops! You don't have enough space to plant that in that spot, try again!</p>
+  </div>
+</div>

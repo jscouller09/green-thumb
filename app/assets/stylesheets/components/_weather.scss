@@ -1,0 +1,83 @@
+.active {
+}
+
+.carousel-inner {
+  text-align: left;
+  margin-bottom: 24px;
+  border: 2px solid $orange;
+  h3 {
+    margin-left: 16px;
+  }
+}
+
+.carousel-item {
+  float: none;
+}
+
+#current-weather-card {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 32px;
+}
+
+.weather-card {
+  align-items: center;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  color: $dk-green;
+  display: flex;
+  // flex-direction: column;
+  height: auto;
+  justify-content: space-between;
+  line-height: 20px;
+  margin: 16px auto;
+  max-width: 500px;
+  min-height: 320px;
+  padding: 8px;
+  // padding-bottom: 24px;
+  text-align: left;
+  width: 80%;
+}
+
+.weather-card-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin: 16px;
+}
+
+.weather-card-headline {
+  margin-left: 16px;
+}
+
+.weather-carousel-indicators {
+  bottom: -50px;
+}
+
+.weather-carousel-dot {
+  margin: 0px 5px !important;
+  background-color: $gray !important;
+  height: 10px !important;
+  width: 10px !important;
+  border-radius: 50%;
+}
+.weather-carousel-dot.active {
+  background-color: black !important;
+}
+
+.weather-carousel-container {
+  position: relative;
+  min-height: 320px;
+  padding: 0;
+  margin-bottom: 16px;
+}
+
+#weather-headline, #weather-station-headline {
+  margin-left: 16px;
+}
+
+.weather-icon {
+  margin: 8px;
+}
+
