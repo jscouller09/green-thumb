@@ -1,4 +1,15 @@
-<div id="current-weather-card" class="weather-card">
+    <% if data[:temp_c] > 24 %>
+        <!-- hot -->
+        <% weather_border = "#FA520A" %>
+        <% elsif data[:temp_c] < 10 %>
+          <!-- cold -->
+            <% weather_border = "#FA9E0A" %>
+        <% else %>
+          <!-- Medium -->
+            <% weather_border = "#B9F5F2" %>
+        <% end %>
+
+<div id="current-weather-card" class="weather-card" style="border-left: 16px solid <%= weather_border %>">
   <div class="weather-icon"><%= image_tag "weather_icons/#{data[:icon]}.png" %></div>
     <div id="weather-card-text">
       <div><%= "#{data[:timestamp].strftime("%l:%M %P %A, %b %e")}" %></div>

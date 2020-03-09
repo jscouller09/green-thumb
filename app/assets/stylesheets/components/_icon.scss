@@ -11,14 +11,13 @@
 
 #plot-card-icon {
   height: auto;
-  left: 16px;
   // margin: 12px;
-  max-height: 40px;
-  max-width: 40px;
-  object-fit: fill;
-  position: absolute;
-  width: auto;
-  border: 1px solid $orange;
+  // max-height: 40px;
+  // max-width: 40px;
+  height: 40px;
+  width: 40px;
+  margin-right: 20px;
+  // object-fit: fill;
 }
 
  #task-icons {
