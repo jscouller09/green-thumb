@@ -1,51 +1,59 @@
 .dashboard-card {
+  align-items: center;
   background: white;
+  border-left: 16px solid $md-green;
   border-radius: 5px;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
   color: $dk-green;
-  font-family: merriweather;
-  font-weight: bold;
+  display: flex;
   height: 90px;
-  justify-content: center;
+  justify-content: space-between;
   line-height: 20px;
   margin-bottom: 24px;
-  padding: 35px;
+  padding: 16px;
   max-width: 500px;
   width: 75%;
   a {
     color: $gray;
-    font-family: special elite;
+    font-family: merriweather;
     font-size: 24px;
     text-decoration: none;
+  }
+  i {
+    margin-left: 12px;
   }
 }
 
 .dashboard-card-content {
+  align-items: center;
   display: flex;
-  justify-content: center;
-  width: 100%;
+  justify-content: space-between;
+  padding: 8px;
+  width: auto;
 }
 
 .task-card {
-  align-items: right;
+  align-items: left;
   background: white;
   border-radius: 5px 0 0 5px;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
   color: $gray;
   display: flex;
   font-family: special elite;
-  font-weight: bold;
   height: auto;
   justify-content: space-between;
   line-height: 20px;
   margin: 40px 0 0 auto;
-  padding: 35px;
+  min-height: 100px;
+  padding: 32px 16px 16px 32px;
   width: 75%;
 }
 
 #task-plus-date {
+  align-items: flex-begin;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 #task-desc {
@@ -71,7 +79,7 @@
   width: 75%;
 }
 
-.weather-card {
+.weather-thumb-card {
   align-items: center;
   background-color: $green;
   border-radius: 8px 0 0 8px;
@@ -87,11 +95,15 @@
 }
 
 @media screen and (max-width: 600px) {
-  .weather-card {
+  .dashboard-card {
+    width: 95vw;
+  }
+  .weather-thumb-card {
     width: 30%;
   }
   .task-card {
-    height: 100px;
+    height: auto;
+    min-height: 96px;
     h1, h2 {
       font-size: 18px;
     }

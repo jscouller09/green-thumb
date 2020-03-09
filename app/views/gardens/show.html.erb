@@ -10,14 +10,17 @@
     <!-- display all the users plots as cards -->
       <% @plots.each_with_index do |plot, i| %>
       <div class="plot-card">
-          <div><%= link_to plot.name, plot_path(plot) %></div>
-          <!-- accesses cloudinary .png for the Main Plant of the plot -->
-          <%= cl_image_tag @main_plant_img[i], id: "plot-card-icon" %>
+        <div class="plot-card-inner-wrapper">
+          <div class="plot-card-content">
+            <div><%= link_to plot.name, plot_path(plot) %></div>
+            <!-- accesses cloudinary .png for the Main Plant of the plot -->
+            <div><%= image_tag @main_plant_img[i], id: "plot-card-icon" %></div>
+          </div>
+        </div>
       </div>
       <% end %>
-  </div>
-<% end %>
-    <div class="garden-buttons-group">
+  <% end %>
+    <div>
         <%= link_to "New Plot", new_garden_plot_path(@garden), class: 'garden-button' %>
-        <%= link_to "Back to Dashboard", dashboard_path, class: 'garden-button' %>
     </div>
+</div>

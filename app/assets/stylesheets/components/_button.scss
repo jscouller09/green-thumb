@@ -1,19 +1,27 @@
 // alphabetize for ease of reference later
 .garden-button {
+  align-items: center;
   border-radius: 5px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   background-color: $md-green;
+  display: flex;
   flex-grow: 0;
   font-size: 20px;
-  height: 75px;
-  padding: 24px;
+  height: 48px;
+  justify-content: center;
+  // line-height: 8px;
   text-align: center;
   text-decoration: none;
-  margin-top: 24px;
-  min-width: 250px;
+  margin: 24px;
+  min-width: 200px;
   width: auto;
+  a {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
   &:hover {
-    color: $cream;
+    color: $lt-green;
     text-decoration: none;
   }
 }

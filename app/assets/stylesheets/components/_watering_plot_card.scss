@@ -1,7 +1,7 @@
 
 // alphabetize for ease of reference later
 .watering-plot-card {
-  align-items: center;
+  align-item: center;
   background: white;
   border-radius: 5px;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
@@ -10,26 +10,25 @@
   font-family: merriweather;
   font-weight: bold;
   height: 90px;
-  justify-content: center;
   line-height: 20px;
   margin-bottom: 24px;
   padding: 35px;
   position: absolute;
   max-width: 500px;
-  width: 75%;
-  a {
-    color: $gray;
-    font-family: special elite;
-    font-size: 24px;
-    text-decoration: none;
-  }
+  width: 100%;
 }
 
 .watering-plot-card-content {
-  align-items: center;
   display: flex;
+  align-items: center;
   justify-content: center;
   max-width: 240px;
   max-height: 88px;
-  width: 100%;
+  width: 50%;
+  height: 50%;
+}
+
+.watering-plot-card-info {
+  display: flex;
+  width: 100%
 }

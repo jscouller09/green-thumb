@@ -1,41 +1,34 @@
 <div class="mobile-navbar">
   <div class="navbar-menu-items">
-    <div><%= link_to tasks_path do %>
-      <i class="fas fa-clipboard-list"></i>
+    <%= link_to tasks_path do %>
+      <i class="las la-tasks"></i>
       <% end %>
-    </div>
-    <div>Tasks</div>
+    <p>Tasks</p>
   </div>
   <div class="navbar-menu-items">
-    <div><%= link_to waterings_path do %>
-      <i class="fas fa-tint"></i>
+    <%= link_to waterings_path do %>
+      <i class="las la-tint"></i>
       <% end %>
-      </div>
-    <div>Watering</div>
+    <p>Watering</p>
   </div>
   <div class="navbar-menu-items">
-    <div><%= link_to gardens_path do %>
-      <i class="fas fa-seedling"></i>
+    <%= link_to gardens_path do %>
+      <i class="las la-seedling"></i>
       <% end %>
-    </div>
-    <div>Garden</div>
+    <p>Garden</p>
   </div>
   <div class="navbar-menu-items">
-    <div>
       <!-- This will eventually be to weather_station_path -->
       <%= link_to weather_stations_path do %>
-      <i class="fas fa-cloud-sun"></i>
+      <i class="las la-cloud-sun"></i>
       <% end %>
-    </div>
-    <div>Weather</div>
+    <p>Weather</p>
   </div>
   <div class="navbar-menu-items">
-    <div>
       <!-- This is currently NOT to conversations page -->
       <%= link_to gardens_path do %>
-      <i class="far fa-comments"></i>
+      <i class="las la-users"></i>
       <% end %>
-    </div>
-    <div>Connect</div>
+    <p>Connect</p>
   </div>
 </div>

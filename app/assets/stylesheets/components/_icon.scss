@@ -3,33 +3,40 @@
   height: 100%;
 }
 
+.lg-task-icon {
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  font-size: 24px;
+  opacity: .7;
+  }
+
 #plot-card-icon {
   height: auto;
-  left: 40px;
+  left: 16px;
+  // margin: 12px;
   max-height: 40px;
   max-width: 40px;
   object-fit: fill;
   position: absolute;
   width: auto;
+  border: 1px solid $orange;
 }
 
-
-.lg-task-icon {
-  font-size: 42px;
-}
- .task-icon {
-  color: $gray;
+ #task-icons {
+  align-items: center;
+  display: flex;
   font-size: 30px;
+  justify-content: center;
+  max-width: 48px;
   &:hover {
     text-decoration: none;
-    color: $turquoise;
+    color: $green;
+  }
+  a {
+    color: $gray;
+    opacity: .6;
+    padding-left: 8px;
   }
  }
-
-#task-icons {
-  display: flex;
-  justify-content: flex-end;
-}
 
 @media screen and (max-width: 600px) {
   .task-icon {
