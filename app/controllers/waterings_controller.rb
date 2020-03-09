@@ -7,16 +7,28 @@ class WateringsController < ApplicationController
     @garden = policy_scope(Garden).first
     @plots = []
     @garden.plots.each do |plot|
-      @plots << plot unless plot.waterings.empty?
+      plot.waterings.map do |watering|
+        @plots << plot unless watering.done?
+      end
+      @plots.uniq!
     end
-
   end
 
   # GET plots/:plot_id/waterings
   def watering_plot
     @plot = Plot.find(params[:plot_id])
     authorize @plot
+    @plant = Plant.new
     @watering_groups = {}
+    @plants = @plot.plants
+    plants_to_json = @plants.map do |plant|
+      { id: plant.id,
+        x: plant.x,
+        y: plant.y,
+        radius_mm: plant.radius_mm,
+        photo_url: plant.plant_type.photo_url }
+    end
+    @plants_json = plants_to_json.to_json.html_safe
     @plot.plant_types.each do |type|
       # get the plants of this type, in this plot
       plants = @plot.plants.where(plant_type: type)
@@ -44,15 +56,20 @@ class WateringsController < ApplicationController
     authorize watering
     plot = watering.plant.plot
     watering.update(done: true)
+    # after watering, update the plant water deficit
+    watering.update_plant_water_deficit
+    # redirect to plot waterings
     redirect_to plot_waterings_path(plot)
   end
 
   # PATCH plots/:id/complete_waterings
   def complete_plot_watering
     plot = Plot.find(params[:plot_id])
-    waterings = policy_scope(plot.waterings)
+    waterings = plot.waterings
     waterings.each do |watering|
       watering.update(done: true)
+      # after watering, update the plant water deficit
+      watering.update_plant_water_deficit
     end
       redirect_to plot_waterings_path
   end

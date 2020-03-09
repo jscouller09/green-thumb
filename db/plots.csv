@@ -6,11 +6,3 @@ garden_id,name,shape,grid_cell_size_mm,length_m,width_m
 2,Squash,rectangle,100,2,2
 2,Sunny front garden,rectangle,100,3,3.5
 3,Greensies,rectangle,100,2,4
-3,round veggies,rectangle,100,0.7,1.7
-3,Summer plant,rectangle,100,0.8,1.6
-3,Winter plants,rectangle,100,1.5,2
-4,Carrots,rectangle,100,0.5,1.5
-4,Tomatoes,rectangle,100,0.45,0.9
-5,My first veggies,rectangle,100,1,1
-6,Left plot,rectangle,100,0.7,1.4
-6,Rigth plot,rectangle,100,0.7,1.4

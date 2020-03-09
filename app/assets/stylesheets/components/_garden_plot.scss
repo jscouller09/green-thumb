@@ -7,3 +7,12 @@
   background-position: center;
   background-size: cover;
 }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: auto;
+  grid-gap: 12px;
+
+}
+

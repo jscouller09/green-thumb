@@ -1,3 +1,5 @@
+<div class="container">
+
 <h1><%= @plot.name %></h1>
 
 <!-- List all the plant in the plot -->
@@ -20,14 +22,27 @@
 <%= link_to "Delete plot", plot_path(@plot), method: 'delete',
     data: { confirm: "Are you sure you want to delete #{@plot.name}?"} %>
 
-<div class="container pb-5 mb-5">
-  <h2>Add a plant</h2>
-  <%= simple_form_for [@plot, @plant], method: 'post' do |f| %>
+    <h2 >Add a plant</h2>
+  <div class="container-cards">
+    <div class="cards">
+        <% @plant_types.each do |plant_type| %>
+        <div class="card">
+
+          <img src="<%= cl_image_path plant_type.photo_url, height: 150, width: 70, crop: :scale %>" alt="<%= plant_type.name %>">
+
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+<%= simple_form_for [@plot, @plant], method: 'post' do |f| %>
     <%= f.association :plant_type, collection: @plant_types %>
     <%= f.input :plant_date %>
     <%= f.button :submit, value = 'Plant!'%>
-  <% end %>
-</div>
+<% end %>
 
 
 <!-- TEST!!! -->
@@ -36,11 +51,9 @@
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
-
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
     <p>Whoops! You don't have enough space to plant that in that spot, try again!</p>
   </div>
-
 </div>
