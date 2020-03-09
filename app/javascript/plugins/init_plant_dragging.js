@@ -78,7 +78,7 @@ const init_ineractjs=(plant, element, mm_per_pixel, grid_size) => {
                 x = data.x * grid_size;
                 y = data.y * grid_size;
                 event.target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
-                console.log(data.errors);
+                console.log(data.errors.base[0]);
                 // modal
                 const modal_btn = document.getElementById('error-modal-button');
                 const modal_body = document.getElementById('error-modal-body');

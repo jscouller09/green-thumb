@@ -77,12 +77,14 @@ class PlantsController < ApplicationController
   end
 
   def plants_overlap?(plant_1, plant_2)
-    x1 = plant_1.x
-    y1 = plant_1.y
-    x2 = plant_2.x
-    y2 = plant_2.y
+    # plant coordinates are top left corner of a square around the plant circle
+    # convert to center coordinates by adding the radius to each
     r1 = plant_1.radius_mm.fdiv(plant_1.plot.grid_cell_size_mm)
     r2 = plant_2.radius_mm.fdiv(plant_2.plot.grid_cell_size_mm)
+    x1 = plant_1.x + r1
+    y1 = plant_1.y + r1
+    x2 = plant_2.x + r2
+    y2 = plant_2.y + r2
     center_distance = Math.sqrt((x1 - x2)**2 + (y1 - y2)**2);
     radius_sum = (r1 + r2);
     if center_distance >= radius_sum
