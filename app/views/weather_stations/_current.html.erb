@@ -10,21 +10,25 @@
         <% end %>
 
 <div id="current-weather-card" class="weather-card" style="border-left: 16px solid <%= weather_border %>">
-  <div class="weather-icon"><%= image_tag "weather_icons/#{data[:icon]}.png" %></div>
+  <div class="weather-card-temperature">
+    <div class="weather-icon"><%= image_tag "weather_icons/#{data[:icon]}.png" %></div>
+      <div class="temperature">
+        <p class= "current-temp"><%= "#{data[:temp_c]}°C" %></p>
+        <p class="feel-like"><%= "Feels like: #{data[:temp_feels_like_c]}°C" %></p>
+      </div>
+  </div>
     <div id="weather-card-text">
-      <div><%= "#{data[:timestamp].strftime("%l:%M %P %A, %b %e")}" %></div>
-      <div><%= "Sunrise: #{data[:sunrise].strftime("%l:%M %P")}" %></div>
-      <div><%= "Sunset: #{data[:sunset].strftime("%l:%M %P")}" %></div>
-      <div><%= "Temp (°C): #{data[:temp_c]}" %></div>
-      <div><%= "Feels like (°C): #{data[:temp_feels_like_c]}" %></div>
-      <div><%= "Humidity (%): #{data[:humidity_perc]}" %></div>
+      <div class="sun">
+        <p> <%= image_tag 'weather_icons/dawn.svg'%> <%="#{data[:sunrise].strftime("%l:%M %P")}" %></p>
+        <p><%= image_tag 'weather_icons/sunset.svg'%> <%= "#{data[:sunset].strftime("%l:%M %P")}" %></p>
+      </div>
+      <p><%= "Humidity: #{data[:humidity_perc]}%" %></p>
       <!-- <div><%= "Pressure (hPa): #{data[:pressure_hPa]}" %></div> -->
-      <div><%= "Wind (km/h): #{data[:wind_direction]} #{(data[:wind_speed_mps]*3.6).round(0)}" %></div>
-      <div><%= "Rain last 3 hrs (mm): #{data[:rain_3h_mm].round(1)}" %></div>
+      <p><%= "Wind: #{data[:wind_direction]} #{(data[:wind_speed_mps]*3.6).round(0)} km/h" %></p>
+      <p><%= "Rain last 3 hrs: #{data[:rain_3h_mm].round(1)} mm" %></p>
       <% unless data[:snow_3h_mm].zero? %>
-        <div><%= "Snow last 3 hrs (mm): #{data[:snow_3h_mm].round(1)}" %></div>
+        <div><%= "Snow last 3 hrs: #{data[:snow_3h_mm].round(1)} mm" %></p>
       <% end %>
-      <div><%= "Description: #{data[:description]}" %></div>
   </div>
 </div>
 

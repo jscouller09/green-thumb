@@ -2,6 +2,7 @@
 }
 
 .carousel-inner {
+  display: flex;
   text-align: left;
   margin-bottom: 24px;
   h3 {
@@ -16,11 +17,11 @@
 #current-weather-card {
   display: flex;
   flex-direction: column;
-  padding-bottom: 32px;
+  // padding-bottom: 32px;
 }
 
 .weather-card {
-  align-items: center;
+  // align-items: center;
   background: white;
   border-radius: 5px;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
@@ -32,18 +33,72 @@
   line-height: 20px;
   margin: 16px auto 32px;
   max-width: 500px;
-  min-height: 320px;
+  // min-height: 320px;
   padding: 8px;
   // padding-bottom: 24px;
-  text-align: left;
-  width: 80%;
+  text-align: center;
+  width: 100%;
+}
+.forecast-temp{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 0px 34px;
+  font-size: 24px;
+  font-family: $headers-font;
+  margin-bottom: 16px;
+  .min-temp{
+    color: $brown;
+    opacity: 0.7;
+  }
+}
+.forecast-card-text{
+  p{
+    margin-bottom: 0px;
+  }
 }
 
-.weather-card-text {
+#weather-card-text {
   display: flex;
   flex-direction: column;
   text-align: left;
-  margin: 16px;
+  p{
+    font-size:14px;
+    margin-bottom: 0;
+    margin-left: 16px;
+  }
+  img{
+    width:16px;
+    height: 16px;
+  }
+  .sun{
+    display: flex;
+  }
+}
+.weather-description{
+  font-family: $headers-font;
+  color: $brown;
+  opacity: 0.7;
+}
+
+.weather-card-temperature{
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  .feel-like{
+    font-family: $headers-font;
+    color: $brown;
+    font-size: 12px;
+  }
+  .current-temp{
+    font-size: 32px;
+    p{
+      margin-bottom: 0;
+    }
+  }
+  .temperature{
+    line-height:12px;
+  }
 }
 
 .weather-card-headline {
@@ -58,10 +113,16 @@
 }
 
 #weather-headline, #weather-station-headline {
-  margin-left: 16px;
+  // margin-left: 16px;
 }
 
 .weather-icon {
   margin: 8px;
+}
+.weather-header{
+  h3{
+    font-family: $body-font;
+    color: $dk-green;
+  }
 }
 

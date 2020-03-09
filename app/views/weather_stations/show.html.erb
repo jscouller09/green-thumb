@@ -1,8 +1,12 @@
-<div class="container m-5">
+<div class="container">
   <h1 id="weather-headline">Weather</h1>
 
   <!-- Station name and country -->
-  <h3 id="weather-station-headline"><%= "#{@station.name}, #{@station.country}" %></h3>
+  <div class="weather-header">
+    <div><%= "#{@current[:timestamp].strftime("%l:%M %P %A, %b %e")}" %></div>
+    <h3 id="weather-station-headline"><%= "#{@station.name}, #{@station.country}" %></h3>
+    <div class="weather-description"><%= "#{@current[:description]}" %></div>
+  </div>
 
   <!-- Current forecast -->
   <%= render "current", data: @current %>
@@ -26,35 +30,37 @@
         <% if index == 0 %>
           <div class="weather-card carousel-item active" style="border-left: 16px solid <%= weather_border %>">
             <h3 id="weather-card-headline"><%= day %></h3>
-            <div class="weather-card-text">
+            <div class="forecast-card-text">
               <div><%= image_tag "weather_icons/#{data[:icon]}.png" %></div>
-              <div><%= "Avg temp (°C): #{data[:temp_c_avg].round(1)}" %></div>
-              <div><%= "Min temp (°C): #{data[:temp_c_min].round(1)}" %></div>
-              <div><%= "Avg temp (°C): #{data[:temp_c_max].round(1)}" %></div>
-              <div><%= "Rain (mm): #{data[:rain_mm_tot].round(1)}" %></div>
+                <div class="forecast-temp">
+                  <div class="max-temp"> <p><%= "#{data[:temp_c_max].round(1)}°C" %></p></div>
+                  <div class="min-temp"><p><%= "#{data[:temp_c_min].round(1)}°C" %></p></div>
+                </div>
+              <div><%= "Rain: #{data[:rain_mm_tot].round(1)} mm" %></div>
               <% unless data[:snow_mm_tot].nil? %>
-                <div><%= "Snow (mm): #{data[:snow_mm_tot].round(1)}" %></div>
+                <div><%= "Snow: #{data[:snow_mm_tot].round(1)} mm" %></div>
               <% end %>
-              <div><%= "Avg humidity (%): #{data[:humidity_perc_avg].round(0)}" %></div>
-              <div><%= "Wind (km/h): #{data[:wind_direction]} #{(data[:wind_speed_mps_avg]*3.6).round(0)}" %></div>
-              <div><%= "Description: #{data[:description]}" %></div>
+              <div><%= "Avg humidity: #{data[:humidity_perc_avg].round(0)}%" %></div>
+              <div><%= "Wind: #{data[:wind_direction]} #{(data[:wind_speed_mps_avg]*3.6).round(0)} km/h" %></div>
+              <!-- <div><%= "Description: #{data[:description]}" %></div> -->
             </div>
           </div>
         <% else %>
           <div class="weather-card carousel-item" style="border-left: 16px solid <%= weather_border %>">
             <h3 id="weather-card-headline"><%= day %></h3>
-            <div class="weather-card-text">
+            <div class="forecast-card-text">
               <div><%= image_tag "weather_icons/#{data[:icon]}.png" %></div>
-              <div><%= "Avg temp (°C): #{data[:temp_c_avg].round(1)}" %></div>
-              <div><%= "Min temp (°C): #{data[:temp_c_min].round(1)}" %></div>
-              <div><%= "Avg temp (°C): #{data[:temp_c_max].round(1)}" %></div>
-              <div><%= "Rain (mm): #{data[:rain_mm_tot].round(1)}" %></div>
+              <div class="forecast-temp">
+                <div class="min-temp"><p><%= "#{data[:temp_c_min].round(1)}°C" %></p></div>
+                <div class="max-temp"><p><%="#{data[:temp_c_max].round(1)}°C" %></p></div>
+              </div>
+              <p><%= "Rain: #{data[:rain_mm_tot].round(1)} mm" %></p>
               <% unless data[:snow_mm_tot].nil? %>
-                <div><%= "Snow (mm): #{data[:snow_mm_tot].round(1)}" %></div>
+                <p><%= "Snow: #{data[:snow_mm_tot].round(1)} mm" %></p>
               <% end %>
-              <div><%= "Avg humidity (%): #{data[:humidity_perc_avg].round(0)}" %></div>
-              <div><%= "Wind (km/h): #{data[:wind_direction]} #{(data[:wind_speed_mps_avg]*3.6).round(0)}" %></div>
-              <div><%= "Description: #{data[:description]}" %></div>
+              <p><%= "Avg humidity: #{data[:humidity_perc_avg].round(0)}%" %></p>
+              <p><%= "Wind: #{data[:wind_direction]} #{(data[:wind_speed_mps_avg]*3.6).round(0)} km/h" %></p>
+      <!--         <div><%= "Description: #{data[:description]}" %></div> -->
             </div>
           </div>
         <% end %>
