@@ -2,82 +2,89 @@
   <h1 id="weather-headline">Weather</h1>
 
   <!-- Station name and country -->
-  <div class="weather-header">
-    <div><%= "#{@current[:timestamp].strftime("%l:%M %P %A, %b %e")}" %></div>
-    <h3 id="weather-station-headline"><%= "#{@station.name}, #{@station.country}" %></h3>
-    <div class="weather-description"><%= "#{@current[:description]}" %></div>
-  </div>
-
-  <!-- Current forecast -->
-  <%= render "current", data: @current %>
-
-  <!-- Render a forecast for each day of the 3 day forecast (render does not work with the carousel action) -->
-  <h1 id="weather-headline">3-Day Forecast</h1>
-  <div id="carouselExampleControls" class="carousel slide" data-ride="false" data-touch="true" data-interval="false">
-    <div class="carousel-inner">
-      <% @forecast.each_with_index do | (day, data), index | %>
-          <% if data[:temp_c_avg].round(1) > 24 %>
-          <!-- hot -->
-          <% weather_border = "#FA520A" %>
-          <% elsif data[:temp_c_avg].round(1) < 10 %>
-            <!-- cold -->
-              <% weather_border = "#FA9E0A" %>
-          <% else %>
-            <!-- Medium -->
-              <% weather_border = "#B9F5F2" %>
-          <% end %>
-
-        <% if index == 0 %>
-          <div class="weather-card carousel-item active" style="border-left: 16px solid <%= weather_border %>">
-            <h3 id="weather-card-headline"><%= day %></h3>
-            <div class="forecast-card-text">
-              <div><%= image_tag "weather_icons/#{data[:icon]}.png" %></div>
-                <div class="forecast-temp">
-                  <div class="max-temp"> <p><%= "#{data[:temp_c_max].round(1)}°C" %></p></div>
-                  <div class="min-temp"><p><%= "#{data[:temp_c_min].round(1)}°C" %></p></div>
-                </div>
-              <div><%= "Rain: #{data[:rain_mm_tot].round(1)} mm" %></div>
-              <% unless data[:snow_mm_tot].nil? %>
-                <div><%= "Snow: #{data[:snow_mm_tot].round(1)} mm" %></div>
-              <% end %>
-              <div><%= "Avg humidity: #{data[:humidity_perc_avg].round(0)}%" %></div>
-              <div><%= "Wind: #{data[:wind_direction]} #{(data[:wind_speed_mps_avg]*3.6).round(0)} km/h" %></div>
-              <!-- <div><%= "Description: #{data[:description]}" %></div> -->
-            </div>
-          </div>
-        <% else %>
-          <div class="weather-card carousel-item" style="border-left: 16px solid <%= weather_border %>">
-            <h3 id="weather-card-headline"><%= day %></h3>
-            <div class="forecast-card-text">
-              <div><%= image_tag "weather_icons/#{data[:icon]}.png" %></div>
-              <div class="forecast-temp">
-                <div class="min-temp"><p><%= "#{data[:temp_c_min].round(1)}°C" %></p></div>
-                <div class="max-temp"><p><%="#{data[:temp_c_max].round(1)}°C" %></p></div>
-              </div>
-              <p><%= "Rain: #{data[:rain_mm_tot].round(1)} mm" %></p>
-              <% unless data[:snow_mm_tot].nil? %>
-                <p><%= "Snow: #{data[:snow_mm_tot].round(1)} mm" %></p>
-              <% end %>
-              <p><%= "Avg humidity: #{data[:humidity_perc_avg].round(0)}%" %></p>
-              <p><%= "Wind: #{data[:wind_direction]} #{(data[:wind_speed_mps_avg]*3.6).round(0)} km/h" %></p>
-      <!--         <div><%= "Description: #{data[:description]}" %></div> -->
-            </div>
-          </div>
-        <% end %>
-      <% end %>
+  <div class="current-weather">
+    <div class="weather-header">
+      <div><%= "#{@current[:timestamp].strftime("%l:%M %P %A, %b %e")}" %></div>
+      <h3 id="weather-station-headline"><%= "#{@station.name}, #{@station.country}" %></h3>
+      <div class="weather-description"><%= "#{@current[:description]}" %></div>
     </div>
-      <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
+
+    <!-- Current forecast -->
+    <%= render "current", data: @current %>
   </div>
 
-  <br>
-  <br>
-  <br>
+  <div class="forecast">
+      <!-- Render a forecast for each day of the 3 day forecast (render does not work with the carousel action) -->
+      <h2 id="weather-headline">3-Day Forecast</h1>
+      <div id="carouselExampleControls" class="carousel slide" data-ride="false" data-touch="true" data-interval="false" data-wrap=true>
+        <ol class="carousel-indicators" style="z-index: none; bottom: -46px;">
+          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="carousel-dot active" style="background-color: #534243;transition:none; -webkit-transition: none;"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="1" class="carousel-dot" style="background-color: #534243;transition:none; -webkit-transition: none;"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="2" class="carousel-dot" style="background-color: #534243;transition:none; -webkit-transition: none;"></li>
+        </ol>
+        <div class="carousel-inner text-center">
+          <% @forecast.each_with_index do | (day, data), index | %>
+              <% if data[:temp_c_avg].round(1) > 24 %>
+              <!-- hot -->
+              <% weather_border = "#FA520A" %>
+              <% elsif data[:temp_c_avg].round(1) < 10 %>
+                <!-- cold -->
+                  <% weather_border = "#FA9E0A" %>
+              <% else %>
+                <!-- Medium -->
+                  <% weather_border = "#B9F5F2" %>
+              <% end %>
 
+            <% if index == 0 %>
+              <div class="weather-card carousel-item active" style="border-left: 16px solid <%= weather_border %>; backface-visibility: inherit;">
+                <h3 id="weather-card-headline"><%= day %></h3>
+                <div class="forecast-card-text">
+                  <div><%= image_tag "weather_icons/#{data[:icon]}.png" %></div>
+                    <div class="forecast-temp">
+                      <div class="max-temp"> <p><%= "#{data[:temp_c_max].round(1)}°C" %></p></div>
+                      <div class="min-temp"><p><%= "#{data[:temp_c_min].round(1)}°C" %></p></div>
+                    </div>
+                  <p><%= "Rain: #{data[:rain_mm_tot].round(1)} mm" %></p>
+                  <% unless data[:snow_mm_tot].nil? %>
+                    <p><%= "Snow: #{data[:snow_mm_tot].round(1)} mm" %></p>
+                  <% end %>
+                  <p><%= "Avg humidity: #{data[:humidity_perc_avg].round(0)}%" %></p>
+                  <p><%= "Wind: #{data[:wind_direction]} #{(data[:wind_speed_mps_avg]*3.6).round(0)} km/h" %></p>
+                  <!-- <div><%= "Description: #{data[:description]}" %></div> -->
+                </div>
+              </div>
+            <% else %>
+              <div class="weather-card carousel-item" style="border-left: 16px solid <%= weather_border %>; backface-visibility: inherit;">
+                <h3 id="weather-card-headline"><%= day %></h3>
+                <div class="forecast-card-text">
+                  <div><%= image_tag "weather_icons/#{data[:icon]}.png" %></div>
+                  <div class="forecast-temp">
+                    <div class="max-temp"><p><%="#{data[:temp_c_max].round(1)}°C" %></p></div>
+                    <div class="min-temp"><p><%= "#{data[:temp_c_min].round(1)}°C" %></p></div>
+                  </div>
+                  <p><%= "Rain: #{data[:rain_mm_tot].round(1)} mm" %></p>
+                  <% unless data[:snow_mm_tot].nil? %>
+                    <p><%= "Snow: #{data[:snow_mm_tot].round(1)} mm" %></p>
+                  <% end %>
+                  <p><%= "Avg humidity: #{data[:humidity_perc_avg].round(0)}%" %></p>
+                  <p><%= "Wind: #{data[:wind_direction]} #{(data[:wind_speed_mps_avg]*3.6).round(0)} km/h" %></p>
+          <!--         <div><%= "Description: #{data[:description]}" %></div> -->
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+          <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+      </div>
+      <br>
+      <br>
+      <br>
+  </div>
 </div>

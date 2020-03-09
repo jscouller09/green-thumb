@@ -1,10 +1,22 @@
 .active {
 }
 
+.current-weather{
+ margin-bottom: 56px;
+ margin-top: 24px;
+}
+
+.forecast{
+  margin: 24px 0;
+}
+
 .carousel-inner {
   display: flex;
   text-align: left;
   margin-bottom: 24px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border: none;
+  border-radius: 5px;
   h3 {
     margin-left: 16px;
   }
@@ -18,26 +30,42 @@
   display: flex;
   flex-direction: column;
   // padding-bottom: 32px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.carousel-dot {
+  margin: 0px 5px !important;
+  background-color: $brown !important;
+  height: 10px !important;
+  width: 10px !important;
+  border-radius: 50%;
+  transition: none !important;
+  -webkit-transition: none !important;
+}
+.carousel-dot.active {
+  background-color: $brown !important;
+  transition: none !important;
+  -webkit-transition: none !important;
 }
 
 .weather-card {
-  // align-items: center;
   background: white;
   border-radius: 5px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
   color: $dk-green;
-  // display: flex;
-  // flex-direction: column;
   height: auto;
-  // justify-content: space-between;
   line-height: 20px;
-  margin: 16px auto 32px;
   max-width: 500px;
-  // min-height: 320px;
   padding: 8px;
-  // padding-bottom: 24px;
   text-align: center;
   width: 100%;
+
+  // margin: 16px auto 32px;
+  // align-items: center;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: space-between;
+  // min-height: 320px;
+  // padding-bottom: 24px;
 }
 .forecast-temp{
   display: flex;
@@ -106,7 +134,7 @@
 }
 
 #weather-carousel-container {
-  position: relative;
+  // position: relative;
   min-height: 320px;
   padding: 0;
   margin-bottom: 32px;
@@ -120,9 +148,16 @@
   margin: 8px;
 }
 .weather-header{
+  margin: 16px 0;
   h3{
     font-family: $body-font;
     color: $dk-green;
   }
 }
+
+
+
+
+
+
 
