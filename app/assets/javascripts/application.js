@@ -1,10 +1,6 @@
 //= require rails-ujs
 //= require_tree .
 
-// $('#weather-carousel').carousel({
-//   ride: false
-// });
-
 
 // Get the modal
 var modal = document.getElementById("myModal");
