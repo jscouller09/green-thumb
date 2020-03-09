@@ -19,7 +19,7 @@
     <div class="task-card" style="border-left: 16px solid <%= border_color %>">
         <div id="task-plus-date">
           <div id="task-desc"><%= task.description %></div>
-          <div><%= task.due_date %></div>
+          <div class="date"><%= task.due_date %></div>
           <div><% task.priority %></div>
           <div id="task-icons">
             <% if current_user && policy(task).destroy? %>

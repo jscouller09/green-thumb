@@ -43,6 +43,35 @@
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: auto;
   grid-gap: 12px;
-
 }
 
+.card-category {
+  background-size: cover;
+  background-position: center;
+  font-family: special elite;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.modal-header .header {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (max-width: 576px) {
+  .cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
