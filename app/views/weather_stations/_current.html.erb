@@ -1,19 +1,19 @@
-<div>
-  <ul>
-    <li><%= "#{data[:timestamp].strftime("%l:%M %P %A, %b %e")}" %></li>
-    <li><%= "Sunrise: #{data[:sunrise].strftime("%l:%M %P")}" %></li>
-    <li><%= "Sunset: #{data[:sunset].strftime("%l:%M %P")}" %></li>
-    <li><%= "Temp (°C): #{data[:temp_c]}" %></li>
-    <li><%= "Feels like (°C): #{data[:temp_feels_like_c]}" %></li>
-    <li><%= "Humidity (%): #{data[:humidity_perc]}" %></li>
-    <li><%= "Pressure (hPa): #{data[:pressure_hPa]}" %></li>
-    <li><%= "Wind (km/h): #{data[:wind_direction]} #{(data[:wind_speed_mps]*3.6).round(0)}" %></li>
-    <li><%= "Rain last 3 hrs (mm): #{data[:rain_3h_mm].round(1)}" %></li>
-    <% unless data[:snow_3h_mm].zero? %>
-      <li><%= "Snow last 3 hrs (mm): #{data[:snow_3h_mm].round(1)}" %></li>
-    <% end %>
-    <li><%= "Description: #{data[:description]}" %></li>
-    <li><%= image_tag "weather_icons/#{data[:icon]}.png" %></li>
-  </ul>
+<div id="current-weather-card" class="weather-card">
+  <div class="weather-icon"><%= image_tag "weather_icons/#{data[:icon]}.png" %></div>
+    <div id="weather-card-text">
+      <div><%= "#{data[:timestamp].strftime("%l:%M %P %A, %b %e")}" %></div>
+      <div><%= "Sunrise: #{data[:sunrise].strftime("%l:%M %P")}" %></div>
+      <div><%= "Sunset: #{data[:sunset].strftime("%l:%M %P")}" %></div>
+      <div><%= "Temp (°C): #{data[:temp_c]}" %></div>
+      <div><%= "Feels like (°C): #{data[:temp_feels_like_c]}" %></div>
+      <div><%= "Humidity (%): #{data[:humidity_perc]}" %></div>
+      <!-- <div><%= "Pressure (hPa): #{data[:pressure_hPa]}" %></div> -->
+      <div><%= "Wind (km/h): #{data[:wind_direction]} #{(data[:wind_speed_mps]*3.6).round(0)}" %></div>
+      <div><%= "Rain last 3 hrs (mm): #{data[:rain_3h_mm].round(1)}" %></div>
+      <% unless data[:snow_3h_mm].zero? %>
+        <div><%= "Snow last 3 hrs (mm): #{data[:snow_3h_mm].round(1)}" %></div>
+      <% end %>
+      <div><%= "Description: #{data[:description]}" %></div>
+  </div>
 </div>
 
