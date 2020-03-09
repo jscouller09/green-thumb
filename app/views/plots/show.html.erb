@@ -14,6 +14,31 @@
   <% end %>
 </ul>
 
+<!-- This is the testing area for the Plant-Spacing-Alert Popup from Bootstrap -->
+<!-- Button trigger modal -->
+<button id="error-modal-button" hidden type="button" class="garden-button" data-toggle="modal" data-target="#error-modal">
+  Test
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Whoops!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-backdrop="false">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="error-modal-body" class="modal-body">
+       You don't have enough space to plant that there! Crowded plants are unhappy plants :-(
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= 100 %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
 </div>
 
@@ -68,23 +93,8 @@
 </div>
 
 
-
 <%= simple_form_for [@plot, @plant], method: 'post' do |f| %>
 
     <%= f.input :plant_date %>
     <%= f.button :submit, value = 'Plant!'%>
 <% end %>
-
-
-<!-- TEST!!! -->
-<!-- Trigger/Open The Modal -->
-<button id="myBtn">Test Plant Warning Button</button>
-
-<!-- The Modal -->
-<div id="myModal" class="modal">
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p>Whoops! You don't have enough space to plant that in that spot, try again!</p>
-  </div>
-</div>
