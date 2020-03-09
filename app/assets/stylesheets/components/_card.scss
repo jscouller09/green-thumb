@@ -46,7 +46,7 @@
   margin: 40px 0 0 auto;
   min-height: 100px;
   padding: 32px 16px 16px 32px;
-  width: 75%;
+  width: 85%;
 }
 
 #task-plus-date {
@@ -54,15 +54,30 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+    .date{
+    font-size: 12px;
+    color: $brown;
+    opacity: 0.7;
+  }
 }
 
 #task-desc {
   color: $dk-green;
   font-family: merriweather;
-  font-size: 24px;
-  margin-bottom: 8px;
+  font-size: 21px;
+  line-height: 24px;
+  max-width: 75%;
+  position: relative;
 }
-
+.task-title{
+  display: flex;
+  justify-content: space-between;
+  #task-icons{
+    position: relative;
+    top: 0;
+    right: 20px;
+  }
+}
 .watering-card {
   background: white;
   border-radius: 5px 0 0 5px;
