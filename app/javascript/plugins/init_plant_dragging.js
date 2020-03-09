@@ -5,26 +5,27 @@ const add_plant_to_plot=(plant, plants_container, mm_per_pixel) => {
   // generate a plant div with a nested thumbnail image
   const plant_div = document.createElement('div');
   const thumbnail = document.createElement('div');
+  const plant_border = document.createElement('div');
 
   // set plant div id and css properties
-  plant_div.class = 'plant';
+  plant_div.classList.add('plot-plant');
   plant_div.setAttribute('data-id', plant.id);
+  plant_div.removeAttribute('hidden');
+  plant_div.style.width = `${plant.radius_mm * 2 / mm_per_pixel}px`;
   plant_div.style.width = `${plant.radius_mm * 2 / mm_per_pixel}px`;
   plant_div.style.height = `${plant.radius_mm * 2 / mm_per_pixel}px`;
-  plant_div.style.position = 'absolute';
-  plant_div.style.border = '1px dashed lightgrey';
+
+  // style plant border
+  plant_border.classList.add('plot-plant-border');
 
   // style thumbnail image
-  thumbnail.style.height = '100%';
-  thumbnail.style.width = '100%';
-  thumbnail.style.backgroundImage = `url("https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325509/${plant.photo_url}")`;
-  //thumbnail.style.backgroundImage = `url("${plant.photo_url}")`;
-  thumbnail.style.backgroundSize = 'cover';
-  thumbnail.style.backgroundPostion = 'center';
-  thumbnail.style.borderRadius = '50%';
+  thumbnail.classList.add('plot-plant-thumbnail');
+  // thumbnail.style.backgroundImage = `url("https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325509/${plant.photo_url}")`;
+  thumbnail.style.backgroundImage = `url("${plant.icon}")`;
 
-  // insert the thumbnail into the plant div
-  plant_div.appendChild(thumbnail);
+  // insert the thumbnail/border into the plant div
+  plant_border.appendChild(thumbnail);
+  plant_div.appendChild(plant_border);
 
   // insert the plant div into the plot container
   plants_container.appendChild(plant_div);
@@ -69,7 +70,7 @@ const init_ineractjs=(plant, element, mm_per_pixel, grid_size) => {
             .then((data) => {
               if (data.accepted) {
                 // if response ok, keep updated plant x/y
-                console.log(`${plant} moved to ${plant.x} ${plant.y}`);
+                console.log(`plant ${plant.id} moved to x:${plant.x} y:${plant.y}`);
               } else {
                 // move it back to where it was
                 plant.x = data.x
@@ -77,7 +78,12 @@ const init_ineractjs=(plant, element, mm_per_pixel, grid_size) => {
                 x = data.x * grid_size;
                 y = data.y * grid_size;
                 event.target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
-                console.log(data.errors);
+                console.log(data.errors.base[0]);
+                // modal
+                const modal_btn = document.getElementById('error-modal-button');
+                const modal_body = document.getElementById('error-modal-body');
+                modal_body.innerHTML = data.errors.base[0];
+                modal_btn.click();
               }
             })
         }
@@ -104,7 +110,7 @@ const init_plant_dragging=() => {
     plants_container.innerHTML = "";
     // determine grid spacing based of viewport size and plot size
     const intViewportHeight = window.innerHeight;
-    const intViewportWidth = window.innerWidth * 0.9;
+    const intViewportWidth = window.innerWidth * 0.8;
     const length = parseInt(plants_container.dataset.length);
     const width = parseInt(plants_container.dataset.width);
     // set the grid scale (i.e. each grid cell is how many mm?
@@ -119,7 +125,6 @@ const init_plant_dragging=() => {
     // set container style and dimensions
     plants_container.style.height = `${length / mm_per_pixel}px`;
     plants_container.style.width = `${width / mm_per_pixel}px`;
-    plants_container.style.position = 'relative';
     // get plant data and iterate
     const plants = JSON.parse(plants_container.dataset.plants);
     plants.forEach((plant) => {

@@ -1,18 +1,19 @@
 <div class="container m-5">
 
-<h1><%= @plot.name %></h1>
+  <h1><%= @plot.name %></h1>
 
-<!-- List all the plant in the plot -->
-<ul>
-  <% @plot.plants.each do|plant| %>
-    <li>
-      <%= plant.plant_type.name %>
-      <%= plant.plant_date %>
-      <%= link_to "x", plant_path(plant), method: 'delete',
-          data: { confirm: "Are you sure you want to remove this plant?"} %>
-    </li>
-  <% end %>
-</ul>
+  <!-- List all the plant in the plot -->
+  <ul>
+    <% @plot.plants.each do|plant| %>
+      <li>
+        <%= plant.plant_type.name %>
+        <%= plant.plant_date %>
+        <%= link_to "x", plant_path(plant), method: 'delete',
+            data: { confirm: "Are you sure you want to remove this plant?"} %>
+      </li>
+    <% end %>
+  </ul>
+
 
 <!-- This is the testing area for the Plant-Spacing-Alert Popup from Bootstrap -->
 <!-- Button trigger modal -->
@@ -39,62 +40,53 @@
   </div>
 </div>
 
-<div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= 100 %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
+
+<div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= @plot.grid_cell_size_mm %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
+  <!-- Plants will be added here by the JS plugin-->
 </div>
 
-<!-- Links -->
-<%= link_to "Edit Plot", edit_plot_path(@plot) %>
-<%= link_to "Delete plot", plot_path(@plot), method: 'delete',
-    data: { confirm: "Are you sure you want to delete #{@plot.name}?"} %>
 
-    <h2 >What would you like to plant?</h2>
-    <div class="cards">
-        <% @plant_types.each do |plant_type| %>
-          <button type="button" data-toggle="modal" data-target="#<%= plant_type.name %>" style="border:none;">
-          <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= cl_image_path plant_type.photo_bg, height: 300, width: 400, crop: :fit %>")>
-           <%= plant_type.name %>
-          </div>
-          </button>
-          <div class="modal fade" id="<%= plant_type.name %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content" style="border-radius: 16px;">
-              <button type="button" class="garden-button-small" data-dismiss="modal">close</button>
-                <div class="modal-header">
-                  <div class="header">
-                    <img src="<%= cl_image_path plant_type.photo_bg, height: 300, width: 400, crop: :fit %>" alt="<%= plant_type.name %>" style="border-radius: 8px;">
-                    <h2 class="modal-title" id="<%= plant_type.name %>"><%= plant_type.name %></h2>
-                  </div>
-                  <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button> -->
+  <h2 >What would you like to plant?</h2>
+  <div class="cards">
+      <% @plant_types.each do |plant_type| %>
+        <button type="button" data-toggle="modal" data-target="#<%= plant_type.name %>" style="border:none;">
+        <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= cl_image_path plant_type.photo_bg, height: 300, width: 400, crop: :fit %>")>
+         <%= plant_type.name %>
+        </div>
+        </button>
+        <div class="modal fade" id="<%= plant_type.name %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 16px;">
+            <button type="button" class="garden-button-small" data-dismiss="modal">close</button>
+              <div class="modal-header">
+                <div class="header">
+                  <img src="<%= cl_image_path plant_type.photo_bg, height: 300, width: 400, crop: :fit %>" alt="<%= plant_type.name %>" style="border-radius: 8px;">
+                  <h2 class="modal-title" id="<%= plant_type.name %>"><%= plant_type.name %></h2>
                 </div>
-                <div class="modal-body">
-                  <%= plant_type.description %>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" style="border-radius: 16px;">
-                  <div class="row justify-content-center" style="border-radius: 8px;">
-                    <div class="form-wrapper" style="width: 80%;">
-                      <h2>Choose a plant date!</h2>
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button> -->
+              </div>
+              <div class="modal-body">
+                <%= plant_type.description %>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" style="border-radius: 16px;">
+                <div class="row justify-content-center" style="border-radius: 8px;">
+                  <div class="form-wrapper" style="width: 80%;">
+                    <h2>Choose a plant date!</h2>
 
-                      <%= simple_form_for :search, method: "get" do |f| %>
-                        <%= f.input :plant_date, as: :string, required: false, input_html: {class: "datepicker"} %>
-                        <%= f.button :submit, "Plant!", class: "garden-button" %>
-                      <% end %>
-                    </div>
+                    <%= simple_form_for :search, method: "get" do |f| %>
+                      <%= f.input :plant_date, as: :string, required: false, input_html: {class: "datepicker"} %>
+                      <%= f.button :submit, "Plant!", class: "garden-button" %>
+                    <% end %>
                   </div>
-                    </button>
                 </div>
+                  </button>
               </div>
             </div>
           </div>
-      <% end %>
-    </div>
+        </div>
+    <% end %>
+  </div>
 </div>
-
-
-<%= simple_form_for [@plot, @plant], method: 'post' do |f| %>
-
-    <%= f.input :plant_date %>
-    <%= f.button :submit, value = 'Plant!'%>
-<% end %>
