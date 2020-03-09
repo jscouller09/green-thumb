@@ -14,7 +14,7 @@
           <div class="plot-card-content">
             <div><%= link_to plot.name, plot_path(plot) %></div>
             <!-- accesses cloudinary .png for the Main Plant of the plot -->
-            <div><%= image_tag @main_plant_img[i], id: "plot-card-icon" %></div>
+            <div><%= cl_image_tag @main_plant_img[i], id: "plot-card-icon" %></div>
           </div>
         </div>
       </div>
