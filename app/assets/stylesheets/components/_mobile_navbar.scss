@@ -3,11 +3,12 @@
   // align-items: center;
   background-color: $brown;
   bottom: 0;
-  left:0;
+  box-shadow: inset 0 0 32px rgba(0,0,0,0.4);
   color: $cream;
   display: flex;
   height: 80px;
   justify-content: space-around;
+  left:0;
   padding: 24px 16px;
   position: fixed;
   width: 100%;
