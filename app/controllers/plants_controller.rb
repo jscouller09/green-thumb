@@ -6,16 +6,50 @@ class PlantsController < ApplicationController
     @plot = Plot.find params[:plot_id]
     # check this is the users plot before proceeding
     authorize @plot
-    #create a new plant
-    @plant = Plant.new(plant_params)
-    # assign inital water deficit of 0 and plot id
-    @plant.water_deficit_mm = 0.0
-    @plant.plot = @plot
-    authorize @plant
-    if @plant.save
+    # first clear any surplus plants from the wheelbarrow
+    # if the plant has a negative y coordinate it is in the wheelbarrow
+    wheelbarrow_plants = @plot.plants.where("y IS NULL OR y < 0").destroy_all
+    # create a new plant
+    new_plant = Plant.new(plant_params)
+    new_plant.water_deficit_mm = 0.0
+    new_plant.plot_id = @plot.id
+    if new_plant.save
+      # making new plants succeeded
       redirect_to plot_path(@plot)
     else
       render "plots/show"
+    end
+  end
+
+  # POST /plants
+  def copy
+    plant = Plant.find(plant_params[:id])
+    # check this is the users plant
+    authorize plant
+    # make a new plant from supplied params and duplicating old plant
+    new_plant = plant.dup
+    new_plant.x = params[:x]
+    new_plant.y = params[:y]
+    if new_plant.save
+      # making new plants succeeded
+      # update count of plants in garden
+      plants_counts_by_type = Hash.new(0)
+      plants_icons_by_type = {}
+      plant.plot.plants.where("x >= 0 AND y >= 0").each do |plant|
+        type = plant.plant_type.name
+        plants_counts_by_type[type] += 1
+        plants_icons_by_type[type] = ActionController::Base.helpers.asset_path("icons/#{plant.plant_type.icon}")
+      end
+      # store new plant as JSON
+      plant_obj = { id: new_plant.id,
+                    x: new_plant.x,
+                    y: new_plant.y,
+                    planted: new_plant.planted,
+                    plant_date: new_plant.plant_date,
+                    radius_mm: new_plant.radius_mm,
+                    plant_type: new_plant.plant_type.name,
+                    icon: ActionController::Base.helpers.asset_path("icons/#{new_plant.plant_type.icon}") }
+      render json: { plant: plant_obj, plant_counts: plants_counts_by_type, plant_icons: plants_icons_by_type }.to_json
     end
   end
 
@@ -42,14 +76,17 @@ class PlantsController < ApplicationController
     # update the location
     cur_x = @plant.x
     cur_y = @plant.y
-    @plant.update(plant_params)
-    if plant_space_ok?(@plant)
+    update_ok = @plant.update(plant_params)
+    if update_ok && plant_space_ok?(@plant)
       render json: { accepted: true, status: 201 }
     else
       # return to original location
+      unless update_ok
+        msg = "Something went wrong moving that plant!"
+        @plant.errors.add(:base, msg)
+      end
       errors = @plant.errors.messages
       render json: { x: cur_x, y: cur_y, accepted: false, status: 500, errors: errors }
-      flash.now[:error] = errors.first
       @plant.update(x: cur_x, y: cur_y)
     end
   end
@@ -57,13 +94,13 @@ class PlantsController < ApplicationController
   private
 
   def plant_params
-    params.require(:plant).permit(:plant_type_id, :plot_id, :plant_date, :x, :y)
+    params.require(:plant).permit(:id, :planted, :radius_mm, :icon, :plant_type_id, :plot_id, :plant_date, :x, :y)
   end
 
   def plant_space_ok?(current_plant)
     # go through all plants in the current plot
     current_plant.plot.plants.each do |plant|
-      unless plant == current_plant
+      unless plant == current_plant || (plant.x.nil? && plant.y.nil?)
         # check the moved plant does not overlap with another plant
         if plants_overlap?(current_plant, plant)
           # return false if it intersects any plant

@@ -8,6 +8,3 @@ initAutocomplete('garden_address');
 
 // setup initial plant plot with dragging
 init_plant_dragging();
-
-// make sure we update plot layout on window resize
-//window.addEventListener('resize', setup_plant_plot);
