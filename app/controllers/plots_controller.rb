@@ -12,20 +12,22 @@ class PlotsController < ApplicationController
     # filter plants to only be those actually in the garden (not wheelbarrow)
     @plants = @plot.plants.where("x >= 0 AND y >= 0")
     # count types of plants in the garden
-    @plants_by_type = Hash.new(0)
+    plants_by_type = Hash.new(0)
     @plants.each do |plant|
       type = plant.plant_type.name
-      @plants_by_type[type] += 1
+      plants_by_type[type] += 1
     end
-    plants_to_json = @plot.plants.map do |plant|
+    @plants_by_type = plants_by_type.to_json.html_safe
+    plants_to_json = {}
+    @plot.plants.each do |plant|
       # on plants without a position, move to wheelbarrow (negative x and y)
-      { id: plant.id,
-        x: plant.x.nil? ? -1 : plant.x,
-        y: plant.y.nil? ? -1 : plant.y,
-        planted: plant.planted,
-        radius_mm: plant.radius_mm,
-        plant_type: plant.plant_type.name,
-        icon: ActionController::Base.helpers.asset_path("icons/#{plant.plant_type.icon}") }
+      plants_to_json[plant.id] = {id: plant.id,
+                                  x: plant.x.nil? ? -1 : plant.x,
+                                  y: plant.y.nil? ? -1 : plant.y,
+                                  planted: plant.planted,
+                                  radius_mm: plant.radius_mm,
+                                  plant_type: plant.plant_type.name,
+                                  icon: ActionController::Base.helpers.asset_path("icons/#{plant.plant_type.icon}") }
     end
     @plants_json = plants_to_json.to_json.html_safe
   end

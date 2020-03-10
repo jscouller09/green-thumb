@@ -10,12 +10,7 @@
   <div class='plot-overview'>
     <div>
       <!-- List of plants currently in the plot go here-->
-      <ul id='plant-list'>
-        <% @plants_by_type.each do|plant_type, count| %>
-          <li>
-            <%= plant_type %>(<%= count %>)
-          </li>
-        <% end %>
+      <ul id='plant-list' data-plant_counts=<%= @plants_by_type %>>
       </ul>
     </div>
     <div id='wheelbarrow'>

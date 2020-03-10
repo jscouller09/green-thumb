@@ -27,22 +27,26 @@ class PlantsController < ApplicationController
     # check this is the users plant
     authorize plant
     # make a new plant from supplied params and duplicating old plant
-    @new_plant = plant.dup
-    @new_plant.x = params[:x]
-    @new_plant.y = params[:y]
-    if @new_plant.save
+    new_plant = plant.dup
+    new_plant.x = params[:x]
+    new_plant.y = params[:y]
+    if new_plant.save
       # making new plants succeeded
-      respond_to do |format|
-        plant_json = { id: @new_plant.id,
-                       x: @new_plant.x,
-                       y: @new_plant.y,
-                       planted: @new_plant.planted,
-                       radius_mm: @new_plant.radius_mm,
-                       plant_type: @new_plant.plant_type.name,
-                       icon: ActionController::Base.helpers.asset_path("icons/#{@new_plant.plant_type.icon}") }
-        @plant_json = plant_json.to_json.html_safe
-        format.js
+      # update count of plants in garden
+      plants_by_type = Hash.new(0)
+      plant.plot.plants.where("x >= 0 AND y >= 0").each do |plant|
+        type = plant.plant_type.name
+        plants_by_type[type] += 1
       end
+      # store new plant as JSON
+      plant_obj = { id: new_plant.id,
+                    x: new_plant.x,
+                    y: new_plant.y,
+                    planted: new_plant.planted,
+                    radius_mm: new_plant.radius_mm,
+                    plant_type: new_plant.plant_type.name,
+                    icon: ActionController::Base.helpers.asset_path("icons/#{new_plant.plant_type.icon}") }
+      render json: { plant: plant_obj, plant_counts: plants_by_type }.to_json
     end
   end
 

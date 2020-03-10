@@ -7,7 +7,11 @@ var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 // setup global grid setup vars
 var plants_container = document.getElementById('plot-container');
 if (plants_container) {
+  // global object with all plant info
+  var plants = JSON.parse(plants_container.dataset.plants);
+  // containers above plot area
   var wheelbarrow = document.getElementById('wheelbarrow');
+  var plant_list = document.getElementById('plant-list');
   // determine grid spacing based of viewport size and plot size
   const intViewportHeight = window.innerHeight;
   // var intViewportWidth = window.innerWidth * 0.9;
@@ -29,17 +33,29 @@ if (plants_container) {
   plants_container.style.width = `${width / mm_per_pixel}px`;
 }
 
+const update_plant_counts=(plant_counts=JSON.parse(plant_list.dataset.plant_counts)) => {
+  // update the UL with the count of each plant type
+  let html = "";
+  Object.keys(plant_counts).forEach(plant_type => {
+    html += `<li>${plant_type} (${plant_counts[plant_type]})</li>`;
+  });
+  plant_list.innerHTML = html;
+}
+
+const info_modal_callback=(target) => {
+  console.log(plants[target.dataset.id]);
+}
+
 
 const add_plant_to_plot=(plant) => {
   // generate a plant div with a nested thumbnail image
   const plant_div = document.createElement('div');
   const thumbnail = document.createElement('div');
   const plant_border = document.createElement('div');
-  const delete_link = document.createElement('a');
 
   // set plant div id and css properties
   plant_div.classList.add('plot-plant');
-  plant_div.setAttribute('data-id', plant.id);
+  plant_div.dataset.id = plant.id;
   plant_div.style.width = `${plant.radius_mm * 2 / mm_per_pixel}px`;
   plant_div.style.height = `${plant.radius_mm * 2 / mm_per_pixel}px`;
 
@@ -48,6 +64,7 @@ const add_plant_to_plot=(plant) => {
 
   // Add delete link
   //  'data-confirm="Are you sure you want to remove this plant?" rel="nofollow" data-method="delete" href="/plants/1"'
+  const delete_link = document.createElement('a');
   delete_link.classList.add('plot-plant-delete');
   delete_link.setAttribute('data-confirm', "Are you sure you want to remove this plant?");
   delete_link.setAttribute('rel', "nofollow");
@@ -59,6 +76,13 @@ const add_plant_to_plot=(plant) => {
   thumbnail.classList.add('plot-plant-thumbnail');
   // thumbnail.style.backgroundImage = `url("https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325509/${plant.photo_url}")`;
   thumbnail.style.backgroundImage = `url("${plant.icon}")`;
+
+  // add event listener for double click on icon
+  thumbnail.addEventListener('dblclick', (event) => {
+    console.log(event);
+    // want to operate on parent div of thumbnail icon that was clicked
+    info_modal_callback(event.currentTarget.parentNode.parentNode);
+  });
 
   // insert the thumbnail/border into the plant div
   plant_border.appendChild(thumbnail);
@@ -138,6 +162,8 @@ const init_ineractjs=(plant) => {
               if (data.accepted) {
                 // if response ok, keep updated plant x/y
                 console.log(`plant ${plant.id} moved to x:${plant.x} y:${plant.y}`);
+                // update global plants object also
+                plants[plant.id] = plant
                 // if the plant moved was a new one, add a copy to the wheelbarrow area
                 if (plant.initial_y < 0) {
                   console.log("Adding new plant...");
@@ -146,11 +172,18 @@ const init_ineractjs=(plant) => {
                   let copy_plant = plant;
                   copy_plant.x = plant.initial_x;
                   copy_plant.y = plant.initial_y;
-                  xhttp.open("POST", "/plants", true);
-                  xhttp.setRequestHeader("Content-type", "application/json");
-                  xhttp.setRequestHeader("x-csrf-token", csrfToken);
-                  xhttp.send(JSON.stringify(copy_plant));
-
+                  fetch("/plants", { method: "POST",
+                                     headers: { 'Content-Type': 'application/json',
+                                               'x-csrf-token': csrfToken },
+                                     body: JSON.stringify(copy_plant),
+                                    })
+                    .then(res => res.json())
+                    .then(data => {
+                      // update plant counts in the garden
+                      update_plant_counts(data.plant_counts);
+                      // attach the interact plugin to the duplicated plant
+                      init_ineractjs(data.plant);
+                    });
                 }
               } else {
                 // move it back to where it was or the initial position
@@ -159,8 +192,10 @@ const init_ineractjs=(plant) => {
                 x = plant.x * grid_size;
                 y = plant.y * grid_size;
                 event.target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+                // update global plants object also
+                plants[plant.id] = plant
+                // modal error msg
                 console.log(data.errors.base[0]);
-                // modal
                 const modal_btn = document.getElementById('error-modal-button');
                 const modal_body = document.getElementById('error-modal-body');
                 modal_body.innerHTML = data.errors.base[0];
@@ -187,15 +222,16 @@ const init_plant_dragging=() => {
   // check if we have a plant plot on the page
   const plants_container = document.getElementById('plot-container');
   if (plants_container) {
+    // render the counts of different types of plants in the overview
+    update_plant_counts();
     // first destroy any children already in the plot
     plants_container.innerHTML = "";
     // now go through each plant and add it to the plot
-    const plants = JSON.parse(plants_container.dataset.plants);
-    plants.forEach((plant) => {
+    Object.values(plants).forEach((plant) => {
       // attach the interact plugin to the plant
       init_ineractjs(plant);
     });
   }
 }
 
-export { init_plant_dragging, init_ineractjs };
+export { init_plant_dragging };
