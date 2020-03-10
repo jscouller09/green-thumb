@@ -55,7 +55,6 @@
                     <div class="row justify-content-center" style="border-radius: 8px;">
                       <div class="form-wrapper" style="width: 80%;">
                         <h2 style="padding-top: 8px;">Choose a plant date!</h2>
-
                       <%= simple_form_for [@plot, Plant.new()] do |f| %>
                         <%= f.input :plant_type_id, label: false, input_html: {value: plant_type.id, hidden: "true"} %>
                         <%= f.input :plant_date, as: :string, required: true, input_html: {value: Date.today, class: "datepicker"} %>
@@ -72,29 +71,4 @@
       </div>
     </div>
 
-</div>
-
-<!-- This is the testing area for the Plant-Spacing-Alert Popup from Bootstrap -->
-<!-- Button trigger modal -->
-<button id="error-modal-button" hidden type="button" class="garden-button" data-toggle="modal" data-target="#error-modal">
-  Test
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div id="error-modal-content" class="modal-content">
-      <div id="error-modal-header" class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Whoops!</h5>
-        <button id="error-modal-close-button" type="button" class="close" data-dismiss="modal" aria-label="Close" data-backdrop="false">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div id="error-modal-body" class="modal-body">
-       You don't have enough space to plant that there! Crowded plants are unhappy plants :-(
-      </div>
-      <div id="error-modal-footer" class="modal-footer">
-      </div>
-    </div>
-  </div>
 </div>

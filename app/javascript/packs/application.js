@@ -1,8 +1,8 @@
 import "bootstrap";
 import { initAutocomplete } from "../plugins/init_autocomplete";
-import { init_plant_dragging, init_ineractjs } from "../plugins/init_plant_dragging";
-import "../plugins/flatpickr";
-
+import { init_plant_dragging } from "../plugins/init_plant_dragging";
+import "../plugins/flatpickr"
+import "../plugins/modal_confirm"
 // set autocomplete on garden address field if it exists
 initAutocomplete('garden_address');
 
