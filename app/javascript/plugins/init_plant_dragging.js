@@ -4,7 +4,7 @@ import interact from 'interactjs';
 var xhttp = new XMLHttpRequest();
 var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
-// setup global grid setup vars
+// setup global grid vars
 var plants_container = document.getElementById('plot-container');
 if (plants_container) {
   // global object with all plant info
@@ -33,15 +33,14 @@ if (plants_container) {
   plants_container.style.width = `${width / mm_per_pixel}px`;
 }
 
-const update_plant_counts=(plant_counts=JSON.parse(plant_list.dataset.plant_counts)) => {
+const update_plant_counts=(plant_counts=JSON.parse(plant_list.dataset.plant_counts), plant_icons=JSON.parse(plant_list.dataset.plant_icons)) => {
   // update the UL with the count of each plant type
-  const plant_icons = JSON.parse(plant_list.dataset.plant_icons);
   plant_list.innerHTML = "";
   // make a new list entry with the count and icon for each plant type
-  let list_element = document.createElement('li');
-  let p_element = document.createElement('p');
-  let icon_element = document.createElement('div');
   Object.keys(plant_counts).forEach(plant_type => {
+    let list_element = document.createElement('li');
+    let p_element = document.createElement('p');
+    let icon_element = document.createElement('div');
     p_element.innerText = `${plant_type} (${plant_counts[plant_type]})`;
     icon_element.style.backgroundImage = `url("${plant_icons[plant_type]}")`;
     list_element.appendChild(icon_element);
@@ -144,7 +143,7 @@ const add_plant_to_plot=(plant) => {
 }
 
 const init_ineractjs=(plant) => {
-  console.log(`Adding new plant id:${plant.id} type:${plant.plant_type} x:${plant.x} y:${plant.y}`);
+  // console.log(`Adding new plant id:${plant.id} type:${plant.plant_type} x:${plant.x} y:${plant.y}`);
   // create plant element
   const element = add_plant_to_plot(plant);
 
@@ -173,6 +172,8 @@ const init_ineractjs=(plant) => {
   // store inital positions
   plant.initial_x = plant.x
   plant.initial_y = plant.y
+  // update global plants object also
+  plants[plant.id] = plant
 
   let x = plant.x * grid_size;
   let y = plant.y * grid_size;
@@ -197,7 +198,8 @@ const init_ineractjs=(plant) => {
       inertia: true,
       listeners: {
         end: (event) => {
-          //console.log(event.currentTarget.dataset.id, plant.x, plant.y, x, y);
+          // console.log(event.currentTarget.dataset.id, plant.x, plant.y, x, y);
+
           // send x and y with fetch
           const url = `/plants/${element.dataset.id}`
           fetch(url, { method: "PATCH",
@@ -228,7 +230,7 @@ const init_ineractjs=(plant) => {
                     .then(res => res.json())
                     .then(data => {
                       // update plant counts in the garden
-                      update_plant_counts(data.plant_counts);
+                      update_plant_counts(data.plant_counts, data.plant_icons);
                       // attach the interact plugin to the duplicated plant
                       init_ineractjs(data.plant);
                     });
