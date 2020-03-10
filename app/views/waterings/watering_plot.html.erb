@@ -12,7 +12,7 @@
                 <div class="watering-plot-card-info">
                   <p><%= watering.ammount_L %>L</p><%= link_to "done?", complete_watering_path(watering),
                       method: "PATCH",
-                      data: { confirm: "Are You Sure You Want to complete this watering task?"} %>
+                      data: { modal_confirm: "But did you really, though?"} %>
                 </div>
                 <% end %>
               </li>
@@ -23,7 +23,7 @@
     <% end %>
           <%= link_to "all done?", plot_complete_waterings_path(@plot),
                       method: "PATCH",
-                      data: { confirm: "Are You Sure You Want to complete all the watering's tasks?"} %>
+                      data: { modal_confirm: "You're sure that #{@plot.name} is all watered?"} %>
   <div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= 100 %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
   </div>
 </div>
