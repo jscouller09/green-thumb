@@ -1,6 +1,6 @@
 garden_id,name,shape,grid_cell_size_mm,length_m,width_m
 1,Front garden,rectangle,10,1,2
-1,Berries,rectangle,10,1,1
+1,Veggie patch,rectangle,10,1,1
 1,Back garden,rectangle,10,0.5,1.5
 2,Veggie patch,rectangle,10,1,1.5
 2,Squash,rectangle,10,2,2
