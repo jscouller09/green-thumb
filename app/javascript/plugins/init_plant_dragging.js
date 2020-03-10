@@ -127,6 +127,11 @@ const add_plant_to_plot=(plant) => {
 
   // style thumbnail image
   thumbnail.classList.add('plot-plant-thumbnail');
+  if (plant.planted && plant.watering == null) {
+    thumbnail.classList.add('planted');
+  } else if (plant.watering > 0) {
+    thumbnail.classList.add('needs-water');
+  }
   // thumbnail.style.backgroundImage = `url("https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325509/${plant.photo_url}")`;
   thumbnail.style.backgroundImage = `url("${plant.icon}")`;
 
@@ -182,88 +187,89 @@ const init_ineractjs=(plant) => {
   let x = plant.x * grid_size;
   let y = plant.y * grid_size;
   element.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+  if (!plant.planted && plant.watering == null) {
+    interact(element)
+      .draggable({
+        modifiers: [
+          interact.modifiers.snap({
+            targets: [
+              interact.createSnapGrid({ x: grid_size, y: grid_size })
+            ],
+            range: Infinity,
+            relativePoints: [ { x: 0, y: 0 } ]
+          }),
+          interact.modifiers.restrict({
+            restriction: element.parentNode,
+            elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
+            endOnly: true
+          })
+        ],
+        inertia: true,
+        listeners: {
+          end: (event) => {
+            // console.log(event.currentTarget.dataset.id, plant.x, plant.y, x, y);
 
-  interact(element)
-    .draggable({
-      modifiers: [
-        interact.modifiers.snap({
-          targets: [
-            interact.createSnapGrid({ x: grid_size, y: grid_size })
-          ],
-          range: Infinity,
-          relativePoints: [ { x: 0, y: 0 } ]
-        }),
-        interact.modifiers.restrict({
-          restriction: element.parentNode,
-          elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
-          endOnly: true
-        })
-      ],
-      inertia: true,
-      listeners: {
-        end: (event) => {
-          // console.log(event.currentTarget.dataset.id, plant.x, plant.y, x, y);
-
-          // send x and y with fetch
-          const url = `/plants/${element.dataset.id}`
-          fetch(url, { method: "PATCH",
-                       headers: { 'Content-Type': 'application/json',
-                                  'x-csrf-token': csrfToken },
-                       body: JSON.stringify(plant),
-                      })
-            .then(res => res.json())
-            .then((data) => {
-              if (data.accepted) {
-                // if response ok, keep updated plant x/y
-                console.log(`plant ${plant.id} moved to x:${plant.x} y:${plant.y}`);
-                // update global plants object also
-                plants[plant.id] = plant
-                // if the plant moved was a new one, add a copy to the wheelbarrow area
-                if (plant.initial_y < 0) {
-                  console.log("Adding new plant...");
-                  // create a new plant the same as this one
-                  // also update the list of plants in the garden
-                  let copy_plant = plant;
-                  copy_plant.x = plant.initial_x;
-                  copy_plant.y = plant.initial_y;
-                  fetch("/plants", { method: "POST",
-                                     headers: { 'Content-Type': 'application/json',
-                                               'x-csrf-token': csrfToken },
-                                     body: JSON.stringify(copy_plant),
-                                    })
-                    .then(res => res.json())
-                    .then(data => {
-                      // update plant counts in the garden
-                      update_plant_counts(data.plant_counts, data.plant_icons);
-                      // attach the interact plugin to the duplicated plant
-                      init_ineractjs(data.plant);
-                    });
+            // send x and y with fetch
+            const url = `/plants/${element.dataset.id}`
+            fetch(url, { method: "PATCH",
+                         headers: { 'Content-Type': 'application/json',
+                                    'x-csrf-token': csrfToken },
+                         body: JSON.stringify(plant),
+                        })
+              .then(res => res.json())
+              .then((data) => {
+                if (data.accepted) {
+                  // if response ok, keep updated plant x/y
+                  console.log(`plant ${plant.id} moved to x:${plant.x} y:${plant.y}`);
+                  // update global plants object also
+                  plants[plant.id] = plant
+                  // if the plant moved was a new one, add a copy to the wheelbarrow area
+                  if (plant.initial_y < 0) {
+                    console.log("Adding new plant...");
+                    // create a new plant the same as this one
+                    // also update the list of plants in the garden
+                    let copy_plant = plant;
+                    copy_plant.x = plant.initial_x;
+                    copy_plant.y = plant.initial_y;
+                    fetch("/plants", { method: "POST",
+                                       headers: { 'Content-Type': 'application/json',
+                                                 'x-csrf-token': csrfToken },
+                                       body: JSON.stringify(copy_plant),
+                                      })
+                      .then(res => res.json())
+                      .then(data => {
+                        // update plant counts in the garden
+                        update_plant_counts(data.plant_counts, data.plant_icons);
+                        // attach the interact plugin to the duplicated plant
+                        init_ineractjs(data.plant);
+                      });
+                  }
+                } else {
+                  // move it back to where it was or the initial position
+                  (data.x == null) ? plant.x = plant.initial_x : plant.x = data.x;
+                  (data.y == null) ? plant.y = plant.initial_y : plant.y = data.y;
+                  x = plant.x * grid_size;
+                  y = plant.y * grid_size;
+                  event.target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+                  // update global plants object also
+                  plants[plant.id] = plant
+                  // modal error msg
+                  error_modal(data.errors.base[0]);
                 }
-              } else {
-                // move it back to where it was or the initial position
-                (data.x == null) ? plant.x = plant.initial_x : plant.x = data.x;
-                (data.y == null) ? plant.y = plant.initial_y : plant.y = data.y;
-                x = plant.x * grid_size;
-                y = plant.y * grid_size;
-                event.target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
-                // update global plants object also
-                plants[plant.id] = plant
-                // modal error msg
-                error_modal(data.errors.base[0]);
-              }
-            })
+              })
+          }
         }
-      }
-    })
-    .on('dragmove', function (event) {
-      // update plant position (in number of grid cells, not pixels)
-      plant.x += Math.round((event.dx / grid_size))
-      plant.y += Math.round((event.dy / grid_size))
-      // make sure current position matches what is in plant
-      x = plant.x * grid_size;
-      y = plant.y * grid_size;
-      event.target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
-    })
+      })
+      .on('dragmove', function (event) {
+        // update plant position (in number of grid cells, not pixels)
+        plant.x += Math.round((event.dx / grid_size))
+        plant.y += Math.round((event.dy / grid_size))
+        // make sure current position matches what is in plant
+        x = plant.x * grid_size;
+        y = plant.y * grid_size;
+        event.target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+      })
+  }
 }
 
 

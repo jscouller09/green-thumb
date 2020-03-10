@@ -64,9 +64,20 @@
     background-size: cover;
     height: 50%;
     width: 50%;
-    // md-green equivalent with filters
-    filter: invert(93%) sepia(51%) saturate(503%) hue-rotate(52deg) brightness(92%) contrast(81%);
+    // cream equivalent with filters for unplanted plants
+    filter: invert(88%) sepia(16%) saturate(523%) hue-rotate(314deg) brightness(115%) contrast(102%);
+    &.planted {
+      // md-green equivalent with filters
+      // for planted plants
+      filter: invert(93%) sepia(51%) saturate(503%) hue-rotate(52deg) brightness(92%) contrast(81%);
+    }
+    &.needs-water {
+      // turquoise equivalent with filters
+      // for plants to water
+      filter: invert(87%) sepia(16%) saturate(441%) hue-rotate(128deg) brightness(102%) contrast(99%);
+    }
   }
+
   .plot-plant-border {
     display: flex;
     align-items: center;
