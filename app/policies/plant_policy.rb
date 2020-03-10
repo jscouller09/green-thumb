@@ -20,4 +20,8 @@ class PlantPolicy < ApplicationPolicy
   def update?
     destroy?
   end
+
+  def copy?
+    update?
+  end
 end

@@ -6,16 +6,43 @@ class PlantsController < ApplicationController
     @plot = Plot.find params[:plot_id]
     # check this is the users plot before proceeding
     authorize @plot
-    #create a new plant
-    @plant = Plant.new(plant_params)
-    # assign inital water deficit of 0 and plot id
-    @plant.water_deficit_mm = 0.0
-    @plant.plot = @plot
-    authorize @plant
-    if @plant.save
+    # first clear any surplus plants from the wheelbarrow
+    # if the plant has a negative y coordinate it is in the wheelbarrow
+    wheelbarrow_plants = @plot.plants.where("y IS NULL OR y < 0").destroy_all
+    # create a new plant
+    new_plant = Plant.new(plant_params)
+    new_plant.water_deficit_mm = 0.0
+    new_plant.plot_id = @plot.id
+    if new_plant.save
+      # making new plants succeeded
       redirect_to plot_path(@plot)
     else
       render "plots/show"
+    end
+  end
+
+  # POST /plants
+  def copy
+    plant = Plant.find(plant_params[:id])
+    # check this is the users plant
+    authorize plant
+    # make a new plant from supplied params and duplicating old plant
+    @new_plant = plant.dup
+    @new_plant.x = params[:x]
+    @new_plant.y = params[:y]
+    if @new_plant.save
+      # making new plants succeeded
+      respond_to do |format|
+        plant_json = { id: @new_plant.id,
+                       x: @new_plant.x,
+                       y: @new_plant.y,
+                       planted: @new_plant.planted,
+                       radius_mm: @new_plant.radius_mm,
+                       plant_type: @new_plant.plant_type.name,
+                       icon: ActionController::Base.helpers.asset_path("icons/#{@new_plant.plant_type.icon}") }
+        @plant_json = plant_json.to_json.html_safe
+        format.js
+      end
     end
   end
 
@@ -60,7 +87,7 @@ class PlantsController < ApplicationController
   private
 
   def plant_params
-    params.require(:plant).permit(:plant_type_id, :plot_id, :plant_date, :x, :y)
+    params.require(:plant).permit(:id, :planted, :radius_mm, :icon, :plant_type_id, :plot_id, :plant_date, :x, :y)
   end
 
   def plant_space_ok?(current_plant)

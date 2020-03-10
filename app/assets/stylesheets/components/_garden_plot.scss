@@ -4,24 +4,19 @@
   width:100%;
   margin: 0;
   padding: 0;
+
+  & > div {
+    display: flex;
+    min-width: 300px;
+    padding: 0;
+    margin: 0;
+    border: 3px solid red;
+    flex: auto;
+  }
 }
 
 #wheelbarrow {
-  padding: 0;
-  margin: 0;
-  border: 3px solid red;
   flex: initial;
-  display: flex;
-}
-
-
-#plant-list {
-  display: flex;
-  min-width: 300px;
-  padding: 0;
-  margin: 0;
-  border: 3px solid red;
-  flex: auto;
 }
 
 #plot-container {

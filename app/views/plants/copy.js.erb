@@ -1,0 +1,10 @@
+//import { init_ineractjs } from "../plugins/init_plant_dragging";
+
+// add the new plant to the list of plants
+const wheelbarrow = document.getElementById('wheelbarrow');
+wheelbarrow.innerHTML = "Updating...";
+const plant_list = document.getElementById('plant-list');
+plant_list.insertAdjacentHTML('beforeend', "Test");
+
+// attach the interact plugin to the new plant
+//init_ineractjs(JSON.parse(<%= j @plant_json %>));

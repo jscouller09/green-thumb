@@ -8,10 +8,9 @@
   </h1>
 
   <div class='plot-overview'>
-    <div id='plant-list'>
+    <div>
       <!-- List of plants currently in the plot go here-->
-      <!-- List all the plant in the plot -->
-      <ul>
+      <ul id='plant-list'>
         <% @plants.each do|plant| %>
           <li>
             <%= plant.plant_type.name %> <%= plant.plant_date %>

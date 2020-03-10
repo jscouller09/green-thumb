@@ -1,34 +1,36 @@
 import interact from 'interactjs';
 
+// for axaj requests
+var xhttp = new XMLHttpRequest();
+var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
-const add_plant_to_wheelbarrow=(plant, plants_container, mm_per_pixel) => {
-  // generate a plant div with a nested thumbnail image
-  const plant_div = document.createElement('div');
-  const thumbnail = document.createElement('div');
-
-  // set plant div id and css properties
-  plant_div.classList.add('plot-plant');
-  plant_div.setAttribute('data-id', plant.id);
-  plant_div.style.width = '50px';
-  plant_div.style.height = '50px';
-
-  // style thumbnail image
-  thumbnail.classList.add('plot-plant-thumbnail');
-  // thumbnail.style.backgroundImage = `url("https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325509/${plant.photo_url}")`;
-  thumbnail.style.backgroundImage = `url("${plant.icon}")`;
-
-  // insert the thumbnail/border into the plant div
-  plant_div.appendChild(thumbnail);
-
-  // insert the plant div into the plot container
-  plants_container.appendChild(plant_div);
-
-  return plant_div;
+// setup global grid setup vars
+var plants_container = document.getElementById('plot-container');
+if (plants_container) {
+  var wheelbarrow = document.getElementById('wheelbarrow');
+  // determine grid spacing based of viewport size and plot size
+  const intViewportHeight = window.innerHeight;
+  // var intViewportWidth = window.innerWidth * 0.9;
+  const page_container = document.querySelector('.container');
+  const intViewportWidth = page_container.clientWidth * 0.95;
+  const length = parseInt(plants_container.dataset.length);
+  const width = parseInt(plants_container.dataset.width);
+  // set the grid scale (i.e. each grid cell is how many mm?
+  var grid_cell_mm = parseInt(plants_container.dataset.grid);;
+  // work out how many rows and columns we want in the grid
+  var grid_rows =  length / grid_cell_mm;
+  var grid_cols = width / grid_cell_mm;
+  // work out scaling factors
+  var mm_per_pixel = width / intViewportWidth;
+  var grid_size = intViewportWidth / grid_cols;
+  // console.log(grid_rows, grid_cols, mm_per_pixel, grid_size);
+  // set container style and dimensions
+  plants_container.style.height = `${length / mm_per_pixel}px`;
+  plants_container.style.width = `${width / mm_per_pixel}px`;
 }
 
 
-
-const add_plant_to_plot=(plant, plants_container, mm_per_pixel) => {
+const add_plant_to_plot=(plant) => {
   // generate a plant div with a nested thumbnail image
   const plant_div = document.createElement('div');
   const thumbnail = document.createElement('div');
@@ -58,11 +60,14 @@ const add_plant_to_plot=(plant, plants_container, mm_per_pixel) => {
   return plant_div;
 }
 
-const init_ineractjs=(plant, element, mm_per_pixel, grid_size, grid_cols) => {
-  const wheelbarrow = document.getElementById('wheelbarrow');
+const init_ineractjs=(plant) => {
+  console.log(`Adding new plant id:${plant.id} type:${plant.plant_type} x:${plant.x} y:${plant.y}`);
+  // create plant element
+  const element = add_plant_to_plot(plant);
+
   // set wheelbarrow dimensions based on any unplaced plants (negative coordinates)
   if ((plant.y < 0 || plant.y == null) || (plant.x < 0 || plant.x == null)) {
-    wheelbarrow.innerHTML = "Drag the plant onto the plot..."
+    wheelbarrow.innerHTML = "Drag the plant onto the plot...";
     // plant dimensions
     let plant_size = 2*plant.radius_mm/mm_per_pixel;
     // plant is in the wheelbarrow, resize it if necessary to fit the plant
@@ -81,10 +86,10 @@ const init_ineractjs=(plant, element, mm_per_pixel, grid_size, grid_cols) => {
     // console.log(grid_size, grid_cols, plant_size/grid_size, Math.round(current_width/2/grid_size));
     plant.x = Math.round(grid_cols - (plant_size/grid_size));
   }
+
   // store inital positions
   plant.initial_x = plant.x
   plant.initial_y = plant.y
-
 
   let x = plant.x * grid_size;
   let y = plant.y * grid_size;
@@ -111,7 +116,6 @@ const init_ineractjs=(plant, element, mm_per_pixel, grid_size, grid_cols) => {
         end: (event) => {
           //console.log(event.currentTarget.dataset.id, plant.x, plant.y, x, y);
           // send x and y with fetch
-          const csrfToken = document.querySelector('meta[name="csrf-token"]').content
           const url = `/plants/${element.dataset.id}`
           fetch(url, { method: "PATCH",
                        headers: { 'Content-Type': 'application/json',
@@ -126,12 +130,16 @@ const init_ineractjs=(plant, element, mm_per_pixel, grid_size, grid_cols) => {
                 // if the plant moved was a new one, add a copy to the wheelbarrow area
                 if (plant.initial_y < 0) {
                   console.log("Adding new plant...");
-                  // create plant div and add it to the plot
-                  const plants_container = document.getElementById('plot-container');
-                  const new_element = add_plant_to_plot(plant, plants_container, mm_per_pixel);
-                  // attach the interact plugin to the plant
-                  init_ineractjs(plant, new_element, mm_per_pixel, grid_size, grid_cols);
-                  // update the list of plants in the garden
+                  // create a new plant the same as this one
+                  // also update the list of plants in the garden
+                  let copy_plant = plant;
+                  copy_plant.x = plant.initial_x;
+                  copy_plant.y = plant.initial_y;
+                  xhttp.open("POST", "/plants", true);
+                  xhttp.setRequestHeader("Content-type", "application/json");
+                  xhttp.setRequestHeader("x-csrf-token", csrfToken);
+                  xhttp.send(JSON.stringify(copy_plant));
+
                 }
               } else {
                 // move it back to where it was or the initial position
@@ -170,34 +178,13 @@ const init_plant_dragging=() => {
   if (plants_container) {
     // first destroy any children already in the plot
     plants_container.innerHTML = "";
-    // determine grid spacing based of viewport size and plot size
-    const intViewportHeight = window.innerHeight;
-    // const intViewportWidth = window.innerWidth * 0.9;
-    const container = document.querySelector('.container');
-    const intViewportWidth = container.clientWidth * 0.95;
-    const length = parseInt(plants_container.dataset.length);
-    const width = parseInt(plants_container.dataset.width);
-    // set the grid scale (i.e. each grid cell is how many mm?
-    const grid_cell_mm = parseInt(plants_container.dataset.grid);;
-    // work out how many rows and columns we want in the grid
-    const grid_rows =  length / grid_cell_mm;
-    const grid_cols = width / grid_cell_mm;
-    // work out scaling factors
-    const mm_per_pixel = width / intViewportWidth;
-    const grid_size = intViewportWidth / grid_cols;
-    // console.log(grid_rows, grid_cols, mm_per_pixel, grid_size);
-    // set container style and dimensions
-    plants_container.style.height = `${length / mm_per_pixel}px`;
-    plants_container.style.width = `${width / mm_per_pixel}px`;
-    // get plant data and iterate
+    // now go through each plant and add it to the plot
     const plants = JSON.parse(plants_container.dataset.plants);
     plants.forEach((plant) => {
-      // create plant div and add it to the plot
-      const element = add_plant_to_plot(plant, plants_container, mm_per_pixel);
       // attach the interact plugin to the plant
-      init_ineractjs(plant, element, mm_per_pixel, grid_size, grid_cols);
+      init_ineractjs(plant);
     });
   }
 }
 
-export { init_plant_dragging };
+export { init_plant_dragging, init_ineractjs };
