@@ -13,6 +13,8 @@ class User < ApplicationRecord
 
   #user associations
   has_many :gardens, dependent: :destroy
+  has_many :weather_stations, through: :gardens
+  has_many :weather_alerts, through: :weather_stations
   has_many :plots, through: :gardens
   has_many :plants, through: :plots
   has_many :tasks, dependent: :destroy

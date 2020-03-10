@@ -5,6 +5,7 @@ class WeatherStation < ApplicationRecord
   has_many :measurements
   has_many :gardens
   has_many :users, through: :gardens
+  has_many :weather_alerts
 
   # validations
   validates :name, presence: true

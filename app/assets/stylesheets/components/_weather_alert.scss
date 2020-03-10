@@ -1,0 +1,20 @@
+.weather-alert{
+  background-color: $red;
+  color: white;
+  padding: 8px;
+  text-align: left;
+  margin-bottom: 8px;
+
+  p{
+    margin-bottom: 0px;
+  }
+  .marquee{
+    white-space:no-wrap;
+    overflow:hidden;
+    .marquee-text{
+      white-space:nowrap;
+      display:inline;
+      width:auto;
+    }
+  }
+}
