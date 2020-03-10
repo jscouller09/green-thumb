@@ -24,7 +24,7 @@ class GardensController < ApplicationController
         main_plant = plot.plant_types.group(:id).count.max.first
         PlantType.find(main_plant).photo_url
       else
-        "logo.png"
+        "green-thumb/logo_vztasz"
       end
     end
   end

@@ -18,7 +18,15 @@ class Plant < ApplicationRecord
   validates :water_deficit_mm, numericality: { greater_than_or_equal_to: 0 }
   validates :plant_date, presence: true
 
-  after_create :add_radius
+  after_create :add_radius, :check_planted_status
+
+  def check_planted_status
+    # only run if we have a specified plant date and the plant is not planted
+    unless self.plant_date.nil? || self.planted
+      # plants with plant dates before today are automatically planted
+      self.update(planted: self.plant_date < Date.today)
+    end
+  end
 
   def generate_watering
     # if water deficit exceeds 2 mm, generate a watering
