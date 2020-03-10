@@ -35,6 +35,7 @@ const add_plant_to_plot=(plant) => {
   const plant_div = document.createElement('div');
   const thumbnail = document.createElement('div');
   const plant_border = document.createElement('div');
+  const delete_link = document.createElement('a');
 
   // set plant div id and css properties
   plant_div.classList.add('plot-plant');
@@ -45,6 +46,15 @@ const add_plant_to_plot=(plant) => {
   // style plant border
   plant_border.classList.add('plot-plant-border');
 
+  // Add delete link
+  //  'data-confirm="Are you sure you want to remove this plant?" rel="nofollow" data-method="delete" href="/plants/1"'
+  delete_link.classList.add('plot-plant-delete');
+  delete_link.setAttribute('data-confirm', "Are you sure you want to remove this plant?");
+  delete_link.setAttribute('rel', "nofollow");
+  delete_link.setAttribute('data-method', "delete");
+  delete_link.setAttribute('href', `/plants/${plant.id}`);
+  delete_link.innerHTML= `<i class="fas fa-trash"></i>`;
+
   // style thumbnail image
   thumbnail.classList.add('plot-plant-thumbnail');
   // thumbnail.style.backgroundImage = `url("https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325509/${plant.photo_url}")`;
@@ -53,6 +63,7 @@ const add_plant_to_plot=(plant) => {
   // insert the thumbnail/border into the plant div
   plant_border.appendChild(thumbnail);
   plant_div.appendChild(plant_border);
+  plant_div.appendChild(delete_link);
 
   // insert the plant div into the plot container
   plants_container.appendChild(plant_div);

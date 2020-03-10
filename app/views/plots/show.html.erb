@@ -11,11 +11,9 @@
     <div>
       <!-- List of plants currently in the plot go here-->
       <ul id='plant-list'>
-        <% @plants.each do|plant| %>
+        <% @plants_by_type.each do|plant_type, count| %>
           <li>
-            <%= plant.plant_type.name %> <%= plant.plant_date %>
-            <%= link_to "X", plant_path(plant), method: 'delete',
-                data: { confirm: "Are you sure you want to remove this plant?"} %>
+            <%= plant_type %>(<%= count %>)
           </li>
         <% end %>
       </ul>
@@ -25,6 +23,7 @@
       <p>Your wheelbarrow is empty. Choose a plant to get started!</p>
     </div>
   </div>
+
   <div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= @plot.grid_cell_size_mm %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
     <!-- Plants will be added here by the JS plugin-->
   </div>

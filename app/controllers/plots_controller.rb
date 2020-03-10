@@ -9,7 +9,14 @@ class PlotsController < ApplicationController
     @plant = Plant.new
     @plot = Plot.find(params[:id])
     authorize @plot
+    # filter plants to only be those actually in the garden (not wheelbarrow)
     @plants = @plot.plants.where("x >= 0 AND y >= 0")
+    # count types of plants in the garden
+    @plants_by_type = Hash.new(0)
+    @plants.each do |plant|
+      type = plant.plant_type.name
+      @plants_by_type[type] += 1
+    end
     plants_to_json = @plot.plants.map do |plant|
       # on plants without a position, move to wheelbarrow (negative x and y)
       { id: plant.id,

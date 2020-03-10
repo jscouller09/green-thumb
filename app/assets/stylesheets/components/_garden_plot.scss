@@ -37,6 +37,15 @@
   align-items: center;
   justify-content: center;
 
+  &:hover {
+    .plot-plant-border {
+      border: 1px dashed $cream;
+    }
+    .plot-plant-delete {
+      opacity: 1;
+    }
+  }
+
   .plot-plant-thumbnail {
     height: 50%;
     width: 50%;
@@ -52,10 +61,18 @@
     height: 100%;
     width: 100%;
     border-radius: 50%;
-    border: 1px dashed $cream;
-    &:hover {
-      border: 1px dashed $cream;
-    }
+    // &:hover {
+    //   border: 1px dashed $cream;
+    // }
+  }
+
+  .plot-plant-delete {
+    font-size: 80%;
+    opacity: 0;
+    color: $md-green;
+    position: absolute;
+    right: 0px;
+    top: 0px;
   }
 }
 
