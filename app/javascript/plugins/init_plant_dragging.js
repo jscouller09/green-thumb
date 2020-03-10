@@ -52,6 +52,8 @@ const update_plant_counts=(plant_counts=JSON.parse(plant_list.dataset.plant_coun
 const error_modal=(error_msg) => {
   // set the body of the modal
   const modal_body = document.getElementById('error-modal-body');
+  const modal_title = document.getElementById('exampleModalLabel');
+  modal_title.innerText = "Whoops!"
   modal_body.innerHTML = "";
   const modal_content = document.createElement('p');
   modal_content.innerText = error_msg;
@@ -61,9 +63,11 @@ const error_modal=(error_msg) => {
   modal_btn.click();
 }
 
-const info_modal=(modal_content) => {
+const info_modal=(modal_content, title) => {
   // set the body of the modal
   const modal_body = document.getElementById('error-modal-body');
+  const modal_title = document.getElementById('exampleModalLabel');
+  modal_title.innerText = title;
   modal_body.innerHTML = "";
   modal_body.appendChild(modal_content);
   // trigger modal
@@ -77,7 +81,7 @@ const plant_info_callback=(target) => {
   const content = document.createElement('div');
 
   // plant type
-  const title = document.createElement('h3');
+  const title = document.createElement('h5');
   title.innerHTML = `${plant.plant_type}&nbsp;`;
 
   // Add delete link using following html attribs...
@@ -95,14 +99,14 @@ const plant_info_callback=(target) => {
   // plant date and planted status
   element = document.createElement('p');
   if (plant.planted) {
-    element.innerText = `planted on ${plant.plant_date}`;
+    element.innerText = `Planted on ${plant.plant_date}.`;
   } else {
-    element.innerText = `scheduled for planting on ${plant.plant_date}`;
+    element.innerText = `Scheduled for planting on ${plant.plant_date}.`;
   }
   content.appendChild(element);
 
   // pass to modal
-  info_modal(content);
+  info_modal(content, "Plant details");
 }
 
 
