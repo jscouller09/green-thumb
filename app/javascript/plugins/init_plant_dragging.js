@@ -33,20 +33,29 @@ if (plants_container) {
   plants_container.style.width = `${width / mm_per_pixel}px`;
 }
 
-const update_plant_counts=(plant_counts=JSON.parse(plant_list.dataset.plant_counts), plant_icons=JSON.parse(plant_list.dataset.plant_icons)) => {
-  // update the UL with the count of each plant type
-  plant_list.innerHTML = "";
-  // make a new list entry with the count and icon for each plant type
-  Object.keys(plant_counts).forEach(plant_type => {
-    let list_element = document.createElement('li');
-    let p_element = document.createElement('p');
-    let icon_element = document.createElement('div');
-    p_element.innerText = `${plant_type} (${plant_counts[plant_type]})`;
-    icon_element.style.backgroundImage = `url("${plant_icons[plant_type]}")`;
-    list_element.appendChild(icon_element);
-    list_element.appendChild(p_element);
-    plant_list.appendChild(list_element);
-  });
+const update_plant_counts=(plant_counts=null, plant_icons=null) => {
+  if (plant_list) {
+    if (plant_counts == null) {
+      plant_counts=JSON.parse(plant_list.dataset.plant_counts);
+    }
+    if (plant_icons == null) {
+      plant_icons=JSON.parse(plant_list.dataset.plant_icons)
+    }
+
+    // update the UL with the count of each plant type
+    plant_list.innerHTML = "";
+    // make a new list entry with the count and icon for each plant type
+    Object.keys(plant_counts).forEach(plant_type => {
+      let list_element = document.createElement('li');
+      let p_element = document.createElement('p');
+      let icon_element = document.createElement('div');
+      p_element.innerText = `${plant_type} (${plant_counts[plant_type]})`;
+      icon_element.style.backgroundImage = `url("${plant_icons[plant_type]}")`;
+      list_element.appendChild(icon_element);
+      list_element.appendChild(p_element);
+      plant_list.appendChild(list_element);
+    });
+  }
 }
 
 const error_modal=(error_msg) => {
@@ -86,7 +95,7 @@ const plant_info_callback=(target) => {
 
   // Add delete link using following html attribs...
   //  'data-confirm="Are you sure you want to remove this plant?" rel="nofollow" data-method="delete" href="/plants/1"'
-  var element = document.createElement('a');
+  let element = document.createElement('a');
   element.classList.add('plot-plant-delete');
   element.setAttribute('data-confirm', "Are you sure you want to remove this plant?");
   element.setAttribute('rel', "nofollow");
@@ -107,6 +116,35 @@ const plant_info_callback=(target) => {
 
   // pass to modal
   info_modal(content, "Plant details");
+}
+
+const watering_info_callback=(target) => {
+  const plant = plants[target.dataset.id];
+  // make container div for content
+  const content = document.createElement('div');
+
+  // plant type
+  const title = document.createElement('h5');
+  title.innerHTML = `${plant.plant_type}&nbsp;`;
+  content.appendChild(title);
+
+  // plant date and planted status
+  let element = document.createElement('p');
+  const age_days = Math.floor((Date.now() - Date.parse(plant.plant_date)) / 86400000);
+  element.innerText = `Plant is ${age_days} days old (planted on ${plant.plant_date}). Needs ${plant.watering} L water.`;
+  content.appendChild(element);
+
+  // button to mark watering complete
+  element = document.createElement('a');
+  element.setAttribute('data-confirm-modal', "Have you really watered it?");
+  element.setAttribute('rel', "nofollow");
+  element.setAttribute('data-method', "patch");
+  element.setAttribute('href', `/waterings/${plant.id}/complete`);
+  element.innerHTML= `Done?`;
+  content.appendChild(element);
+
+  // pass to modal
+  info_modal(content, "Watering requirements");
 }
 
 
@@ -138,7 +176,14 @@ const add_plant_to_plot=(plant) => {
   // add event listener for double click on icon
   thumbnail.addEventListener('dblclick', (event) => {
     // want to operate on parent div of thumbnail icon that was clicked
-    plant_info_callback(event.currentTarget.parentNode.parentNode);
+    if (plant.watering == null) {
+      // plot show page - double clicking should show plant info
+      plant_info_callback(event.currentTarget.parentNode.parentNode);
+    } else {
+      // has watering info, so on watering dashboard
+      // show watering info on double click
+      watering_info_callback(event.currentTarget.parentNode.parentNode);
+    }
   });
 
   // insert the thumbnail/border into the plant div
@@ -157,7 +202,7 @@ const init_ineractjs=(plant) => {
   const element = add_plant_to_plot(plant);
 
   // set wheelbarrow dimensions based on any unplaced plants (negative coordinates)
-  if ((plant.y < 0 || plant.y == null) || (plant.x < 0 || plant.x == null)) {
+  if (wheelbarrow && ((plant.y < 0 || plant.y == null) || (plant.x < 0 || plant.x == null))) {
     wheelbarrow.innerHTML = "Drag the plant onto the plot...";
     // plant dimensions
     let plant_size = 2*plant.radius_mm/mm_per_pixel;
@@ -224,7 +269,7 @@ const init_ineractjs=(plant) => {
                   // update global plants object also
                   plants[plant.id] = plant
                   // if the plant moved was a new one, add a copy to the wheelbarrow area
-                  if (plant.initial_y < 0) {
+                  if (plant.initial_y < 0 && wheelbarrow && plant_list) {
                     console.log("Adding new plant...");
                     // create a new plant the same as this one
                     // also update the list of plants in the garden

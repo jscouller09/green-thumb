@@ -1,10 +1,10 @@
 <div class="container m-5">
   <h1><%= @plot.name %></h1>
           <h2>Here is the plants you have :</h2>
-    <% @watering_groups.each do |plant_type, plants| %>
+    <% @watering_groups.each do |plant_type, total_water| %>
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#<%= plant_type.name %>">
           <div class="plant_list">
-            <p><%= plant_type.name %>: <%= @watering_plant %>L</p>
+            <p><%= plant_type.name %>: <%= total_water %>L</p>
 
           </div>
       </button>
@@ -29,8 +29,13 @@
       </div>
     <% end %>
 
-  <div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= 100 %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
+
+  <div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= @plot.grid_cell_size_mm %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
+    <!-- Plants will be added here by the JS plugin-->
   </div>
+
+
+
   <%= link_to "Water all?", plot_complete_waterings_path(@plot),
               method: "PATCH",
               data: { modal_confirm: "You're sure that #{@plot.name} is all watered?"}, class: "garden-button" %>
