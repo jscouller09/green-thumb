@@ -33,20 +33,23 @@ class PlantsController < ApplicationController
     if new_plant.save
       # making new plants succeeded
       # update count of plants in garden
-      plants_by_type = Hash.new(0)
+      plants_counts_by_type = Hash.new(0)
+      plants_icons_by_type = {}
       plant.plot.plants.where("x >= 0 AND y >= 0").each do |plant|
         type = plant.plant_type.name
-        plants_by_type[type] += 1
+        plants_counts_by_type[type] += 1
+        plants_icons_by_type[type] = ActionController::Base.helpers.asset_path("icons/#{plant.plant_type.icon}")
       end
       # store new plant as JSON
       plant_obj = { id: new_plant.id,
                     x: new_plant.x,
                     y: new_plant.y,
                     planted: new_plant.planted,
+                    plant_date: new_plant.plant_date,
                     radius_mm: new_plant.radius_mm,
                     plant_type: new_plant.plant_type.name,
                     icon: ActionController::Base.helpers.asset_path("icons/#{new_plant.plant_type.icon}") }
-      render json: { plant: plant_obj, plant_counts: plants_by_type }.to_json
+      render json: { plant: plant_obj, plant_counts: plants_counts_by_type, plant_icons: plants_icons_by_type }.to_json
     end
   end
 

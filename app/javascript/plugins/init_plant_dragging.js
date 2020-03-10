@@ -35,15 +35,75 @@ if (plants_container) {
 
 const update_plant_counts=(plant_counts=JSON.parse(plant_list.dataset.plant_counts)) => {
   // update the UL with the count of each plant type
-  let html = "";
+  const plant_icons = JSON.parse(plant_list.dataset.plant_icons);
+  plant_list.innerHTML = "";
+  // make a new list entry with the count and icon for each plant type
+  let list_element = document.createElement('li');
+  let p_element = document.createElement('p');
+  let icon_element = document.createElement('div');
   Object.keys(plant_counts).forEach(plant_type => {
-    html += `<li>${plant_type} (${plant_counts[plant_type]})</li>`;
+    p_element.innerText = `${plant_type} (${plant_counts[plant_type]})`;
+    icon_element.style.backgroundImage = `url("${plant_icons[plant_type]}")`;
+    list_element.appendChild(icon_element);
+    list_element.appendChild(p_element);
+    plant_list.appendChild(list_element);
   });
-  plant_list.innerHTML = html;
 }
 
-const info_modal_callback=(target) => {
-  console.log(plants[target.dataset.id]);
+const error_modal=(error_msg) => {
+  // set the body of the modal
+  const modal_body = document.getElementById('error-modal-body');
+  modal_body.innerHTML = "";
+  const modal_content = document.createElement('p');
+  modal_content.innerText = error_msg;
+  modal_body.appendChild(modal_content);
+  // trigger modal
+  const modal_btn = document.getElementById('error-modal-button');
+  modal_btn.click();
+}
+
+const info_modal=(modal_content) => {
+  // set the body of the modal
+  const modal_body = document.getElementById('error-modal-body');
+  modal_body.innerHTML = "";
+  modal_body.appendChild(modal_content);
+  // trigger modal
+  const modal_btn = document.getElementById('error-modal-button');
+  modal_btn.click();
+}
+
+const plant_info_callback=(target) => {
+  const plant = plants[target.dataset.id];
+  // make container div for content
+  const content = document.createElement('div');
+
+  // plant type
+  const title = document.createElement('h3');
+  title.innerHTML = `${plant.plant_type}&nbsp;`;
+
+  // Add delete link using following html attribs...
+  //  'data-confirm="Are you sure you want to remove this plant?" rel="nofollow" data-method="delete" href="/plants/1"'
+  var element = document.createElement('a');
+  element.classList.add('plot-plant-delete');
+  element.setAttribute('data-confirm', "Are you sure you want to remove this plant?");
+  element.setAttribute('rel', "nofollow");
+  element.setAttribute('data-method', "delete");
+  element.setAttribute('href', `/plants/${plant.id}`);
+  element.innerHTML= `<i class="fas fa-trash"></i>`;
+  title.appendChild(element);
+  content.appendChild(title);
+
+  // plant date and planted status
+  element = document.createElement('p');
+  if (plant.planted) {
+    element.innerText = `planted on ${plant.plant_date}`;
+  } else {
+    element.innerText = `scheduled for planting on ${plant.plant_date}`;
+  }
+  content.appendChild(element);
+
+  // pass to modal
+  info_modal(content);
 }
 
 
@@ -62,16 +122,6 @@ const add_plant_to_plot=(plant) => {
   // style plant border
   plant_border.classList.add('plot-plant-border');
 
-  // Add delete link
-  //  'data-confirm="Are you sure you want to remove this plant?" rel="nofollow" data-method="delete" href="/plants/1"'
-  const delete_link = document.createElement('a');
-  delete_link.classList.add('plot-plant-delete');
-  delete_link.setAttribute('data-confirm', "Are you sure you want to remove this plant?");
-  delete_link.setAttribute('rel', "nofollow");
-  delete_link.setAttribute('data-method', "delete");
-  delete_link.setAttribute('href', `/plants/${plant.id}`);
-  delete_link.innerHTML= `<i class="fas fa-trash"></i>`;
-
   // style thumbnail image
   thumbnail.classList.add('plot-plant-thumbnail');
   // thumbnail.style.backgroundImage = `url("https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325509/${plant.photo_url}")`;
@@ -79,15 +129,13 @@ const add_plant_to_plot=(plant) => {
 
   // add event listener for double click on icon
   thumbnail.addEventListener('dblclick', (event) => {
-    console.log(event);
     // want to operate on parent div of thumbnail icon that was clicked
-    info_modal_callback(event.currentTarget.parentNode.parentNode);
+    plant_info_callback(event.currentTarget.parentNode.parentNode);
   });
 
   // insert the thumbnail/border into the plant div
   plant_border.appendChild(thumbnail);
   plant_div.appendChild(plant_border);
-  plant_div.appendChild(delete_link);
 
   // insert the plant div into the plot container
   plants_container.appendChild(plant_div);
@@ -195,11 +243,7 @@ const init_ineractjs=(plant) => {
                 // update global plants object also
                 plants[plant.id] = plant
                 // modal error msg
-                console.log(data.errors.base[0]);
-                const modal_btn = document.getElementById('error-modal-button');
-                const modal_body = document.getElementById('error-modal-body');
-                modal_body.innerHTML = data.errors.base[0];
-                modal_btn.click();
+                error_modal(data.errors.base[0]);
               }
             })
         }
