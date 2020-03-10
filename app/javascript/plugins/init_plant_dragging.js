@@ -52,7 +52,7 @@ const update_plant_counts=(plant_counts=JSON.parse(plant_list.dataset.plant_coun
 const error_modal=(error_msg) => {
   // set the body of the modal
   const modal_body = document.getElementById('error-modal-body');
-  const modal_title = document.getElementById('exampleModalLabel');
+  const modal_title = document.getElementById('error-modal-title');
   modal_title.innerText = "Whoops!"
   modal_body.innerHTML = "";
   const modal_content = document.createElement('p');
@@ -63,11 +63,11 @@ const error_modal=(error_msg) => {
   modal_btn.click();
 }
 
-const info_modal=(modal_content, title) => {
+const info_modal=(modal_content, title_text) => {
   // set the body of the modal
   const modal_body = document.getElementById('error-modal-body');
-  const modal_title = document.getElementById('exampleModalLabel');
-  modal_title.innerText = title;
+  const modal_title = document.getElementById('error-modal-title');
+  modal_title.innerHTML = title_text;
   modal_body.innerHTML = "";
   modal_body.appendChild(modal_content);
   // trigger modal
