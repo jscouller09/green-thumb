@@ -1,3 +1,4 @@
+// plot plant list, wheelbarrow and layout view
 .plot-overview {
   display: flex;
   justify-content: space-between;
@@ -36,7 +37,6 @@
   padding: 0;
   margin: 0 auto;
   box-shadow: 0 0 8px black;
-  // border: 8px solid $brown;
   background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
                     url("https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583523873/green-thumb/1_d8DyNLUIa8xo5rGrO-2FSg_v7kggg.jpg");
   background-position: center;
@@ -45,10 +45,10 @@
 }
 
 .plot-plant {
-  position: absolute;
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
+  position: absolute;
 
   &:hover {
     .plot-plant-border {
@@ -60,53 +60,61 @@
   }
 
   .plot-plant-thumbnail {
+    background-position: center;
+    background-size: cover;
     height: 50%;
     width: 50%;
-    background-size: cover;
-    background-position: center;
     // md-green equivalent with filters
     filter: invert(93%) sepia(51%) saturate(503%) hue-rotate(52deg) brightness(92%) contrast(81%);
   }
   .plot-plant-border {
-    display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
     width: 100%;
     border-radius: 50%;
   }
+}
 
-  .plot-plant-delete {
-    font-size: 80%;
-    opacity: 0;
-    color: $md-green;
-    position: absolute;
-    right: 0px;
-    top: 0px;
-  }
+    
+  
+  
+  
+  
+  
+// plant cards
+.card-category {
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  color: white;
+  display: flex;
+  font-family: special elite;
+  font-size: 24px;
+  font-weight: bold;
+  height: 150px;
+  justify-content: center;
+  object-fit: cover;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-template-rows: auto;
   grid-gap: 12px;
 }
 
-.card-category {
-  background-size: cover;
-  background-position: center;
-  font-family: special elite;
-  height: 150px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-  border-radius: 5px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+h2 {
+  margin-top: 16px;
+}
+
+  
+// modals
+.modal-header img {
+  object-fit: cover;
 }
 
 .modal-header .header {
@@ -117,9 +125,21 @@
   justify-content: center
 }
 
+
 // Small devices (landscape phones, 576px and up)
 @media (max-width: 576px) {
   .cards {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+@media screen and (max-width: 600px) {
+  h1 {
+    font-size: 32px;
+  }
+
+  h2 {
+    font-size: 24px;
+    margin: 8px;
+    }
+  }
