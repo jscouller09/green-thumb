@@ -1,3 +1,5 @@
+<%# render 'shared/confirmation_modal' %>
+
 <div class="container">
 
   <h1><%= @plot.name %></h1>
@@ -9,38 +11,10 @@
         <%= plant.plant_type.name %>
         <%= plant.plant_date %>
         <%= link_to "x", plant_path(plant), method: 'delete',
-            data: { confirm: "Are you sure you want to remove this plant?"} %>
+            data: { modal_confirm: "Are you sure you want to remove this plant?"} %>
       </li>
     <% end %>
   </ul>
-
-
-<!-- Plant Spacing ERROR Alert Popup, Bootstrap -->
-<!-- Button trigger modal - keep button 'hidden' -->
-<button id="error-modal-button" type="button" hidden class="garden-button" data-toggle="modal" data-target="#error-modal">
-  Test
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div id="error-modal-content" class="modal-content">
-      <div id="error-modal-header" class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Whoops!</h5>
-        <button id="error-modal-close-button" type="button" class="close" data-dismiss="modal" aria-label="Close" data-backdrop="false">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div id="error-modal-body" class="modal-body">
-       You don't have enough space to plant that there! Crowded plants are unhappy plants :-(
-      </div>
-      <div id="error-modal-footer" class="modal-footer">
-      </div>
-    </div>
-  </div>
-</div>
-
-
 
 <div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= @plot.grid_cell_size_mm %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
   <!-- Plants will be added here by the JS plugin-->
@@ -74,7 +48,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-primary" style="border-radius: 16px;">
-                  <div class="row justify-content-center" style="border-radius: 8px;">
+                  <div class="row" style="border-radius: 8px;">
                     <div class="form-wrapper" style="width: 80%;">
                       <h2 style="padding-top: 8px;">Choose a plant date!</h2>
 
