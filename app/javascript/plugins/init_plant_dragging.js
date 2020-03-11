@@ -48,9 +48,10 @@ const toggle_highlight=(name) => {
 }
 
 const plant_group_click_callback=(event) => {
+  console.log(event);
   const plant_type_name = event.currentTarget.dataset.plant_name;
   toggle_highlight(plant_type_name);
-  setTimeout(() => { toggle_highlight(plant_type_name); }, 2000);
+  setTimeout(() => { toggle_highlight(plant_type_name); }, 1000);
 }
 
 const init_plant_highlighting=() => {
