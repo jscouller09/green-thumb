@@ -18,3 +18,15 @@
     color: $dk-green;
   }
 }
+
+@media screen and (max-width: 600px) {
+  #dashboard-list {
+    margin: 0 auto;
+    i {
+      font-size: 24px;
+    }
+    a {
+      font-size: 20px;
+    }
+  }
+}
