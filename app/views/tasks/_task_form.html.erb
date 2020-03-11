@@ -1,8 +1,24 @@
-
-<%= simple_form_for (task) do |form| %>
-  <%= form.input :description %>
-  <%= form.input :due_date %>
-  <%= form.input :priority %>
-  <%= form.button :submit %>
-<% end %>
+<!-- Modal -->
+<div class="modal fade" id="new-task-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div id="conf-modal-content" class="modal-content">
+      <div id="conf-modal-header" class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Task</h5>
+        <button id="conf-modal-close-button" type="button" class="close" data-dismiss="modal" aria-label="Close" data-backdrop="false">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="conf-modal-body" class="modal-body">
+       <%= simple_form_for (task) do |form| %>
+        <%= form.input :description %>
+        <%= form.input :due_date, as: :string, input_html: {value: Date.today, class: "datepicker"} %>
+        <%= form.input :priority %>
+        <%= form.button :submit, "Create!", class: "garden-button" %>
+      <% end %>
+      </div>
+      <div id="conf-modal-footer" class="modal-footer">
+        </div>
+      </div>
+  </div>
+</div>
 
