@@ -10,9 +10,19 @@ var plants_container = document.getElementById('plot-container');
 if (plants_container) {
   // global object with all plant info
   var plants = JSON.parse(plants_container.dataset.plants);
+  // replace underscores in plant names with spaces
+  Object.values(plants).forEach(plant => {
+    plant.plant_type = plant.plant_type.replace(/_/gi," ");
+  });
   // containers above plot area
   var wheelbarrow = document.getElementById('wheelbarrow');
   var plant_list = document.getElementById('plant-list');
+  // replace underscores in plant names with spaces
+  if (plant_list) {
+    Object.values(plant_list).forEach(plant => {
+      plant.plant_type = plant.plant_type.replace(/_/gi," ");
+    });
+  }
   var plant_groups = document.querySelectorAll('.plant-group');
   // determine grid spacing based of viewport size and plot size
   const intViewportHeight = window.innerHeight;

@@ -21,9 +21,11 @@
   </div>
 
 
-  <div class="btn-container">
-    <%= link_to "Water all?", plot_complete_waterings_path(@plot),
-        method: "PATCH",
-        data: { modal_confirm: "You're sure that #{@plot.name} is all watered?"}, class: "garden-button" %>
-  </div>
+  <% unless @watering_groups.empty? %>
+    <div class="btn-container">
+      <%= link_to "Water all?", plot_complete_waterings_path(@plot),
+          method: "PATCH",
+          data: { modal_confirm: "You're sure that #{@plot.name} is all watered?"}, class: "garden-button" %>
+    </div>
+  <% end %>
 </div>

@@ -2,7 +2,7 @@ class TasksController < ApplicationController
 
   # GET /tasks
   def index   #Task.all
-    @tasks = policy_scope(Task).where(completed: false)
+    @tasks = policy_scope(Task).where(completed: false).order("due_date")
     @task = Task.new
     @user = @task.user_id
   end
