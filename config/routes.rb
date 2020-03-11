@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   # MVP - Destroy plants and update (location)
   resources 'plants', only: [:destroy, :update]
   post 'plants', to: "plants#copy", as: :copy_plant
+  patch 'plants/:id/planted', to: "plants#toggle_planted", as: :toggle_planted
 
   #MVP - Tasks index | IMPORTANT create update and destroy (the creation)
   resources 'tasks', only: [:index, :create, :edit, :update, :destroy]

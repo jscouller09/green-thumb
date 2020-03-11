@@ -24,4 +24,8 @@ class PlantPolicy < ApplicationPolicy
   def copy?
     update?
   end
+
+  def toggle_planted?
+    update?
+  end
 end
