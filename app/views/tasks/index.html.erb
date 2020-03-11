@@ -1,9 +1,15 @@
   <div class="menu-headline">
-    <h1>Hello, <%= current_user.first_name %>!</h1>
-    <!-- The weather card is styled and ready to be used but we might not want it on the task index page -->
-    <!-- <div class="weather-thumb-card" id="weather-thumb-text">7°C</div> -->
-  </div>
-<div class="list">
+    <div class="add-task-flexbox">
+      <h1>Hello, <%= current_user.first_name %>!</h1>
+    </div>
+      <div>
+        <button id="new-task-button" type="button" class="new-task-button" data-toggle="modal" data-target="#new-task-modal">
+          <h1 id="add-task-plus">+</h1>
+        </button>
+      </div>
+    </div>
+  <div class="list">
+  <%= render'/tasks/task_form', task: @task %>
   <% if @tasks.empty? %>
     <p>Good job! You've done all your tasks!</p>
   <% end %>
@@ -28,7 +34,7 @@
             <% if current_user && policy(task).destroy? %>
               <%= link_to task_path(task),
                   method: "DELETE",
-                  data: { modal_confirm: "Are You Sure You Want to Destroy #{task.description}?"} do %>
+                  data: { modal_confirm: "Are you sure you want to get rid of #{task.description}?"} do %>
                   <i class="far fa-trash-alt task-icon"></i>
                 <% end %>
             <% end %>
@@ -40,10 +46,10 @@
             <% end %>
           </div>
         </div>
-        <div>
+        <div id="lg-task-icon">
           <% if current_user && policy(task).mark_as_complete? %>
-            <%= link_to "/tasks/#{task.id}/complete", method: "PATCH", do %>
-                <i class="far fa-square lg-task-icon"></i>
+            <%= link_to "/tasks/#{task.id}/complete", method: "PATCH" do %>
+                <i class="far fa-square"></i>
             <% end %>
           <% end %>
         </div>
@@ -52,8 +58,6 @@
 </div>
 
 <!-- <div>
-  <p>Add a task</p>
-  <%= render "task_form", task: @task %>
 
   <%= link_to "Back to dashboard", dashboard_path %>
 </div> -->

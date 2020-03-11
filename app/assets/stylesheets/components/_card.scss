@@ -95,27 +95,9 @@
   width: 75%;
 }
 
-.weather-thumb-card {
-  align-items: center;
-  background-color: $green;
-  border-radius: 8px 0 0 8px;
-  color: white;
-  display: flex;
-  font-size: 24px;
-  height: 64px;
-  justify-content: center;
-  padding: 8px;
-  position: absolute;
-  right: 0;
-  width: 20%;
-}
-
 @media screen and (max-width: 600px) {
   .dashboard-card {
     width: 95vw;
-  }
-  .weather-thumb-card {
-    width: 30%;
   }
   .task-card {
     height: auto;
