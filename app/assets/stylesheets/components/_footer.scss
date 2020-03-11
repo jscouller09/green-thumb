@@ -1,0 +1,34 @@
+.footer {
+  padding: 24px;
+  color: $cream;
+  background-color: $brown;
+  text-align: center;
+  p {
+  opacity: 1;
+  font-size: 16px;
+  }
+  a{
+    color:$lt-green;
+    &:hover{
+      text-decoration: none;
+      font-weight: bolder;
+    }
+  }
+  #citation{
+    font-size: 10px;
+    text-align: left;
+  }
+}
+
+@media (max-width: 720px) {
+  /* For a screen < 720px, this CSS will be read */
+  .footer > .container {
+    flex-direction: column;
+  }
+}
+@media (max-width: 540px) {
+  /* For a screen < 540px, this CSS will be read */
+  .footer > .container {
+    flex-direction: column;
+  }
+}

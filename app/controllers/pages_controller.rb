@@ -3,7 +3,7 @@ class PagesController < ApplicationController
   skip_after_action :verify_authorized, only: [:dashboard, :home]
 
   def home
-    redirect_to "https://jscouller09.github.io/green-thumb-landing-page/"
+    # redirect_to "https://jscouller09.github.io/green-thumb-landing-page/"
   end
 
   #GET  /dashboard
