@@ -43,26 +43,18 @@
   padding: 50px;
 }
 
-.garden-button-small {
-  align-items: right;
-  border-radius: 5px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  background-color: $md-green;
+.close-btn {
+  background: none;
+  border: none;
   display: flex;
-  flex-grow: 0;
-  font-size: 20px;
-  justify-content: right;
+  font-size: 16px;
+  justify-content: center;
   position: absolute;
-  right: 5px;
-  top: 5px;
-  width: 28px;
+  right: 1px;
+  top: -3px;
+  width: 16px;
+  opacity: 0.6;
   // line-height: 8px;
-  text-align: right;
-  text-decoration: none;
-  &:hover {
-    color: $lt-green;
-    text-decoration: none;
-  }
 }
 
 .no-button-button {
