@@ -32,6 +32,8 @@ class PlantsController < ApplicationController
     new_plant.y = params[:y]
     if new_plant.save
       # making new plants succeeded
+      #generating plant task
+      generate_task(new_plant)
       # update count of plants in garden
       plants_counts_by_type = Hash.new(0)
       plants_icons_by_type = {}
@@ -104,6 +106,34 @@ class PlantsController < ApplicationController
 
   def plant_params
     params.require(:plant).permit(:id, :planted, :radius_mm, :icon, :plant_type_id, :plot_id, :plant_date, :x, :y)
+  end
+
+  def generate_task(new_plant)
+    if new_plant[:plant_date] > DateTime.now
+      new_task_plant = Task.create(
+        description: "Plant your  #{new_plant.plant_type.name}",
+        due_date: new_plant[:plant_date],
+        user_id: current_user.id,
+        plant_id: new_plant.plant_type.id
+        )
+      diff = (new_plant[:plant_date] - DateTime.now).to_i
+      if diff > 7
+          new_task_plant[:priority] = "low"
+        elsif diff < 5 && diff >= 3
+          new_task_plant[:priority] = "medium"
+        elsif diff < 3
+          new_task_plant[:priority] = "high"
+      end
+      # new_task_harvest = Task.create(
+      #   description: "Harvest your  #{new_plant.plant_type.name}",
+      #   due_date: new_plant[plant_date: + new_plant.plant_type.l_end_days.to_i],
+      #   binding.pry
+      #   user_id: current_user.id,
+      #   plant_id: new_plant.plant_type.id
+      #   )
+    elsif new_plant[:plant_date] < DateTime.now
+      new_plant[:planted] = true
+    end
   end
 
   def plant_space_ok?(current_plant)
