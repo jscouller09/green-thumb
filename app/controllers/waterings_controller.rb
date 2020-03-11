@@ -38,7 +38,7 @@ class WateringsController < ApplicationController
                                   planted: plant.planted,
                                   plant_date: plant.plant_date,
                                   radius_mm: plant.radius_mm,
-                                  plant_type: plant.plant_type.name,
+                                  plant_type: plant.plant_type.name.gsub(" ","_"),
                                   watering: plant_watering.nil? ? 0 : plant_watering.ammount_L,
                                   watering_id: plant_watering.nil? ? nil : plant_watering.id,
                                   last_watering_date: last_watering.nil? ? nil : last_watering.updated_at.to_date,

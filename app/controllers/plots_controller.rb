@@ -15,7 +15,7 @@ class PlotsController < ApplicationController
     plants_by_type = Hash.new(0)
     plants_icons_by_type = {}
     @plants.each do |plant|
-      type = plant.plant_type.name
+      type = plant.plant_type.name.gsub(" ", "_")
       plants_by_type[type] += 1
       plants_icons_by_type[type] = ActionController::Base.helpers.asset_path("icons/#{plant.plant_type.icon}")
     end
@@ -30,7 +30,7 @@ class PlotsController < ApplicationController
                                   planted: plant.planted,
                                   plant_date: plant.plant_date,
                                   radius_mm: plant.radius_mm,
-                                  plant_type: plant.plant_type.name,
+                                  plant_type: plant.plant_type.name.gsub(" ", "_"),
                                   icon: ActionController::Base.helpers.asset_path("icons/#{plant.plant_type.icon}") }
     end
     @plants_json = plants_to_json.to_json.html_safe

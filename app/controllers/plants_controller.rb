@@ -49,7 +49,7 @@ class PlantsController < ApplicationController
                     planted: new_plant.planted,
                     plant_date: new_plant.plant_date,
                     radius_mm: new_plant.radius_mm,
-                    plant_type: new_plant.plant_type.name,
+                    plant_type: new_plant.plant_type.name.gsub(" ", "_"),
                     icon: ActionController::Base.helpers.asset_path("icons/#{new_plant.plant_type.icon}") }
       render json: { plant: plant_obj, plant_counts: plants_counts_by_type, plant_icons: plants_icons_by_type }.to_json
     end
