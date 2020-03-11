@@ -28,13 +28,13 @@
       <h2 >What would you like to plant?</h2>
       <div class="cards">
           <% @plant_types.each do |plant_type| %>
-            <button type="button" data-toggle="modal" class="no-button-button" data-target="#<%= plant_type.name %>">
+            <button type="button" data-toggle="modal" class="no-button-button" data-target="#<%= plant_type.name.gsub(" ", "_") %>">
             <div class="card-category" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(<%= cl_image_path plant_type.photo_bg, height: 300, width: 400, crop: :fit %>")>
              <%= plant_type.name %>
             </div>
             </button>
             <!-- Plant Details Modal -->
-            <div class="modal fade" id="<%= plant_type.name %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+            <div class="modal fade" id="<%= plant_type.name.gsub(" ", "_") %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
               <div class="modal-dialog" role="document">
                 <div class="modal-content" style="border-radius: 16px;">
                 <button type="button" class="garden-button-small" data-dismiss="modal">X</button>
