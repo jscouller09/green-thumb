@@ -18,7 +18,12 @@ class Plant < ApplicationRecord
   validates :water_deficit_mm, numericality: { greater_than_or_equal_to: 0 }
   validates :plant_date, presence: true
 
-  after_create :add_radius, :check_planted_status
+  after_create :add_radius
+  after_create :check_planted_status, unless: :is_positioned?
+
+  def is_positioned?
+    self.y.nil? || self.y < 0
+  end
 
   def check_planted_status
     # only run if we have a specified plant date and the plant is not planted

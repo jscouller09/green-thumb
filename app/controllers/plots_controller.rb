@@ -9,6 +9,9 @@ class PlotsController < ApplicationController
     @plant = Plant.new
     @plot = Plot.find(params[:id])
     authorize @plot
+    # first clear any surplus plants from the wheelbarrow
+    # if the plant has a negative y coordinate it is in the wheelbarrow
+    wheelbarrow_plants = @plot.plants.where("y IS NULL OR y < 0").destroy_all
     # filter plants to only be those actually in the garden (not wheelbarrow)
     @plants = @plot.plants.where("x >= 0 AND y >= 0")
     # count types of plants in the garden

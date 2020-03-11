@@ -30,6 +30,7 @@ class PlantsController < ApplicationController
     new_plant = plant.dup
     new_plant.x = params[:x]
     new_plant.y = params[:y]
+    new_plant.is_copy = true
     if new_plant.save
       # making new plants succeeded
       # update count of plants in garden
