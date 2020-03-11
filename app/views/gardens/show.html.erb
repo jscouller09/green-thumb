@@ -8,15 +8,15 @@
     <p>Sorry! You don't have any plots yet</p>
   <% else %>
     <!-- display all the users plots as cards -->
-    <% @plots.each_with_index do |plot, i| %>
-      <div class="plot-card">
-        <div class="plot-card-inner-wrapper">
-          <!-- accesses cloudinary .png for the Main Plant of the plot -->
-          <%= cl_image_tag @main_plant_img[i], id: "plot-card-icon" %>
-          <%= link_to plot.name, plot_path(plot) %>
-        </div>
-      </div>
-    <% end %>
+      <% @plots.each_with_index do |plot, i| %>
+        <%= link_to plot_path(plot), class: "plot-card" do %>
+          <div class="plot-card-inner-wrapper">
+            <!-- accesses cloudinary .png for the Main Plant of the plot -->
+            <%= cl_image_tag @main_plant_img[i], id: "plot-card-icon" %>
+            <%= plot.name %>
+          </div>
+        <% end %>
+      <% end %>
   <% end %>
   <div>
       <%= link_to "New Plot", new_garden_plot_path(@garden), class: 'garden-button' %>

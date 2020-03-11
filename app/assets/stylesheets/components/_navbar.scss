@@ -23,4 +23,9 @@
 .dropdown-item{
   padding: 0px;
   color: $dk-green;
+  background: $cream;
+  &:hover{
+    color: $dk-green;
+    font-weight: bolder;
+  }
 }
