@@ -95,6 +95,13 @@
   text-align: center;
 }
 
+.btn-container {
+  width: 100%;
+  display:flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 @media screen and (max-width: 600px) {
   .new-task-button {
     width: 30%;
