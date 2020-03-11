@@ -18,23 +18,35 @@ class WateringsController < ApplicationController
   def watering_plot
     @plot = Plot.find(params[:plot_id])
     authorize @plot
-    @plant = Plant.new
-    @watering_groups = {}
     @plants = @plot.plants
-    plants_to_json = @plants.map do |plant|
-      { id: plant.id,
-        x: plant.x,
-        y: plant.y,
-        radius_mm: plant.radius_mm,
-        photo_url: plant.plant_type.photo_url }
+    plants_to_json = {}
+    @plants.each do |plant|
+      # on plants without a position, move to wheelbarrow (negative x and y)
+      plant_watering = plant.waterings.where(done: false).first
+      unless plant_watering.nil?
+        plants_to_json[plant.id] = {id: plant.id,
+                                    x: plant.x.nil? ? -1 : plant.x,
+                                    y: plant.y.nil? ? -1 : plant.y,
+                                    planted: plant.planted,
+                                    plant_date: plant.plant_date,
+                                    radius_mm: plant.radius_mm,
+                                    plant_type: plant.plant_type.name,
+                                    watering: plant_watering.ammount_L,
+                                    icon: ActionController::Base.helpers.asset_path("icons/#{plant.plant_type.icon}") }
+      end
     end
     @plants_json = plants_to_json.to_json.html_safe
+    @watering_groups = {}
     @plot.plant_types.each do |type|
       # get the plants of this type, in this plot
       plants = @plot.plants.where(plant_type: type)
       # pick the ones that need water (waterings that are incomplete)
       water_plants = plants.joins(:waterings).where('waterings.done' => false)
-      @watering_groups[type] = water_plants unless water_plants.empty?
+      total = 0
+      water_plants.each do |plant|
+        total += plant.waterings.where(done: false).sum(:ammount_L)
+      end
+      @watering_groups[type] = total unless water_plants.empty?
     end
 
   end
