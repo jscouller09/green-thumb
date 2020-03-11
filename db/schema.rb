@@ -140,6 +140,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_155320) do
     t.datetime "updated_at", null: false
     t.float "kc"
     t.float "et_mm"
+    t.boolean "planted", default: false, null: false
     t.index ["plant_type_id"], name: "index_plants_on_plant_type_id"
     t.index ["plot_id"], name: "index_plants_on_plot_id"
   end

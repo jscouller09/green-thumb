@@ -1,11 +1,10 @@
-"user_id","plant_id","description","due_date","priority"
-2,1,"Harvest",20/03/2020,"high"
-2,2,"Plant",20/03/2020,"medium"
-2,3,"Fertilize",20/03/2020,"low"
-3,4,"Transplant",20/03/2020,"high"
-3,5,"Harvest",20/03/2020,"medium"
-3,7,"Harvest",20/03/2020,"low"
-2,,"Reminder to pull out weeds",,
-3,,"Reminder to pull out weeds",,
-2,,"Turn over the new vegetable patch",21/03/2020,"low"
-3,,"Turn over the new vegetable patch",21/03/2020,"low"
+user_id,plant_id,description,due_date,priority
+2,1,Harvest,20/03/2020,high
+2,2,Plant,20/03/2020,medium
+2,3,Fertilize,20/03/2020,low
+3,1,Harvest,20/03/2020,medium
+3,2,Harvest,20/03/2020,low
+2,,Reminder to pull out weeds,,
+3,,Reminder to pull out weeds,,
+2,,Turn over the new vegetable patch,21/03/2020,low
+3,,Turn over the new vegetable patch,21/03/2020,low

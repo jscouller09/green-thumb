@@ -1,3 +1,26 @@
+namespace :plants do
+  desc "once per day update the crop coefficient/water deficit/waterings for each plant in the DB"
+  task :calculate_water_requirements => :environment do
+    puts "Calculating plant water requirements..."
+    Plant.all.each do |plant|
+      plant.update_crop_coeff
+      plant.update_water_deficit
+      plant.generate_watering
+    end
+    puts "Done!"
+  end
+
+  desc "once per day check if plants have been planted"
+  task :check_plants_planted => :environment do
+    puts "Checking if plants have been planted..."
+    Plant.all.each do |plant|
+      plant.check_planted_status
+    end
+    puts "Done!"
+  end
+
+end
+
 namespace :weather do
   desc "every hour download current weather data for each weather station in the DB"
   task :download_hourly_weather_data => :environment do
@@ -20,17 +43,6 @@ namespace :weather do
       # update stats then calculate PET
       station.calculate_24hr_stats
       station.calculate_24hr_pet
-    end
-    puts "Done!"
-  end
-
-  desc "once per day update the crop coefficient/water deficit/waterings for each plant in the DB"
-  task :calculate_water_requirements => :environment do
-    puts "Calculating plant water requirements..."
-    Plant.all.each do |plant|
-      plant.update_crop_coeff
-      plant.update_water_deficit
-      plant.generate_watering
     end
     puts "Done!"
   end

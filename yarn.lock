@@ -833,6 +833,11 @@
   resolved "https://registry.yarnpkg.com/@interactjs/utils/-/utils-1.8.5.tgz#fdbb3fb677aceaafdf779066275a16000b96b3ca"
   integrity sha512-3m3jJj6IatoxMT7VXrdj+PEn4Cgv+nhQemm1Y3Vr+ybsTLuj7XzI4EJoHTkjGX265rziYLO2toVyK8zysDa1gQ==
 
+"@rails/ujs@^6.0.2-1":
+  version "6.0.2-1"
+  resolved "https://registry.yarnpkg.com/@rails/ujs/-/ujs-6.0.2-1.tgz#1273f773bc98832371cb09aab619d6120e794b39"
+  integrity sha512-H1yMA4/M8Vdie/TgyNiOkUdFly3g9HGSbnVPl7kiRVnGMZuT/APnCNyvgYWBQbTtYDYB9rrZAAgghxtt1ABDIA==
+
 "@rails/webpacker@4.2.2":
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@rails/webpacker/-/webpacker-4.2.2.tgz#b9dd3235fdf4d0badbda8e33f6ebee742a9f3abb"
