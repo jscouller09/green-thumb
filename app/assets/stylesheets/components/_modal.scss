@@ -7,6 +7,8 @@
 #conf-modal-content {
   background-color: $cream;
   border-radius: 5px;
+  margin: auto;
+  width: 90%;
 }
 
 #conf-modal-footer {
@@ -27,6 +29,14 @@
   }
 }
 
+.custom-modal {
+  height: 90%;
+}
+
+.modal .custom-modal{
+  height: 90% !important;
+}
+
 #error-modal-close-button {
   padding: 0;
   margin: 0;
@@ -35,6 +45,8 @@
 #error-modal-content {
   background-color: $cream;
   border-radius: 5px;
+  margin: auto;
+  width: 90%;
 }
 
 #error-modal-footer {
