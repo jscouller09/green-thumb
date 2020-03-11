@@ -24,6 +24,7 @@ class WeatherStationsController < ApplicationController
       alert_messages << alert.message
     end
     @alerts = alert_messages.join("&nbsp&nbsp&nbsp&nbsp&nbsp")
+
     @station = WeatherStation.find(params[:id])
     authorize @station
     # get the current weather and forecast summary

@@ -83,6 +83,21 @@
     font-size: 56px;
   }
 }
+.sign-up-button{
+  border-radius: 5px;
+  background-color: $md-green;
+  font-size: 20px;
+  text-align: center;
+  text-decoration: none;
+  padding:16px 24px;
+
+  &:hover {
+    color: $lt-green;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+
+}
 
 #add-task-plus {
   font-family: special elite;
