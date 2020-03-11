@@ -26,22 +26,24 @@ class WateringsController < ApplicationController
   def watering_plot
     @plot = Plot.find(params[:plot_id])
     authorize @plot
-    @plants = @plot.plants
+    @plants = @plot.plants.where(planted: true)
     plants_to_json = {}
     @plants.each do |plant|
       # on plants without a position, move to wheelbarrow (negative x and y)
       plant_watering = plant.waterings.where(done: false).first
-      unless plant_watering.nil?
-        plants_to_json[plant.id] = {id: plant.id,
-                                    x: plant.x.nil? ? -1 : plant.x,
-                                    y: plant.y.nil? ? -1 : plant.y,
-                                    planted: plant.planted,
-                                    plant_date: plant.plant_date,
-                                    radius_mm: plant.radius_mm,
-                                    plant_type: plant.plant_type.name,
-                                    watering: plant_watering.ammount_L,
-                                    icon: ActionController::Base.helpers.asset_path("icons/#{plant.plant_type.icon}") }
-      end
+      last_watering = plant.waterings.where(done: true).order("updated_at DESC").first
+      plants_to_json[plant.id] = {id: plant.id,
+                                  x: plant.x.nil? ? -1 : plant.x,
+                                  y: plant.y.nil? ? -1 : plant.y,
+                                  planted: plant.planted,
+                                  plant_date: plant.plant_date,
+                                  radius_mm: plant.radius_mm,
+                                  plant_type: plant.plant_type.name,
+                                  watering: plant_watering.nil? ? 0 : plant_watering.ammount_L,
+                                  watering_id: plant_watering.nil? ? nil : plant_watering.id,
+                                  last_watering_date: last_watering.nil? ? nil : last_watering.updated_at.to_date,
+                                  last_watering: last_watering.nil? ? nil : last_watering.ammount_L,
+                                  icon: ActionController::Base.helpers.asset_path("icons/#{plant.plant_type.icon}") }
     end
     @plants_json = plants_to_json.to_json.html_safe
     @watering_groups = {}
