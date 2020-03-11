@@ -1,23 +1,46 @@
 // plot plant list, wheelbarrow and layout view
+h1{
+  a{
+    text-decoration: none;
+    font-size: 16px;
+  }
+}
+
 .plot-overview {
   display: flex;
   justify-content: space-between;
   width:100%;
   margin: 0;
   padding: 0;
+  margin-top: 20px;
 
   & > div {
     display: flex;
     min-width: 300px;
     padding: 0;
     margin: 0;
-    border: 3px solid red;
     flex: auto;
   }
 }
 
+#plants-all{
+  display: flex;
+  flex-direction: column;
+  h3{
+    font-family: $body-font;
+    font-size: 20px;
+    font-weight: bolder;
+  }
+}
+
 #plant-list {
+  list-style: none;
+  padding: 20px;
+  margin: 0;
+  width: 100%;
   & > li {
+    display: flex;
+    justify-content:space-between;
     div {
       background-size: cover;
       background-position: center;
@@ -26,11 +49,25 @@
       // md-green equivalent with filters
       filter: invert(93%) sepia(51%) saturate(503%) hue-rotate(52deg) brightness(92%) contrast(81%);
     }
+    p{
+      flex-grow: 1;
+      margin-left: 11px;
+    }
   }
 }
 
 #wheelbarrow {
   flex: initial;
+  flex-grow: 1;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  background-color: $md-green;
+  padding: 16px;
+  border-radius: 5px;
+  p{
+    text-align: center;
+    font-size: 20px;
+  }
 }
 
 #plot-container {

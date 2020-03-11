@@ -1,21 +1,16 @@
-<div class="container">
-  <h1>Don't forget to water!</h1>
-  <br>
-  <br>
+<!-- <div class="container"> -->
+  <div class="menu-headline">
+    <h1>Don't forget to water!</h1>
+  </div>
 
-  <% @plots.each do |plot| %>
-    <%= link_to plot_waterings_path(plot) do %>
-
-        <div class="watering-card">
-
-          <div class="plot-card-content">
-
-              <h2><%= plot.name %></h2>
-
-          </div>
-
+  <div class="list">
+    <% @plots.each_with_index do |plot, i| %>
+      <%= link_to plot_waterings_path(plot), class: "plot-card" do %>
+        <div class="plot-card-inner-wrapper">
+            <%= cl_image_tag @main_plant_img[i], id: "plot-card-icon" %>
+            <p><%= plot.name %></p>
         </div>
-
+      <% end %>
     <% end %>
-  <% end %>
-</div>
+  </div>
+

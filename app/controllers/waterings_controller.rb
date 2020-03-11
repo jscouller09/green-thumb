@@ -12,6 +12,14 @@ class WateringsController < ApplicationController
       end
       @plots.uniq!
     end
+    @main_plant_img = @garden.plots.map do |plot|
+      unless plot.plant_types.empty?
+        main_plant = plot.plant_types.group(:id).count.max.first
+        PlantType.find(main_plant).photo_url
+      else
+        "green-thumb/logo_vztasz"
+      end
+    end
   end
 
   # GET plots/:plot_id/waterings
