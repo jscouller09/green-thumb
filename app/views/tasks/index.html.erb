@@ -4,7 +4,7 @@
     </div>
       <div>
         <button id="new-task-button" type="button" class="new-task-button" data-toggle="modal" data-target="#new-task-modal">
-          <h1 id="add-task-plus">+</h1>
+          <div id="add-task-plus">+</div>
         </button>
       </div>
     </div>
@@ -15,7 +15,8 @@
   <% end %>
   <% @tasks.each do |task| %>
   <!-- changes color of border-left according to level of priority -->
-    <% case task.priority %>
+  <!-- the ampersand accounts for the case when priority is nil, so that the downcase method doesn't make the code break -->
+    <% case task.priority&.downcase %>
       <% when "high" %>
         <% border_color = "#FA520A" %>
       <% when "medium" %>
@@ -25,6 +26,9 @@
       <% else %>
         <% border_color = "#B9F5F2" %>
     <% end %>
+
+    <%= render 'edit_task_form', task: task %>
+
     <div class="task-card" style="border-left: 16px solid <%= border_color %>">
         <div id="task-plus-date">
           <div id="task-desc"><%= task.description %></div>
@@ -40,25 +44,21 @@
             <% end %>
 
             <% if current_user && policy(task).update? %>
-              <%= link_to edit_task_path(task) do %>
-              <i class="fas fa-pencil-alt task-icon"></i>
-              <% end %>
+              <%# render'/tasks/task_form', task: @task
+                  method: "PATCH",  do %>
+              <i class="fas fa-pencil-alt task-icon" data-toggle="modal" data-target="#edit-task-modal-<%= task.id %>"></i>
+              <%# end %>
             <% end %>
           </div>
         </div>
-        <div id="lg-task-icon">
+        <div>
           <% if current_user && policy(task).mark_as_complete? %>
             <%= link_to "/tasks/#{task.id}/complete", method: "PATCH" do %>
-                <i class="far fa-square"></i>
+                <i id="checkbox" class="far fa-square"></i>
             <% end %>
           <% end %>
         </div>
     </div>
   <% end %>
 </div>
-
-<!-- <div>
-
-  <%= link_to "Back to dashboard", dashboard_path %>
-</div> -->
 

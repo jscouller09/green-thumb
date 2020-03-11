@@ -1,9 +1,9 @@
-  #lg-task-icon {
-  box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
-  height: 12px;
-  width: 12px;
-  opacity: .7;
-  }
+#checkbox {
+  font-size: 24px;
+  margin-right: 8px;
+  opacity: .4;
+  text-shadow: 1px 1px 4px;
+}
 
 #plot-card-icon {
   height: auto;
@@ -34,10 +34,10 @@
     font-size: 12px;
   }
   #task-icons {
-    font-size: 12px;
+    font-size: 10px;
   }
-  .lg-task-icon {
-    font-size: 20px;
+  #checkbox {
+    margin-right: 4px;
   }
 }
 
