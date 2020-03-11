@@ -1,6 +1,18 @@
 .alert {
   position: fixed;
-  bottom: 16px;
-  right: 16px;
+  top: 80px;
+  right: 8px;
   z-index: 1000;
+}
+
+.alert-info {
+    color: $dk-green;
+    background-color: $lt-green;
+    border-color: $md-green;
+}
+
+.alert-warning {
+    color: $green;
+    background-color: $lt-green;
+    border-color: $green;
 }
