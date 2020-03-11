@@ -90,35 +90,39 @@ const plant_info_callback=(target) => {
   // make container div for content
   const content = document.createElement('div');
 
-  // plant type
-  const title = document.createElement('h5');
-  title.innerHTML = `${plant.plant_type}&nbsp;`;
-
   // Add delete link using following html attribs...
   //  'data-confirm="Are you sure you want to remove this plant?" rel="nofollow" data-method="delete" href="/plants/1"'
-  let element = document.createElement('a');
-  element.classList.add('plot-plant-delete');
-  element.setAttribute('data-modal-confirm', "Are you sure you want to remove this plant?");
-  element.setAttribute('rel', "nofollow");
-  element.setAttribute('data-method', "delete");
-  element.setAttribute('href', `/plants/${plant.id}`);
-  element.innerHTML= `<i class="fas fa-trash"></i>`;
-  element.addEventListener("click", onClick);
-  title.appendChild(element);
+  const trash = document.createElement('a');
+  trash.setAttribute('data-modal-confirm', "Are you sure you want to remove this plant?");
+  trash.setAttribute('rel', "nofollow");
+  trash.setAttribute('data-method', "delete");
+  trash.setAttribute('href', `/plants/${plant.id}`);
+  trash.innerHTML= `<i class="fas fa-trash"></i>`;
+  trash.addEventListener("click", onClick);
+
+  // plant type
+  const title = document.createElement('h5');
+  title.innerHTML = `${trash.outerHTML}&nbsp;${plant.plant_type}`;
   content.appendChild(title);
 
-  // plant date and planted status
-  element = document.createElement('p');
-  const yesterday = Date.now() - 86400000;
-  if (yesterday > Date.parse(plant.plant_date)) {
-    element.innerText = `Planted on ${plant.plant_date}.`;
-  } else {
-    element.innerText = `Scheduled for planting on ${plant.plant_date}.`;
-  }
-  content.appendChild(element);
-
   // checkbox to mark as planted
+  const check = document.createElement('a');
+  check.setAttribute('rel', "nofollow");
+  check.setAttribute('data-method', "patch");
+  check.setAttribute('href', `/plants/${plant.id}/planted`);
 
+  // plant date and planted status
+  const status = document.createElement('p');
+  // const yesterday = Date.now() - 86400000;
+  // if (yesterday > Date.parse(plant.plant_date)) {
+  if (plant.planted) {
+    check.innerHTML= `<i class="far fa-check-square"></i>`;
+    status.innerHTML = `${check.outerHTML}&nbsp;&nbsp;&nbsp;Planted on ${plant.plant_date}.`;
+  } else {
+    check.innerHTML= `<i class="far fa-square"></i>`;
+    status.innerHTML = `${check.outerHTML}&nbsp;&nbsp;&nbsp;Scheduled for planting on ${plant.plant_date}.`;
+  }
+  content.appendChild(status);
 
   // pass to modal
   info_modal(content, "Plant details");

@@ -19,11 +19,6 @@ class Plant < ApplicationRecord
   validates :plant_date, presence: true
 
   after_create :add_radius
-  after_create :check_planted_status, unless: :is_positioned?
-
-  def is_positioned?
-    self.y.nil? || self.y < 0
-  end
 
   def check_planted_status
     # only run if we have a specified plant date and the plant is not planted

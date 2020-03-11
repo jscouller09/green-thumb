@@ -30,7 +30,6 @@ class PlantsController < ApplicationController
     new_plant = plant.dup
     new_plant.x = params[:x]
     new_plant.y = params[:y]
-    new_plant.is_copy = true
     if new_plant.save
       # making new plants succeeded
       # update count of plants in garden
@@ -65,6 +64,15 @@ class PlantsController < ApplicationController
     @plant.destroy
     flash[:notice] = "#{@plant.plant_type.name} has been deleted"
     redirect_to plot_path(@plot)
+  end
+
+  # PATCH /plants/:id/planted
+  def toggle_planted
+    plant = Plant.find(params[:id])
+    # check this is the users plant
+    authorize plant
+    plant.update(planted: !plant.planted)
+    redirect_to plot_path(plant.plot)
   end
 
   # PATCH /plants/:id
