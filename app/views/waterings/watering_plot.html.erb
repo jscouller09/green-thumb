@@ -1,9 +1,11 @@
+<% content_for :meta_title, "Green Thumb | Water your plants with the right amount" %>
+<% content_for :meta_description, "Select a plant to seed how much water it needs!" %>
 <div class="container m-5">
   <h1><%= @plot.name %></h1>
 
           <h2>Here are the plants you have :</h2>
     <% @watering_groups.each do |plant_type, total_water| %>
-  
+
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#<%= plant_type.name %>">
           <div class="plant_list">
             <p><%= plant_type.name %>: <%= total_water %>L</p>
