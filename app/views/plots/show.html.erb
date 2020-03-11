@@ -36,13 +36,18 @@
              <%= plant_type.name %>
             </div>
             </button>
+
+
             <!-- Plant Details Modal -->
-            <div class="modal fade" id="<%= plant_type.name.gsub(" ", "_") %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+            <div class="modal fade custom-modal" id="<%= plant_type.name.gsub(" ", "_") %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content" style="border-radius: 16px;">
                 <button type="button" class="close-btn" data-dismiss="modal">
                   <span aria-hidden="true">&times;</span>
                 </button>
+
+
+
                   <div class="modal-header">
                     <div class="header">
                       <img src="<%= cl_image_path plant_type.photo_bg, height: 300, width: 400, crop: :fit %>" alt="<%= plant_type.name %>" style="border-radius: 8px;">
@@ -68,9 +73,12 @@
                   </div>
                 </div>
               </div>
+
+
             </div>
         <% end %>
       </div>
+
     </div>
 
 </div>

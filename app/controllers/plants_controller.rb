@@ -66,6 +66,15 @@ class PlantsController < ApplicationController
     redirect_to plot_path(@plot)
   end
 
+  # PATCH /plants/:id/planted
+  def toggle_planted
+    plant = Plant.find(params[:id])
+    # check this is the users plant
+    authorize plant
+    plant.update(planted: !plant.planted)
+    redirect_to plot_path(plant.plot)
+  end
+
   # PATCH /plants/:id
   def update
     # this method is only called from the JS code for shifting plants

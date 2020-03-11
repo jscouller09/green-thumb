@@ -1,9 +1,9 @@
 import $ from 'jquery';
 
 const initMarquee = () => {
-  console.log('executed');
+  //console.log('executed');
   var marquee = $('div.marquee');
-  console.log(marquee);
+  //console.log(marquee);
   marquee.each(function() {
       var mar = $(this),indent = mar.width();
       mar.marquee = function() {

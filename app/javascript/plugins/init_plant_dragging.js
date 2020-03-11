@@ -1,4 +1,5 @@
 import interact from 'interactjs';
+import { onClick } from "../plugins/modal_confirm";
 
 // for axaj requests
 var xhttp = new XMLHttpRequest();
@@ -12,6 +13,7 @@ if (plants_container) {
   // containers above plot area
   var wheelbarrow = document.getElementById('wheelbarrow');
   var plant_list = document.getElementById('plant-list');
+  var plant_groups = document.querySelectorAll('.plant-group');
   // determine grid spacing based of viewport size and plot size
   const intViewportHeight = window.innerHeight;
   // var intViewportWidth = window.innerWidth * 0.9;
@@ -33,6 +35,32 @@ if (plants_container) {
   plants_container.style.width = `${width / mm_per_pixel}px`;
 }
 
+
+const toggle_highlight=(name) => {
+  // select all plant elements with the given name
+  const thumbnails = document.querySelectorAll('.plot-plant-thumbnail');
+  thumbnails.forEach(thumb => {
+    const thumb_name = plants[thumb.parentNode.parentNode.dataset.id].plant_type;
+    if (thumb_name == name) {
+      thumb.classList.toggle('highlight');
+    }
+  });
+}
+
+const plant_group_click_callback=(event) => {
+  const plant_type_name = event.currentTarget.dataset.plant_name;
+  toggle_highlight(plant_type_name);
+  setTimeout(() => { toggle_highlight(plant_type_name); }, 2000);
+}
+
+const init_plant_highlighting=() => {
+  if (plant_groups) {
+    plant_groups.forEach(group => {
+      group.addEventListener('click', plant_group_click_callback);
+    });
+  }
+}
+
 const update_plant_counts=(plant_counts=null, plant_icons=null) => {
   if (plant_list) {
     if (plant_counts == null) {
@@ -47,6 +75,8 @@ const update_plant_counts=(plant_counts=null, plant_icons=null) => {
     // make a new list entry with the count and icon for each plant type
     Object.keys(plant_counts).forEach(plant_type => {
       let list_element = document.createElement('li');
+      list_element.classList.add('plant-group');
+      list_element.dataset.plant_name = plant_type;
       let p_element = document.createElement('p');
       let icon_element = document.createElement('div');
       p_element.innerText = `${plant_type} (${plant_counts[plant_type]})`;
@@ -89,30 +119,43 @@ const plant_info_callback=(target) => {
   // make container div for content
   const content = document.createElement('div');
 
-  // plant type
-  const title = document.createElement('h5');
-  title.innerHTML = `${plant.plant_type}&nbsp;`;
-
   // Add delete link using following html attribs...
   //  'data-confirm="Are you sure you want to remove this plant?" rel="nofollow" data-method="delete" href="/plants/1"'
-  let element = document.createElement('a');
-  element.classList.add('plot-plant-delete');
-  element.setAttribute('data-confirm', "Are you sure you want to remove this plant?");
-  element.setAttribute('rel', "nofollow");
-  element.setAttribute('data-method', "delete");
-  element.setAttribute('href', `/plants/${plant.id}`);
-  element.innerHTML= `<i class="fas fa-trash"></i>`;
-  title.appendChild(element);
+  const trash = document.createElement('a');
+  trash.setAttribute('data-modal-confirm', "Are you sure you want to remove this plant?");
+  trash.setAttribute('rel', "nofollow");
+  trash.setAttribute('data-method', "delete");
+  trash.setAttribute('href', `/plants/${plant.id}`);
+  trash.innerHTML= `<i class="fas fa-trash"></i>`;
+  trash.addEventListener("click", onClick);
+
+  // plant type
+  const title = document.createElement('h5');
+  title.innerHTML = `&nbsp;&nbsp;&nbsp;${plant.plant_type}`;
+  title.prepend(trash);
   content.appendChild(title);
 
+  // checkbox to mark as planted
+  const check = document.createElement('a');
+  check.setAttribute('rel', "nofollow");
+  check.setAttribute('data-method', "patch");
+  check.setAttribute('href', `/plants/${plant.id}/planted`);
+
   // plant date and planted status
-  element = document.createElement('p');
-  if (plant.planted) {
-    element.innerText = `Planted on ${plant.plant_date}.`;
+  const status = document.createElement('p');
+  const age_days = Math.floor((Date.now() - Date.parse(plant.plant_date)) / 86400000);
+  if (plant.planted && age_days == 0) {
+    check.innerHTML= `<i class="far fa-check-square"></i>`;
+    status.innerHTML = `&nbsp;&nbsp;&nbsp;Planted today (${plant.plant_date}).`;
+  } else if (plant.planted && age_days > 0) {
+    check.innerHTML= `<i class="far fa-check-square"></i>`;
+    status.innerHTML = `&nbsp;&nbsp;&nbsp;Plant is ${age_days} days old (planted on ${plant.plant_date}).`;
   } else {
-    element.innerText = `Scheduled for planting on ${plant.plant_date}.`;
+    check.innerHTML= `<i class="far fa-square"></i>`;
+    status.innerHTML = `&nbsp;&nbsp;&nbsp;Scheduled for planting on ${plant.plant_date}.`;
   }
-  content.appendChild(element);
+  status.prepend(check);
+  content.appendChild(status);
 
   // pass to modal
   info_modal(content, "Plant details");
@@ -128,20 +171,48 @@ const watering_info_callback=(target) => {
   title.innerHTML = `${plant.plant_type}&nbsp;`;
   content.appendChild(title);
 
-  // plant date and planted status
+  // plant age and watering requirements
   let element = document.createElement('p');
   const age_days = Math.floor((Date.now() - Date.parse(plant.plant_date)) / 86400000);
-  element.innerText = `Plant is ${age_days} days old (planted on ${plant.plant_date}). Needs ${plant.watering} L water.`;
+  if (age_days == 0) {
+    element.innerHTML = `Planted today (${plant.plant_date}).`;
+  } else if (age_days > 0) {
+    element.innerHTML = `Plant is ${age_days} days old (planted on ${plant.plant_date}).`;
+  }
   content.appendChild(element);
 
-  // button to mark watering complete
-  element = document.createElement('a');
-  element.setAttribute('data-confirm-modal', "Have you really watered it?");
-  element.setAttribute('rel', "nofollow");
-  element.setAttribute('data-method', "patch");
-  element.setAttribute('href', `/waterings/${plant.id}/complete`);
-  element.innerHTML= `Done?`;
-  content.appendChild(element);
+  if (plant.watering != null && plant.watering > 0) {
+    // if the plant does need watering, show how much and option to tick done
+    element = document.createElement('p');
+    element.innerText = `Climate data indicates it needs ${plant.watering}L water.`;
+    content.appendChild(element);
+
+    // checkbox to mark as done
+    const check = document.createElement('a');
+    check.setAttribute('data-modal-confirm', "Have you really watered it?");
+    check.addEventListener("click", onClick);
+    check.setAttribute('rel', "nofollow");
+    check.setAttribute('data-method', "patch");
+    check.setAttribute('href', `/waterings/${plant.watering_id}/complete`);
+    check.innerHTML= `<i class="far fa-square"></i>`;
+
+    // status
+    const status = document.createElement('p');
+    status.innerHTML = `&nbsp;&nbsp;&nbsp;Done?`;
+    status.prepend(check);
+    content.appendChild(status);
+  } else {
+    // if the plant does not need watering now, show last watering info
+    element = document.createElement('p');
+    if (plant.last_watering != null) {
+      const last_watering_days = Math.floor((Date.now() - Date.parse(plant.last_watering_date)) / 86400000);
+      const days = last_watering_days == 0 ? 'today' : `${last_watering_days} days ago`
+      element.innerText = `Plant was last watered ${days} (${plant.last_watering_date}) with ${plant.last_watering}L water.`;
+    } else {
+      element.innerText = "Plant has not been watered yet!";
+    }
+    content.appendChild(element);
+  }
 
   // pass to modal
   info_modal(content, "Watering requirements");
@@ -163,9 +234,10 @@ const add_plant_to_plot=(plant) => {
   // style plant border
   plant_border.classList.add('plot-plant-border');
 
-  // style thumbnail image
+  // style thumbnail image (default for unplanted plants is cream white)
   thumbnail.classList.add('plot-plant-thumbnail');
-  if (plant.planted && plant.watering == null) {
+  if (plant.planted && (plant.watering == null || plant.watering == 0)) {
+    // if the plant has been planted and doesn't need water
     thumbnail.classList.add('planted');
   } else if (plant.watering > 0) {
     thumbnail.classList.add('needs-water');
@@ -176,13 +248,13 @@ const add_plant_to_plot=(plant) => {
   // add event listener for double click on icon
   thumbnail.addEventListener('dblclick', (event) => {
     // want to operate on parent div of thumbnail icon that was clicked
-    if (plant.watering == null) {
-      // plot show page - double clicking should show plant info
-      plant_info_callback(event.currentTarget.parentNode.parentNode);
-    } else {
+    if (plant.watering >= 0) {
       // has watering info, so on watering dashboard
       // show watering info on double click
       watering_info_callback(event.currentTarget.parentNode.parentNode);
+    } else {
+      // plot show page - double clicking should show plant info
+      plant_info_callback(event.currentTarget.parentNode.parentNode);
     }
   });
 
@@ -266,12 +338,12 @@ const init_ineractjs=(plant) => {
               .then((data) => {
                 if (data.accepted) {
                   // if response ok, keep updated plant x/y
-                  console.log(`plant ${plant.id} moved to x:${plant.x} y:${plant.y}`);
+                  //console.log(`plant ${plant.id} moved to x:${plant.x} y:${plant.y}`);
                   // update global plants object also
                   plants[plant.id] = plant
                   // if the plant moved was a new one, add a copy to the wheelbarrow area
                   if (plant.initial_y < 0 && wheelbarrow && plant_list) {
-                    console.log("Adding new plant...");
+                    //console.log("Adding new plant...");
                     // create a new plant the same as this one
                     // also update the list of plants in the garden
                     let copy_plant = plant;
@@ -318,12 +390,12 @@ const init_ineractjs=(plant) => {
   }
 }
 
-
-
 const init_plant_dragging=() => {
   // check if we have a plant plot on the page
   const plants_container = document.getElementById('plot-container');
   if (plants_container) {
+    // initalize plant highlighting by type
+    init_plant_highlighting();
     // render the counts of different types of plants in the overview
     update_plant_counts();
     // first destroy any children already in the plot
