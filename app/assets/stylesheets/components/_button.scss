@@ -59,8 +59,11 @@
 .no-button-button {
   background: none;
   border: none;
+  .active {
+    border: none;
+    background: none;
+  }
 }
-
 
 .new-task-button {
   align-items: center;
