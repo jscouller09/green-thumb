@@ -14,7 +14,6 @@ class PlantsController < ApplicationController
     new_plant.water_deficit_mm = 0.0
     new_plant.plot_id = @plot.id
     if new_plant.save
-      generate_task(new_plant)
       # making new plants succeeded
       redirect_to plot_path(@plot)
     else
@@ -33,6 +32,8 @@ class PlantsController < ApplicationController
     new_plant.y = params[:y]
     if new_plant.save
       # making new plants succeeded
+      #generating plant task
+      generate_task(new_plant)
       # update count of plants in garden
       plants_counts_by_type = Hash.new(0)
       plants_icons_by_type = {}
