@@ -42,17 +42,17 @@ Rails.application.routes.draw do
     patch 'weather_alert/:id/dismissed', to: 'weather_alerts#mark_as_dismissed', as: :dismissed_alert
   end
 
-  #NICE TO HAVE - Display all conversations and create a message
-  resources 'conversations', only: [:index, :show] do
-    resources 'messages', only:[:create]
-  end
+  # #NICE TO HAVE - Display all conversations and create a message
+  # resources 'conversations', only: [:index, :show] do
+  #   resources 'messages', only:[:create]
+  # end
 
-  #NICE TO HAVE - Display all users
-  get 'users', to: 'users#index'
+  # #NICE TO HAVE - Display all users
+  # get 'users', to: 'users#index'
 
-  #NICE TO HAVE - See one user and create a new conversation with it
-  get 'users/:user_id', to: 'users#show' do
-    resources 'conversations', only: [:new, :create]
-  end
+  # #NICE TO HAVE - See one user and create a new conversation with it
+  # get 'users/:user_id', to: 'users#show' do
+  #   resources 'conversations', only: [:new, :create]
+  # end
 
 end

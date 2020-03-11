@@ -8,6 +8,5 @@ class PagesController < ApplicationController
 
   #GET  /dashboard
   def dashboard
-
   end
 end

@@ -27,7 +27,7 @@
     <%= render 'shared/error_modal' %>
     <%= render 'shared/flashes' %>
     <!-- this renders our mobile navbar on every screen EXCEPT the dashboard because all actions in navbar are also accessible through dashboard -->
-    <% unless controller_name == "pages" && action_name == "dashboard" || "home" %>
+    <% unless controller_name == "pages" && (action_name == "dashboard" || action_name == "home") %>
 
       <%= render 'shared/mobile_navbar' %>
     <% end %>
