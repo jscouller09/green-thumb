@@ -110,7 +110,7 @@ class PlantsController < ApplicationController
 
   def generate_task(new_plant)
     if new_plant[:plant_date] > DateTime.now
-      new_task_plant = Task.create(
+      new_task_plant = Task.new(
         description: "Plant your  #{new_plant.plant_type.name}",
         due_date: new_plant[:plant_date],
         user_id: current_user.id,
@@ -124,6 +124,7 @@ class PlantsController < ApplicationController
         elsif diff < 3
           new_task_plant[:priority] = "high"
       end
+      new_task_plant.save
       # new_task_harvest = Task.create(
       #   description: "Harvest your  #{new_plant.plant_type.name}",
       #   due_date: new_plant[plant_date: + new_plant.plant_type.l_end_days.to_i],
@@ -131,8 +132,7 @@ class PlantsController < ApplicationController
       #   user_id: current_user.id,
       #   plant_id: new_plant.plant_type.id
       #   )
-    elsif new_plant[:plant_date] < DateTime.now
-      new_plant[:planted] = true
+
     end
   end
 
