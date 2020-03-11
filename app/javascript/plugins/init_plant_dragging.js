@@ -203,7 +203,7 @@ const init_ineractjs=(plant) => {
 
   // set wheelbarrow dimensions based on any unplaced plants (negative coordinates)
   if (wheelbarrow && ((plant.y < 0 || plant.y == null) || (plant.x < 0 || plant.x == null))) {
-    wheelbarrow.innerHTML = "Drag the plant onto the plot...";
+    wheelbarrow.innerHTML = "Drag the plant onto the plot or choose another plant";
     // plant dimensions
     let plant_size = 2*plant.radius_mm/mm_per_pixel;
     // plant is in the wheelbarrow, resize it if necessary to fit the plant
@@ -220,7 +220,8 @@ const init_ineractjs=(plant) => {
     // position plant in center of wheelbarrow area
     plant.y = Math.round(-current_height/grid_size);
     // console.log(grid_size, grid_cols, plant_size/grid_size, Math.round(current_width/2/grid_size));
-    plant.x = Math.round(grid_cols - (plant_size/grid_size));
+    let wb_width = current_width/grid_size
+    plant.x = Math.round(grid_cols - wb_width + (plant_size/grid_size));
   }
 
   // store inital positions
