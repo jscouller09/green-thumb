@@ -33,6 +33,20 @@
   width: 100%
 }
 
-.plant_list {
+.plot {
+  display: flex;
+  width: 100%;
+    img {
+      filter: invert(93%) sepia(51%) saturate(503%) hue-rotate(52deg) brightness(92%) contrast(81%);
+    }
+}
 
+.info-water {
+  text-align: left;
+  min-width: 100px;
+}
+#ammount_L {
+  width: 50%;
+  display:flex;
+  justify-content: space-between;
 }

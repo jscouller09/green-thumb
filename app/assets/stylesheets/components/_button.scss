@@ -59,8 +59,11 @@
 .no-button-button {
   background: none;
   border: none;
+  .active {
+    border: none;
+    background: none;
+  }
 }
-
 
 .new-task-button {
   align-items: center;
@@ -93,6 +96,13 @@
   display: inline-block;
   margin: auto;
   text-align: center;
+}
+
+.btn-container {
+  width: 100%;
+  display:flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 @media screen and (max-width: 600px) {
