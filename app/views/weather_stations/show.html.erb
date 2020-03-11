@@ -25,7 +25,7 @@
           <li data-target="#carouselExampleIndicators" data-slide-to="1" class="carousel-dot" style="background-color: #534243;transition:none; -webkit-transition: none;"></li>
           <li data-target="#carouselExampleIndicators" data-slide-to="2" class="carousel-dot" style="background-color: #534243;transition:none; -webkit-transition: none;"></li>
         </ol>
-        <div class="carousel-inner text-center">
+        <div class="carousel-inner">
           <% @forecast.each_with_index do | (day, data), index | %>
               <% if data[:temp_c_avg].round(1) > 24 %>
               <!-- hot -->
