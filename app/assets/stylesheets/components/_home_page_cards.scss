@@ -111,4 +111,20 @@
   color: $dk-green;
 }
 
+@media screen and (max-width: 600px) {
+  h2{
+    text-align: center;
+  }
+  .cards {
+  grid-template-columns: 1fr 1fr;
+  }
+  .flip-card{
+   height: 200px;
+  }
+  .flip-card-back{
+    p{
+      font-size: 13px;
+    }
+  }
+}
 
