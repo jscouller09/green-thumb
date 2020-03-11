@@ -7,26 +7,11 @@
     <% else %>
       <h3>Here are the plants you need to water:</h3>
       <% @watering_groups.each do |plant_type, total_water| %>
-      <button type="button" class="plant-group btn btn-primary plot" data-toggle="modal" data-plant_name="<%= plant_type.name %> data-target="#<%= plant_type.name %>">
-        <%= image_tag("icons/#{plant_type.icon}", id: "plot-card-icon" ) %>
-        <div id="ammount_L">
-        <span class="info-water"><%= plant_type.name %>:</span><span><%= total_water %> L</span>
-        </div>
-      </button>
-
-      <div class="modal fade" id="<%= plant_type.name %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Watering for <%= plant_type.name %></h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              ...
-
-            </div>
+        <button type="button" class="plant-group btn btn-primary plot" data-plant_name="<%= plant_type.name %>">
+          <%= image_tag("icons/#{plant_type.icon}", id: "plot-card-icon" ) %>
+          <div id="ammount_L">
+            <span class="info-water"><%= plant_type.name %>:</span><span><%= total_water %> L</span>
+          </div>
         </button>
       <% end %>
     <% end %>
@@ -38,7 +23,7 @@
 
   <div class="btn-container">
     <%= link_to "Water all?", plot_complete_waterings_path(@plot),
-                method: "PATCH",
-                data: { modal_confirm: "You're sure that #{@plot.name} is all watered?"}, class: "garden-button" %>
+        method: "PATCH",
+        data: { modal_confirm: "You're sure that #{@plot.name} is all watered?"}, class: "garden-button" %>
   </div>
 </div>
