@@ -1,16 +1,16 @@
-<div class="container m-5">
+<div class="container">
   <h1><%= @plot.name %></h1>
 
           <h2>Here are the plants you have :</h2>
     <% @watering_groups.each do |plant_type, total_water| %>
-  <div id="plants-all">
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#<%= plant_type.name %>">
-          <div class="plant_list">
-            <p data-plant_icons=<%= @plants_icons_by_type %>><%= plant_type.name %>: <%= total_water %>L</p>
 
-          </div>
+      <button type="button" class="btn btn-primary plot" data-toggle="modal" data-target="#<%= plant_type.name %>">
+        <%= image_tag("icons/#{plant_type.icon}", id: "plot-card-icon" ) %>
+        <div id="ammount_L">
+        <span class="info-water"><%= plant_type.name %>:</span><span><%= total_water %> L</span>
+        </div>
       </button>
-    </div>
+
       <div class="modal fade" id="<%= plant_type.name %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
