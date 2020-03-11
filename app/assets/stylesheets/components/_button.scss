@@ -1,4 +1,12 @@
 // alphabetize for ease of reference later
+.add-task-flexbox {
+  display: flex;
+  justify-content: space-between;
+  h1 {
+    margin-bottom: 32px;
+  }
+}
+
 .garden-button {
   align-items: center;
   border-radius: 5px;
@@ -60,4 +68,34 @@
 .no-button-button {
   background: none;
   border: none;
+}
+
+
+.new-task-button {
+  align-items: center;
+  background-color: $green;
+  border-radius: 8px 0 0 8px;
+  color: white;
+  display: flex;
+  font-size: 24px;
+  height: 64px;
+  padding: 8px;
+  position: absolute;
+  text-align: left;
+  right: 0;
+  width: 15%;
+  h1 {
+    font-size: 56px;
+  }
+}
+
+#add-task-plus {
+  font-size: 56px;
+  margin-right: 24px;
+}
+
+@media screen and (max-width: 600px) {
+  .new-task-button {
+    width: 30%;
+  }
 }

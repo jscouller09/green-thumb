@@ -4,7 +4,7 @@
     <!-- Links for editing/deleting plot -->
     <%= link_to '<i class="fas fa-pencil-alt"></i>&nbsp;'.html_safe, edit_plot_path(@plot) %>
     <%= link_to '<i class="fas fa-trash"></i>&nbsp;'.html_safe, plot_path(@plot), method: 'delete',
-        data: { confirm: "Are you sure you want to remove this plot?"} %>
+        data: { modal_confirm: "Are you sure you want to remove your plot #{@plot.name}?"} %>
   </h1>
 
   <div class='plot-overview'>
@@ -43,9 +43,6 @@
                       <img src="<%= cl_image_path plant_type.photo_bg, height: 300, width: 400, crop: :fit %>" alt="<%= plant_type.name %>" style="border-radius: 8px;">
                       <h2 class="modal-title" id="<%= plant_type.name %>"><%= plant_type.name %></h2>
                     </div>
-                    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button> -->
                   </div>
                   <div class="modal-body">
                     <%= plant_type.description %>

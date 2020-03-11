@@ -1,28 +1,21 @@
-// this is useless at the moment, but attempts will continue to use .svg for icons
-#navbar-droplet {
-  height: 100%;
-}
-
-.lg-task-icon {
+  #lg-task-icon {
   box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+  height: 12px;
+  width: 12px;
   opacity: .7;
   }
 
 #plot-card-icon {
   height: auto;
-  // margin: 12px;
-  // max-height: 40px;
-  // max-width: 40px;
   height: 40px;
   width: 40px;
   margin-right: 20px;
-  // object-fit: fill;
-}
+  }
 
  #task-icons {
   align-items: center;
   display: flex;
-  font-size: 30px;
+  font-size: 16px;
   justify-content: space-between;
   max-width: 48px;
   &:hover {
