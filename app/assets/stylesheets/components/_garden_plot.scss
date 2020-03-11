@@ -115,6 +115,11 @@ h1{
       // for plants to water
       filter: invert(87%) sepia(16%) saturate(441%) hue-rotate(128deg) brightness(102%) contrast(99%);
     }
+    &.highlight {
+      // red-orange equivalent with filters
+      // for plants to highlight
+      filter: invert(35%) sepia(57%) saturate(3280%) hue-rotate(359deg) brightness(103%) contrast(96%);
+    }
   }
 
   .plot-plant-border {

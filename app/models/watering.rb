@@ -9,6 +9,7 @@ class Watering < ApplicationRecord
 
   def update_plant_water_deficit
     # run when watering is completed to update plant water deficit
-    self.plant.water_deficit_mm -= self.ammount_mm
+    self.plant.water_deficit_mm = [self.plant.water_deficit_mm - self.ammount_mm, 0.0].max
+    self.plant.save
   end
 end

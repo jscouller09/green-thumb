@@ -1,10 +1,11 @@
 <div class="container">
   <h1><%= @plot.name %></h1>
-
-          <h2>Here are the plants you have :</h2>
-    <% @watering_groups.each do |plant_type, total_water| %>
-
-      <button type="button" class="btn btn-primary plot" data-toggle="modal" data-target="#<%= plant_type.name %>">
+    <% if @watering_groups.empty? %>
+      <h3>No more plants to water here!</h3>
+    <% else %>
+      <h3>Here are the plants you need to water:</h3>
+      <% @watering_groups.each do |plant_type, total_water| %>
+      <button type="button" class="plant-group btn btn-primary plot" data-toggle="modal" data-plant_name="<%= plant_type.name %> data-target="#<%= plant_type.name %>">
         <%= image_tag("icons/#{plant_type.icon}", id: "plot-card-icon" ) %>
         <div id="ammount_L">
         <span class="info-water"><%= plant_type.name %>:</span><span><%= total_water %> L</span>
@@ -22,16 +23,11 @@
             </div>
             <div class="modal-body">
               ...
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
 
+            </div>
+        </button>
+      <% end %>
+    <% end %>
 
   <div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= @plot.grid_cell_size_mm %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
     <!-- Plants will be added here by the JS plugin-->
