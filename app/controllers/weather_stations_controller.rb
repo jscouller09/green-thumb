@@ -19,6 +19,11 @@ class WeatherStationsController < ApplicationController
 
   #GET  /weather_stations/:id
   def show
+    alert_messages = []
+    policy_scope(WeatherAlert).where(dismissed: false).each do |alert|
+      alert_messages << alert.message
+    end
+    @alerts = alert_messages.join("&nbsp&nbsp&nbsp&nbsp&nbsp")
     @station = WeatherStation.find(params[:id])
     authorize @station
     # get the current weather and forecast summary

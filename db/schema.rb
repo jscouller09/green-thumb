@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_09_194127) do
+ActiveRecord::Schema.define(version: 2020_03_10_155320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -208,6 +208,16 @@ ActiveRecord::Schema.define(version: 2020_03_09_194127) do
     t.index ["plant_id"], name: "index_waterings_on_plant_id"
   end
 
+  create_table "weather_alerts", force: :cascade do |t|
+    t.string "message"
+    t.boolean "dismissed", default: false
+    t.datetime "apply_until"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "weather_station_id"
+    t.index ["weather_station_id"], name: "index_weather_alerts_on_weather_station_id"
+  end
+
   create_table "weather_stations", force: :cascade do |t|
     t.string "name"
     t.string "country"
@@ -230,4 +240,5 @@ ActiveRecord::Schema.define(version: 2020_03_09_194127) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users"
+  add_foreign_key "weather_alerts", "weather_stations"
 end
