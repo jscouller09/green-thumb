@@ -24,18 +24,20 @@ class TasksController < ApplicationController
     @tasks = policy_scope(Task).where(completed: false)
     @task = Task.find(params[:id])
     authorize @task
-    render 'index'
+    # render 'index'
   end
 
   # PATCH /tasks/:id
   def update
     @task = Task.find(params[:id])
     authorize @task
-    if @task.update(task_params)
+    # currently no feedback if task is not updated successfully this will hopefully be replaced by an Ajax request to dynamically re-render tasks list
+    # if
+      @task.update(task_params)
       redirect_to tasks_path
-    else
-      render 'index'
-    end
+    # else
+    #   render 'index'
+    # end
   end
 
 
