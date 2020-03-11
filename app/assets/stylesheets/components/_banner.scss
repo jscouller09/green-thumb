@@ -1,9 +1,10 @@
 .banner {
   padding: 150px 0;
-  background-image: linear-gradient(45deg, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url("https://images.unsplash.com/photo-1457530378978-8bac673b8062?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80");
+  background-image: linear-gradient(45deg, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('greenthumb-banner.png');
   background-repeat: no-repeat;
-  background-size: auto;
-  color: white;
+  background-size: cover;
+  background-position: bottom;
+  color: $cream;
 }
 
 .banner h1 {
