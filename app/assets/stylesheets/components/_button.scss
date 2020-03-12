@@ -95,6 +95,9 @@
   &:hover {
     border: none;
   }
+  &:target {
+    border: none;
+  }
 }
 .sign-up-button{
   border-radius: 5px;
