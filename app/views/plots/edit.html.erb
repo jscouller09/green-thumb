@@ -1,9 +1,11 @@
-<h1>Edit your plot</h1>
-
-<%= simple_form_for @plot, method: 'patch' do |f| %>
-  <%= f.input :name %>
-  <%= f.input :length_m, label: 'Length (m)' %>
-  <%= f.input :width_m, label: 'Width (m)' %>
-  <%= f.button :submit, value = 'Edit', class: 'btn btn-primary' %>
-<% end %>
-
+<div class="container mt-5">
+  <h1>Edit your plot</h1>
+  <div class="form">
+    <%= simple_form_for @plot, method: 'patch' do |f| %>
+      <%= f.input :name %>
+      <%= f.input :length_m, label: 'Length (m)' %>
+      <%= f.input :width_m, label: 'Width (m)' %>
+      <%= f.button :submit, value = 'Edit', class: 'garden-button' %>
+    <% end %>
+  </div>
+</div>
