@@ -109,6 +109,12 @@ class PlantsController < ApplicationController
   end
 
   def generate_task(new_plant)
+      pdate = new_plant[:plant_date]
+      i = new_plant.plant_type[:l_ini_days]
+      d = new_plant.plant_type[:l_dev_days]
+      m = new_plant.plant_type[:l_mid_days]
+      e = new_plant.plant_type[:l_end_days]
+      t = i + d + m + e
     if new_plant[:plant_date] > DateTime.now
       new_task_plant = Task.new(
         description: "Plant your  #{new_plant.plant_type.name}",
@@ -118,21 +124,27 @@ class PlantsController < ApplicationController
         )
       diff = (new_plant[:plant_date] - DateTime.now).to_i
       if diff > 7
-          new_task_plant[:priority] = "low"
-        elsif diff < 5 && diff >= 3
-          new_task_plant[:priority] = "medium"
-        elsif diff < 3
-          new_task_plant[:priority] = "high"
+        new_task_plant[:priority] = "low"
+      elsif diff < 5 && diff >= 3
+        new_task_plant[:priority] = "medium"
+      elsif diff < 3
+        new_task_plant[:priority] = "high"
       end
       new_task_plant.save
-      # new_task_harvest = Task.create(
-      #   description: "Harvest your  #{new_plant.plant_type.name}",
-      #   due_date: new_plant[plant_date: + new_plant.plant_type.l_end_days.to_i],
-      #   binding.pry
-      #   user_id: current_user.id,
-      #   plant_id: new_plant.plant_type.id
-      #   )
-
+      new_task_harvest = Task.create(
+        description: "Harvest your  #{new_plant.plant_type.name}",
+        due_date: (new_plant[:plant_date] + t),
+        user_id: current_user.id,
+        plant_id: new_plant.plant_type.id
+        )
+      diff1 = new_task_harvest[:due_date] - DateTime.now
+      if diff1 > 7
+        new_task_harvest[:priority] = "low"
+      elsif diff1 < 5 && diff >= 3
+        new_task_harvest[:priority] = "medium"
+      elsif diff1 < 3
+        new_task_harvest[:priority] = "high"
+      end
     end
   end
 
