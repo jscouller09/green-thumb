@@ -6,7 +6,17 @@
     margin-bottom: 48px;
   }
 }
-
+.ghost-btn{
+  text-decoration: none;
+  color: $gray;
+  opacity: 0.7;
+    &:hover{
+      color: $gray;
+      font-weight: bolder;
+      text-decoration: none;
+      opacity:1;
+    }
+}
 .garden-button {
   align-items: center;
   border-radius: 5px;
