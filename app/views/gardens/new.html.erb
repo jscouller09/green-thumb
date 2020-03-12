@@ -1,7 +1,10 @@
-<h1>Make a new garden</h1>
-
-<%= simple_form_for @garden do |form| %>
-  <%= form.input :name %>
-  <%= form.input :address %>
-  <%= form.button :submit, class: "btn btn-primary" %>
-<% end %>
+<div class="container mt-5">
+  <h1>Make a new garden</h1>
+  <div class="form">
+    <%= simple_form_for @garden do |form| %>
+      <%= form.input :name %>
+      <%= form.input :address %>
+      <%= form.button :submit, class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
