@@ -66,15 +66,8 @@
   padding: 8px;
   text-align: center;
   width: 100%;
-
-  // margin: 16px auto 32px;
-  // align-items: center;
-  // display: flex;
-  // flex-direction: column;
-  // justify-content: space-between;
-  // min-height: 320px;
-  // padding-bottom: 24px;
 }
+
 .forecast-temp{
   display: flex;
   justify-content: space-evenly;
@@ -113,7 +106,7 @@
 }
 .weather-description{
   font-family: $headers-font;
-  color: $brown;
+  color: $gray;
   opacity: 0.7;
 }
 
@@ -130,6 +123,7 @@
     font-size: 32px;
     p{
       margin-bottom: 0;
+      margin-top: 4px;
     }
   }
   .temperature{
@@ -146,6 +140,13 @@
   min-height: 320px;
   padding: 0;
   margin-bottom: 32px;
+}
+
+.weather-desc {
+  color: $gray;
+  font-family: special elite;
+  line-height: 24px;
+  padding-bottom: 4px;
 }
 
 #weather-headline, #weather-station-headline {
