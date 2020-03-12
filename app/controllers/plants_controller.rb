@@ -26,14 +26,14 @@ class PlantsController < ApplicationController
     plant = Plant.find(plant_params[:id])
     # check this is the users plant
     authorize plant
+    # generating plant task
+    generate_task(plant)
     # make a new plant from supplied params and duplicating old plant
     new_plant = plant.dup
     new_plant.x = params[:x]
     new_plant.y = params[:y]
     if new_plant.save
       # making new plants succeeded
-      #generating plant task
-      generate_task(new_plant)
       # update count of plants in garden
       plants_counts_by_type = Hash.new(0)
       plants_icons_by_type = {}
@@ -120,7 +120,7 @@ class PlantsController < ApplicationController
         description: "Plant your  #{new_plant.plant_type.name}",
         due_date: new_plant[:plant_date],
         user_id: current_user.id,
-        plant_id: new_plant.plant_type.id
+        plant_id: new_plant.id
         )
       diff = (new_plant[:plant_date] - DateTime.now).to_i
       if diff > 7
@@ -131,11 +131,12 @@ class PlantsController < ApplicationController
         new_task_plant[:priority] = "high"
       end
       new_task_plant.save
-      new_task_harvest = Task.create(
+
+      new_task_harvest = Task.new(
         description: "Harvest your  #{new_plant.plant_type.name}",
         due_date: (new_plant[:plant_date] + t),
         user_id: current_user.id,
-        plant_id: new_plant.plant_type.id
+        plant_id: new_plant.id
         )
       diff1 = new_task_harvest[:due_date] - DateTime.now
       if diff1 > 7
@@ -145,6 +146,7 @@ class PlantsController < ApplicationController
       elsif diff1 < 3
         new_task_harvest[:priority] = "high"
       end
+      new_task_harvest.save
     end
   end
 
