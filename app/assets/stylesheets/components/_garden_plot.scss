@@ -42,18 +42,24 @@ h1{
   width: 100%;
   & > li {
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
+    align-content: center;
+    button {
+      text-align: left;
+    }
     div {
-      background-size: cover;
+      background-size: fill;
       background-position: center;
-      height: 20px;
-      width: 20px;
+      background-repeat: no-repeat;
+      width: 30px;
+      height: 30px;
+      margin-right: 20px;
       // md-green equivalent with filters
       filter: invert(93%) sepia(51%) saturate(503%) hue-rotate(52deg) brightness(92%) contrast(81%);
     }
-    p{
+    p {
       flex-grow: 1;
-      margin-left: 11px;
+      margin-bottom: 0;
     }
   }
 }

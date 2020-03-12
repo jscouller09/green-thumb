@@ -23,7 +23,6 @@ if (plants_container) {
       plant.plant_type = plant.plant_type.replace(/_/gi," ");
     });
   }
-  var plant_groups = document.querySelectorAll('.plant-group');
   // determine grid spacing based of viewport size and plot size
   const intViewportHeight = window.innerHeight;
   // var intViewportWidth = window.innerWidth * 0.9;
@@ -58,13 +57,13 @@ const toggle_highlight=(name) => {
 }
 
 const plant_group_click_callback=(event) => {
-  console.log(event);
   const plant_type_name = event.currentTarget.dataset.plant_name;
   toggle_highlight(plant_type_name);
   setTimeout(() => { toggle_highlight(plant_type_name); }, 1000);
 }
 
 const init_plant_highlighting=() => {
+  const plant_groups = document.querySelectorAll('.plant-group');
   if (plant_groups) {
     plant_groups.forEach(group => {
       group.addEventListener('click', plant_group_click_callback);
@@ -99,6 +98,7 @@ const update_plant_counts=(plant_counts=null, plant_icons=null) => {
 
     // update the UL with the count of each plant type
     plant_list.innerHTML = "";
+    // inital message for if there are no plants
     if (Object.keys(plant_counts).length === 0) {
       let list_element = document.createElement('li');
       list_element.classList.add('plant-group');
@@ -110,14 +110,19 @@ const update_plant_counts=(plant_counts=null, plant_icons=null) => {
     // make a new list entry with the count and icon for each plant type
     Object.keys(plant_counts).forEach(plant_type => {
       let list_element = document.createElement('li');
-      list_element.classList.add('plant-group');
-      list_element.dataset.plant_name = plant_type;
+      let btn_element = document.createElement('button');
+      btn_element.classList.add('plant-group');
+      btn_element.classList.add('btn');
+      btn_element.classList.add('btn-primary');
+      btn_element.classList.add('plot');
+      btn_element.dataset.plant_name = plant_type;
       let p_element = document.createElement('p');
       let icon_element = document.createElement('div');
       p_element.innerText = `${plant_type} (${plant_counts[plant_type]})`;
       icon_element.style.backgroundImage = `url("${plant_icons[plant_type]}")`;
-      list_element.appendChild(icon_element);
-      list_element.appendChild(p_element);
+      btn_element.appendChild(icon_element);
+      btn_element.appendChild(p_element);
+      list_element.appendChild(btn_element);
       plant_list.appendChild(list_element);
     });
   }
@@ -429,8 +434,6 @@ const init_plant_dragging=() => {
   // check if we have a plant plot on the page
   const plants_container = document.getElementById('plot-container');
   if (plants_container) {
-    // initalize plant highlighting by type
-    init_plant_highlighting();
     // render the counts of different types of plants in the overview
     update_plant_counts();
     // first destroy any children already in the plot
@@ -440,6 +443,8 @@ const init_plant_dragging=() => {
       // attach the interact plugin to the plant
       init_ineractjs(plant);
     });
+    // initalize plant highlighting by type
+    init_plant_highlighting();
   }
 }
 
