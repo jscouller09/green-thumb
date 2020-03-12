@@ -32,6 +32,11 @@ class Plot < ApplicationRecord
   #after_create :calculate_dimensions_in_mm
   after_validation :calculate_dimensions_in_mm
 
+  def clear_wheelbarrow
+    # if the plant has a negative y coordinate it is in the wheelbarrow
+    self.plants.where("y IS NULL OR y < 0").destroy_all
+  end
+
   private
 
   def calculate_dimensions_in_mm

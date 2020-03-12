@@ -7,7 +7,7 @@ class Measurement < ApplicationRecord
 
   # must have timestamp and timezone offset from UTC
   validates :timestamp, presence: true
-  validates :timezone_UTC_offset, presence: true, format: { with: /[-]\d{4}/ }
+  validates :timezone_UTC_offset, presence: true, format: { with: /-?\d{4}/ }
 
   # check these measurements are present as they are necessary for PET calcs
   validates :temp_c, numericality: true

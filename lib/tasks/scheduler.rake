@@ -26,6 +26,7 @@ namespace :weather do
   task :download_hourly => :environment do
     puts "Downloading weather data and storing measurements..."
     WeatherStation.all.each do |station|
+      puts "\tQuerying #{station.name}..."
       data = station.download_current_weather
       meas = Measurement.new(data)
       meas.weather_station = station
@@ -69,6 +70,8 @@ namespace :db do
     puts "Exporting plant_types..."
     export_model_to_csv(PlantType, 'export_plant_types.csv')
     puts "Export plants..."
+    # make sure to not export plants in the wheelbarrow area of a plot
+    Plot.all.each { |plot| plot.clear_wheelbarrow }
     export_model_to_csv(Plant, 'export_plants.csv')
     puts "Export tasks..."
     export_model_to_csv(Task, 'export_tasks.csv')

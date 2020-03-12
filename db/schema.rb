@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_12_113354) do
+ActiveRecord::Schema.define(version: 2020_03_10_155320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 2020_03_12_113354) do
     t.datetime "timestamp"
     t.datetime "sunrise"
     t.datetime "sunset"
-    t.integer "timezone_UTC_offset"
+    t.string "timezone_UTC_offset"
     t.float "temp_c"
     t.integer "humidity_perc"
     t.integer "pressure_hPa"
