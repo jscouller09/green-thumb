@@ -1,5 +1,5 @@
 meta_product_name: "Green Thumb"
 meta_title: "GreenThumb - The new way to manage your home garden"
 meta_description: "With Green Thumb you'll never kill your plants again!"
-meta_image: "greenthumb-banner.png" # should exist in `app/assets/images/`
+meta_image: "https://res.cloudinary.com/dm6mj1qp1/image/upload/v1584027348/green-thumb/GB-banner_ptfbq6.jpg" # should exist in `app/assets/images/`
 twitter_account: "@product_twitter_account"   # required for Twitter Cards

@@ -8,6 +8,7 @@ class PlotsController < ApplicationController
     @plant_types = PlantType.all
     @plant = Plant.new
     @plot = Plot.find(params[:id])
+    @plants_planted = @plot.plants.where(planted: true)
     authorize @plot
     # filter plants to only be those actually in the garden (not wheelbarrow)
     @plants = @plot.plants.where("x >= 0 AND y >= 0")

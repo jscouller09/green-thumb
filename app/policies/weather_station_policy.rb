@@ -17,4 +17,8 @@ class WeatherStationPolicy < ApplicationPolicy
     # this association is through them creating a garden
     user.admin? || record.users.include?(user)
   end
+
+  def mark_as_dismissed?
+    user.admin? || record.users.include?(user)
+  end
 end

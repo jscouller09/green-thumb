@@ -1,24 +1,26 @@
-<% content_for :meta_title, "Green Thumb | Your looking at your plot: #{@plot.name  }" %>
-<% content_for :meta_description, " Welcome to your dashboard, this page will help you manage your garden easily" %>
-<div class="container">
+<% content_for :meta_title, "Green Thumb | You're looking at your plot: #{@plot.name  }" %>
+<% content_for :meta_description, " Welcome to your dashboard, this page will help you manage your garden easily!" %>
+<div class="container grid-container">
   <h1>
     <%= @plot.name %>&nbsp;
     <!-- Links for editing/deleting plot -->
-    <%= link_to '<i class="fas fa-pencil-alt"></i>&nbsp;'.html_safe, edit_plot_path(@plot) %>
+    <% if @plants_planted.empty? %>
+      <%= link_to '<i class="fas fa-pencil-alt"></i>&nbsp;'.html_safe, edit_plot_path(@plot) %>
+    <% end %>
     <%= link_to '<i class="fas fa-trash"></i>&nbsp;'.html_safe, plot_path(@plot), method: 'delete',
-        data: { modal_confirm: "Are you sure you want to remove your plot #{@plot.name}?"} %>
+        data: { modal_confirm: "Are you sure you want to remove your  #{@plot.name}? It will remove all your plants and tasks associated."} %>
   </h1>
 
   <div class='plot-overview'>
     <div id="plants-all">
       <!-- List of plants currently in the plot go here-->
-      <h3>Your veggies:</h3>
+      <h3>Your Veggies:</h3>
       <ul id='plant-list' data-plant_counts=<%= @plants_by_type %> data-plant_icons=<%= @plants_icons_by_type %>>
       </ul>
     </div>
     <div id='wheelbarrow'>
       <!-- New plants or plants without x and y coordinates should show up here-->
-      <p>Your wheelbarrow is empty</p>
+      <p>Your Wheelbarrow is Empty</p>
     </div>
   </div>
 
@@ -43,7 +45,7 @@
               <div class="modal-dialog" role="document">
                 <div class="modal-content" style="border-radius: 16px;">
                 <button type="button" class="close-btn" data-dismiss="modal">
-                  <span aria-hidden="true">&times;</span>
+                  <span aria-hidden="false">&times;</span>
                 </button>
 
 
