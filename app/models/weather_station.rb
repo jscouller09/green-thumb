@@ -104,6 +104,73 @@ class WeatherStation < ApplicationRecord
     804 => { main: 'Clouds', description: 'overcast clouds', icon: '04d', icon_night: '04n' }, # (85-100%)
   }
 
+
+  def check_forecast_for_alerts
+    # get forecast data
+    forecast = download_3hrly_5d_forecast
+    # get current alerts and the codes associated with them
+    alert_ids = self.weather_alerts.where("apply_until >= ?", DateTime.now()).select(:id).map { |a| a.id }
+    alert_codes = alert_codes = alert_ids.map { |a| WeatherAlert.find(a).code }
+    # go through each predicition in the forecast over the next 3 days = 72 hrs = 24x3hr intervals
+    forecast.first(24).each do |prediction|
+      # convert timestamp to UTC
+      tz = prediction[:timezone_UTC_offset]
+      timestamp_UTC = prediction[:timestamp].change(offset: tz[0] == "-" ? tz : "+#{tz}")
+      # check weather code and group together if necessary
+      code = prediction[:code]
+      #code = 212
+      if [202, 211, 212, 221].include?(code)
+        # intense thunderstorms
+        grouped_code = 2000
+      elsif [502, 503, 504].include?(code)
+        # heavy rainfall codes
+        grouped_code = 5000
+      elsif code >= 600 && code <= 622
+        # snow/sleet codes
+        grouped_code = 6000
+      else
+        grouped_code = code
+      end
+      # check if we need to generate a severe weather alert
+      if !alert_codes.include?(grouped_code)
+        new_alert = generate_weather_alert(grouped_code, prediction, timestamp_UTC)
+        # add alert to list of alerts
+        if new_alert && new_alert.save
+          alert_ids << new_alert.id
+          alert_codes << new_alert.code
+        end
+      else
+        # this code exists, update the applies until to the current timestamp
+        # find most recent alert for this code
+        alert_id = alert_ids[alert_codes.rindex(code)]
+        alert = WeatherAlert.find(alert_id)
+        # update the apply_until timestamp
+        alert.update(apply_until: timestamp_UTC)
+      end
+      # check if we need to generate a frost alert
+      if prediction[:temp_c] <= 1.0
+        # possibility of frost => code = 0000
+        if !alert_codes.include?(0000)
+        new_alert = generate_weather_alert(0000, prediction, timestamp_UTC)
+        # add alert to list of alerts
+        if new_alert && new_alert.save
+          alert_ids << new_alert.id
+          alert_codes << new_alert.code
+        end
+        else
+          # already have a frost predicted, update the applies until to the current timestamp
+          # find most recent alert for this code
+          alert_id = alert_ids[alert_codes.rindex(0000)]
+          alert = WeatherAlert.find(alert_id)
+          # update the apply_until timestamp
+          alert.update(apply_until: timestamp_UTC)
+        end
+      end
+    end
+    # return true if there are some alerts in effect, false otherwise
+    return !alert_ids.empty?
+  end
+
   def download_current_weather
     # build url
     url = "#{OW_BASE_URL}/2.5/weather?"
@@ -272,6 +339,42 @@ class WeatherStation < ApplicationRecord
   end
 
   private
+
+  def generate_weather_alert(code, prediction, timestamp_UTC)
+    if code == 0000
+      # frost custom code
+      msg = "potential frosts"
+    elsif code == 2000
+      # intense thunderstorms
+      msg = "thunderstorms"
+    elsif code == 5000
+      # heavy rainfall
+      msg = "heavy rainfall"
+    elsif code == 6000
+      # snow/sleet
+      msg = "snow or sleet"
+    elsif code == 511
+      # freezing rain
+      msg = "freezing rain"
+    elsif code == 771
+      # squall
+      msg = "squalls"
+    elsif code == 781
+      # tornado
+      msg = "tornado"
+    else
+      # not a weather code that needs an alert
+      return nil
+    end
+    # generate alert with the correct message
+    new_alert = WeatherAlert.new(code: code,
+                                 main: prediction[:main],
+                                 description: prediction[:description],
+                                 weather_station_id: self.id,
+                                 begins: timestamp_UTC,
+                                 apply_until: timestamp_UTC,
+                                 message: msg)
+  end
 
   def download_elevation
     # download elevation of coordinates from open topo

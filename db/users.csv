@@ -2,6 +2,6 @@ email,password,first_name,last_name,admin,mentor
 admin@greenthumb.rocks,123456,Garden Guru,Gaia,1,0
 tom.bombadil@LOTR.com,123456,Tom,Bombadil,0,1
 sam.gamgee@LOTR.com,123456,Samwise,Gamgee,0,1
-frodon.baggins@LOTR.com,123456,Frodo,Baggins,0,0
+frodo.baggins@LOTR.com,123456,Frodo,Baggins,0,0
 merry.brandybuck@LOTR.com,123456,Merry,Brandybuck,0,0
 pippin.took@LOTR.com,123456,Pippin,Took,0,0
