@@ -8,7 +8,7 @@
 
 require 'csv'
 
-def generate_model_from_csv(model_class, csv_file)
+def generate_model_from_csv(model_class, csv_file, table_name)
   csv_options = { col_sep: ',',
                   quote_char: '"',
                   headers: :first_row,
@@ -32,16 +32,32 @@ def generate_model_from_csv(model_class, csv_file)
       end
     end
   end
+  # reset the autoincrement incase we have specified ID's
+  last_id = model_class.last.id
+  #ActiveRecord::Base.connection.execute("ALTER TABLE #{table_name} AUTO_INCREMENT = #{last_id + 1};")
+  model_class.connection.execute("ALTER SEQUENCE #{table_name}_id_seq RESTART WITH #{last_id + 1};")
 end
 
 # generate seeds for different models
-generate_model_from_csv(WeatherStation, 'weather_stations.csv')
-generate_model_from_csv(User, 'users.csv')
-generate_model_from_csv(ClimateZone, 'climate_zones.csv')
-generate_model_from_csv(Garden, 'gardens.csv')
-generate_model_from_csv(Plot, 'plots.csv')
-generate_model_from_csv(PlantType, 'plant_types.csv')
-generate_model_from_csv(Plant, 'plants.csv')
-generate_model_from_csv(Task, 'tasks.csv')
-generate_model_from_csv(Watering, 'waterings.csv')
-generate_model_from_csv(WeatherAlert, 'weather_alerts.csv')
+# generate_model_from_csv(WeatherStation, 'weather_stations.csv', 'weather_stations')
+# generate_model_from_csv(User, 'users.csv', 'users')
+# generate_model_from_csv(ClimateZone, 'climate_zones.csv', 'climate_zones')
+# generate_model_from_csv(Garden, 'gardens.csv', 'gardens')
+# generate_model_from_csv(Plot, 'plots.csv', 'plots')
+# generate_model_from_csv(PlantType, 'plant_types.csv', 'plant_types')
+# generate_model_from_csv(Plant, 'plants.csv', 'plants')
+# generate_model_from_csv(Task, 'tasks.csv', 'tasks')
+# generate_model_from_csv(Watering, 'waterings.csv', 'waterings')
+# generate_model_from_csv(WeatherAlert, 'weather_alerts.csv', 'weather_alerts')
+
+generate_model_from_csv(User, 'users.csv', 'users')
+generate_model_from_csv(WeatherStation, 'export_weather_stations.csv', 'weather_stations')
+generate_model_from_csv(Measurement, 'export_measurements.csv', 'measurements')
+generate_model_from_csv(ClimateZone, 'export_climate_zones.csv', 'climate_zones')
+generate_model_from_csv(Garden, 'export_gardens.csv', 'gardens')
+generate_model_from_csv(Plot, 'export_plots.csv', 'plots')
+generate_model_from_csv(PlantType, 'export_plant_types.csv', 'plant_types')
+generate_model_from_csv(Plant, 'export_plants.csv', 'plants')
+generate_model_from_csv(Task, 'export_tasks.csv', 'tasks')
+generate_model_from_csv(Watering, 'export_waterings.csv', 'waterings')
+generate_model_from_csv(WeatherAlert, 'export_weather_alerts.csv', 'weather_alerts')

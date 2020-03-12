@@ -1,0 +1,9 @@
+id,zone,growing_season_days,start_of_growing_season,created_at,updated_at,hemisphere
+1,Polar/subpolar,30,2020-06-01,2020-03-12 11:06:50 UTC,2020-03-12 11:06:50 UTC,northern
+2,Temperate,120,2020-05-01,2020-03-12 11:06:50 UTC,2020-03-12 11:06:50 UTC,northern
+3,Subtropical,180,2020-03-01,2020-03-12 11:06:50 UTC,2020-03-12 11:06:50 UTC,northern
+4,Tropical,365,2020-01-01,2020-03-12 11:06:50 UTC,2020-03-12 11:06:50 UTC,northern
+5,Tropical,365,2020-01-01,2020-03-12 11:06:50 UTC,2020-03-12 11:06:50 UTC,southern
+6,Subtropical,180,2020-09-01,2020-03-12 11:06:50 UTC,2020-03-12 11:06:50 UTC,southern
+7,Temperate,120,2020-11-01,2020-03-12 11:06:50 UTC,2020-03-12 11:06:50 UTC,southern
+8,Polar/subpolar,30,2020-01-01,2020-03-12 11:06:50 UTC,2020-03-12 11:06:50 UTC,southern

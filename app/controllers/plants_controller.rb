@@ -7,8 +7,7 @@ class PlantsController < ApplicationController
     # check this is the users plot before proceeding
     authorize @plot
     # first clear any surplus plants from the wheelbarrow
-    # if the plant has a negative y coordinate it is in the wheelbarrow
-    wheelbarrow_plants = @plot.plants.where("y IS NULL OR y < 0").destroy_all
+    @plot.clear_wheelbarrow
     # create a new plant
     new_plant = Plant.new(plant_params)
     new_plant.water_deficit_mm = 0.0
