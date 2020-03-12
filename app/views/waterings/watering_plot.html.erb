@@ -1,31 +1,33 @@
 <% content_for :meta_title, "Green Thumb | Water your plants with the right amount" %>
 <% content_for :meta_description, "Select a plant to seed how much water it needs!" %>
-<div class="container m-5">
-  <h1><%= @plot.name %></h1>
-    <% if @watering_groups.empty? %>
-      <h3>No more plants to water here!</h3>
-    <% else %>
-      <h3>Here are the plants you need to water:</h3>
-      <% @watering_groups.each do |plant_type, total_water| %>
-        <button type="button" class="plant-group btn btn-primary plot" data-plant_name="<%= plant_type.name %>">
-          <%= image_tag("icons/#{plant_type.icon}", id: "plot-card-icon" ) %>
-          <div id="ammount_L">
-            <span class="info-water"><%= plant_type.name %>:</span><span><%= total_water %> L</span>
-          </div>
-        </button>
+<div class="container">
+  <div class="extra-padding-bottom-container">
+    <h1><%= @plot.name %></h1>
+      <% if @watering_groups.empty? %>
+        <h3>No more plants to water here!</h3>
+      <% else %>
+        <h3>Here are the plants you need to water:</h3>
+        <% @watering_groups.each do |plant_type, total_water| %>
+          <button type="button" class="plant-group btn btn-primary plot" data-plant_name="<%= plant_type.name %>">
+            <%= image_tag("icons/#{plant_type.icon}", id: "plot-card-icon" ) %>
+            <div id="ammount_L">
+              <span class="info-water"><%= plant_type.name %>:</span><span><%= total_water %> L</span>
+            </div>
+          </button>
+        <% end %>
       <% end %>
-    <% end %>
 
-  <div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= @plot.grid_cell_size_mm %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
-    <!-- Plants will be added here by the JS plugin-->
-  </div>
-
-
-  <% unless @watering_groups.empty? %>
-    <div class="btn-container">
-      <%= link_to "Water all?", plot_complete_waterings_path(@plot),
-          method: "PATCH",
-          data: { modal_confirm: "You're sure that #{@plot.name} is all watered?"}, class: "garden-button" %>
+    <div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= @plot.grid_cell_size_mm %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
+      <!-- Plants will be added here by the JS plugin-->
     </div>
-  <% end %>
+
+
+    <% unless @watering_groups.empty? %>
+      <div class="btn-container">
+        <%= link_to "Water all?", plot_complete_waterings_path(@plot),
+            method: "PATCH",
+            data: { modal_confirm: "You're sure that #{@plot.name} is all watered?"}, class: "garden-button" %>
+      </div>
+    <% end %>
+  </div>
 </div>

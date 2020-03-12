@@ -4,19 +4,19 @@
 <div class="menu-headline">
   <h1>Don't forget to water!</h1>
 </div>
-<div class="container">
-  <% if @plots.empty? %>
-    <h3>No more plants to water here. Good job!</h3>
-  <% else %>
-    <div class="list">
-      <% @plots.each_with_index do |plot, i| %>
-        <%= link_to plot_waterings_path(plot), class: "plot-card" do %>
-          <div class="plot-card-inner-wrapper">
-              <%= cl_image_tag @main_plant_img[i], id: "plot-card-icon" %>
-              <p><%= plot.name %></p>
-          </div>
+  <div class="container">
+    <% if @plots.empty? %>
+      <h3>No more plants to water here. Good job!</h3>
+    <% else %>
+      <div class="list">
+        <% @plots.each_with_index do |plot, i| %>
+          <%= link_to plot_waterings_path(plot), class: "plot-card" do %>
+            <div class="plot-card-inner-wrapper">
+                <%= cl_image_tag @main_plant_img[i], id: "plot-card-icon" %>
+                <p><%= plot.name %></p>
+            </div>
+          <% end %>
         <% end %>
-      <% end %>
-    </div>
-  <% end %>
-</div>
+      </div>
+    <% end %>
+  </div>

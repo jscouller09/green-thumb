@@ -14,13 +14,13 @@
   background-color: $md-green;
   display: flex;
   flex-grow: 0;
-  font-size: 20px;
+  font-size: 16px;
   height: 48px;
   justify-content: center;
   text-align: center;
   text-decoration: none;
   margin: auto;
-  min-width: 180px;
+  min-width: 160px;
   width: auto;
   a {
     align-items: center;
@@ -28,7 +28,7 @@
     text-align: center;
   }
   &:hover {
-    color: $lt-green;
+    color: $green;
     text-decoration: none;
   }
 }
@@ -74,13 +74,16 @@
   font-size: 24px;
   height: 56px;
   justify-content: center;
-  padding: 8px;
+  padding: 10px;
   position: absolute;
   text-align: left;
   right: 0;
   width: 15%;
   h1 {
-    font-size: 56px;
+    font-size: 54px;
+  }
+  &:hover {
+    border: none;
   }
 }
 .sign-up-button{

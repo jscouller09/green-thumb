@@ -59,15 +59,17 @@ h1{
 #wheelbarrow {
   flex: initial;
   flex-grow: 1;
-  margin-left: 20px;
-  margin-bottom: 20px;
-  background-color: $md-green;
-  padding: 16px;
+  margin-left: 12px;
+  margin-bottom: 12px;
+  background-color: rgba(44, 63, 47, .5);
+  padding: 8px;
+  border: 1px solid $gray;
   border-radius: 5px;
-  width: 50%;
+  max-width: 50%;
+  min-width: 120px;
   p{
     text-align: center;
-    font-size: 20px;
+    font-size: 16px;
   }
 }
 
