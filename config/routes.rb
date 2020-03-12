@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
+  get 'conversations/index'
   devise_for :users
   root to: 'pages#home'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   #MVP - Access to the dashboad
   get 'dashboard', to: 'pages#dashboard'
+  get 'conversations', to: 'conversations#index'
 
   # MVP - Create a garden and plots into the garden
   resources 'gardens', only: [:new, :create, :show, :index] do
