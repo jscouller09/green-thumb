@@ -8,7 +8,7 @@
       <%= link_to '<i class="fas fa-pencil-alt"></i>&nbsp;'.html_safe, edit_plot_path(@plot) %>
     <% end %>
     <%= link_to '<i class="fas fa-trash"></i>&nbsp;'.html_safe, plot_path(@plot), method: 'delete',
-        data: { modal_confirm: "Are you sure you want to remove your plot #{@plot.name}?"} %>
+        data: { modal_confirm: "Are you sure you want to remove your  #{@plot.name}? It will remove all your plants and tasks associated."} %>
   </h1>
 
   <div class='plot-overview'>
