@@ -1,5 +1,5 @@
 class WateringsController < ApplicationController
-  skip_after_action :verify_authorized, only: [:complete_plot_watering, :watering_overview]
+  skip_after_action :verify_authorized, only: [:watering_overview]
 
   # GET /waterings
   def watering_overview
@@ -58,7 +58,6 @@ class WateringsController < ApplicationController
       end
       @watering_groups[type] = total.round(1) unless water_plants.empty?
     end
-
   end
 
   #PATCH waterings/:id
@@ -70,6 +69,24 @@ class WateringsController < ApplicationController
     else
       render 'watering_plot'
     end
+  end
+
+  # PATCH
+  def plant_type_watered
+    # find a plot
+    @plot = Plot.find(params[:plot_id])
+    authorize @plot
+    # find a specific plant_type
+    @plant_type = @plot.plant_types.find(params[:plant_type_id])
+    # select all the plant of that plant-type that need water
+    # @waterings_plant_type = @plant_type.plants.map { |plant| plant.waterings.select { done ==false }
+    @waterings_to_update = Watering.joins(:plant).where(
+      done: false,
+      plants: { plant_type_id: @plant_type.id }
+    )
+    # update all the plant of this plant type
+    @waterings_to_update.each {|watering| watering.update(done: true)}
+    redirect_to plot_waterings_path
   end
 
   #PATCH waterings/:id/complete
@@ -87,6 +104,7 @@ class WateringsController < ApplicationController
   # PATCH plots/:id/complete_waterings
   def complete_plot_watering
     plot = Plot.find(params[:plot_id])
+    authorize plot
     waterings = plot.waterings
     waterings.each do |watering|
       watering.update(done: true)

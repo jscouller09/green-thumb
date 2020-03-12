@@ -28,4 +28,12 @@ class PlotPolicy < ApplicationPolicy
   def watering_plot?
     show?
   end
+
+  def complete_plot_watering?
+    show?
+  end
+
+  def plant_type_watered?
+    show?
+  end
 end
