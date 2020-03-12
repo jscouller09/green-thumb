@@ -25,8 +25,10 @@ class PlantsController < ApplicationController
     plant = Plant.find(plant_params[:id])
     # check this is the users plant
     authorize plant
-    # generating plant task
-    generate_task(plant)
+    # get all uncompleted tasks, for this plot, that have the same plant type and same planting date as the current plant
+    tasks = Task.all.joins(:plant).where("completed = ? AND plants.plant_type_id = ? AND plants.plot_id = ? AND plants.plant_date = ?", false, plant.plant_type_id, plant.plot_id, plant.plant_date)
+    # generating plant task (only if there aren't any already for this plant type)
+    generate_task(plant) if tasks.empty?
     # make a new plant from supplied params and duplicating old plant
     new_plant = plant.dup
     new_plant.x = params[:x]
@@ -108,20 +110,19 @@ class PlantsController < ApplicationController
   end
 
   def generate_task(new_plant)
-      pdate = new_plant[:plant_date]
-      i = new_plant.plant_type[:l_ini_days]
-      d = new_plant.plant_type[:l_dev_days]
-      m = new_plant.plant_type[:l_mid_days]
-      e = new_plant.plant_type[:l_end_days]
-      t = i + d + m + e
-    if new_plant[:plant_date] > DateTime.now
-      new_task_plant = Task.new(
-        description: "Plant your  #{new_plant.plant_type.name}",
-        due_date: new_plant[:plant_date],
-        user_id: current_user.id,
-        plant_id: new_plant.id
-        )
-      diff = (new_plant[:plant_date] - DateTime.now).to_i
+    # plant date
+    pdate = new_plant[:plant_date]
+    # how long does the plant take to be ready?
+    t = new_plant.plant_life_days
+    # only generate tasks for plants that are scheduled for planting in the future
+    if new_plant[:plant_date] >= Date.today
+      # planting reminder
+      new_task_plant = Task.new(description: "Plant your #{new_plant.plant_type.name}",
+                                due_date: new_plant[:plant_date],
+                                user_id: current_user.id,
+                                plant_id: new_plant.id)
+      # how far out is the task?
+      diff = (new_plant[:plant_date] - Date.today).to_i
       if diff > 7
         new_task_plant[:priority] = "low"
       elsif diff < 5 && diff >= 3
@@ -131,18 +132,17 @@ class PlantsController < ApplicationController
       end
       new_task_plant.save
 
-      new_task_harvest = Task.new(
-        description: "Harvest your  #{new_plant.plant_type.name}",
-        due_date: (new_plant[:plant_date] + t),
-        user_id: current_user.id,
-        plant_id: new_plant.id
-        )
-      diff1 = new_task_harvest[:due_date] - DateTime.now
-      if diff1 > 7
+      # harvesting reminder
+      new_task_harvest = Task.new(description: "Harvest your #{new_plant.plant_type.name} planted on #{new_plant.plant_date.strftime("%d %b")}",
+                                  due_date: (new_plant[:plant_date] + t),
+                                  user_id: current_user.id,
+                                  plant_id: new_plant.id)
+      diff = (new_plant[:plant_date] + t - Date.today).to_i
+      if diff > 7
         new_task_harvest[:priority] = "low"
-      elsif diff1 < 5 && diff >= 3
+      elsif diff < 5 && diff >= 3
         new_task_harvest[:priority] = "medium"
-      elsif diff1 < 3
+      elsif diff < 3
         new_task_harvest[:priority] = "high"
       end
       new_task_harvest.save
