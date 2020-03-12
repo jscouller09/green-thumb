@@ -61,12 +61,13 @@ h1{
   flex-grow: 1;
   margin-left: 12px;
   margin-bottom: 12px;
-  background-color: rgba(44, 63, 47, .5);
+  background-color: $md-green;
   padding: 8px;
-  border: 1px solid $gray;
+  border: 1px dashed $gray;
   border-radius: 5px;
-  max-width: 50%;
+  max-width: 100%;
   min-width: 120px;
+
   p{
     text-align: center;
     font-size: 16px;
