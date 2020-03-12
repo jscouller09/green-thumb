@@ -1,5 +1,5 @@
 <% content_for :meta_title, "Green Thumb | Water your plants with the right amount" %>
-<% content_for :meta_description, "Select a plant to seed how much water it needs!" %>
+<% content_for :meta_description, "Select a plant to see how much water it needs!" %>
 <div class="container">
   <div class="extra-padding-bottom-container">
     <h1><%= @plot.name %></h1>
@@ -15,19 +15,19 @@
             </div>
           </button>
         <% end %>
-      <% end %>
 
     <div id='plot-container' data-plants=<%= @plants_json %> data-grid=<%= @plot.grid_cell_size_mm %> data-length=<%= @plot.length_mm %> data-width=<%= @plot.width_mm %>>
       <!-- Plants will be added here by the JS plugin-->
-    </div>
-
-
-    <% unless @watering_groups.empty? %>
-      <div class="btn-container">
-        <%= link_to "Water all?", plot_complete_waterings_path(@plot),
-            method: "PATCH",
-            data: { modal_confirm: "You're sure that #{@plot.name} is all watered?"}, class: "garden-button" %>
+  <% unless @watering_groups.empty? %>
+    <div class="btn-container">
+      <%= link_to "Water all?", plot_complete_waterings_path(@plot),
+          method: "PATCH",
+          data: { modal_confirm: "You're sure that #{@plot.name} is all watered?"}, class: "garden-button" %>
       </div>
-    <% end %>
-  </div>
+   </div>
+  <% end %>
+  <br>
+  <br>
+  <br>
+  <br>
 </div>

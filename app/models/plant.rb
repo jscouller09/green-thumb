@@ -20,6 +20,7 @@ class Plant < ApplicationRecord
 
   after_create :add_radius
 
+
   def check_planted_status
     # only run if we have a specified plant date and the plant is not planted
     unless self.plant_date.nil? || self.planted
