@@ -39,10 +39,10 @@ class WateringsController < ApplicationController
                                   plant_date: plant.plant_date,
                                   radius_mm: plant.radius_mm,
                                   plant_type: plant.plant_type.name.gsub(" ","_"),
-                                  watering: plant_watering.nil? ? 0 : plant_watering.ammount_L,
+                                  watering: plant_watering.nil? ? 0 : plant_watering.ammount_L.round(1),
                                   watering_id: plant_watering.nil? ? nil : plant_watering.id,
                                   last_watering_date: last_watering.nil? ? nil : last_watering.updated_at.to_date,
-                                  last_watering: last_watering.nil? ? nil : last_watering.ammount_L,
+                                  last_watering: last_watering.nil? ? nil : last_watering.ammount_L.round(1),
                                   icon: ActionController::Base.helpers.asset_path("icons/#{plant.plant_type.icon}") }
     end
     @plants_json = plants_to_json.to_json.html_safe
@@ -56,7 +56,7 @@ class WateringsController < ApplicationController
       water_plants.each do |plant|
         total += plant.waterings.where(done: false).sum(:ammount_L)
       end
-      @watering_groups[type] = total unless water_plants.empty?
+      @watering_groups[type] = total.round(1) unless water_plants.empty?
     end
 
   end
