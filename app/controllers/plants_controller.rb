@@ -114,6 +114,20 @@ class PlantsController < ApplicationController
     pdate = new_plant[:plant_date]
     # how long does the plant take to be ready?
     t = new_plant.plant_life_days
+    new_task_buy = Task.new(description: "Buy your #{new_plant.plant_type.name}'s seeds",
+                                due_date: (new_plant[:plant_date] - 1),
+                                user_id: current_user.id,
+                                plant_id: new_plant.id)
+      # how far out is the task?
+      diff = (new_plant[:plant_date] - Date.today).to_i
+      if diff > 7
+        new_task_buy[:priority] = "low"
+      elsif diff < 5 && diff >= 3
+        new_task_buy[:priority] = "medium"
+      elsif diff < 3
+        new_task_buy[:priority] = "high"
+      end
+      new_task_buy.save
     # only generate tasks for plants that are scheduled for planting in the future
     if new_plant[:plant_date] >= Date.today
       # planting reminder
