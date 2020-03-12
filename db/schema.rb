@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_10_155320) do
+ActiveRecord::Schema.define(version: 2020_03_12_160640) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,6 +215,10 @@ ActiveRecord::Schema.define(version: 2020_03_10_155320) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "weather_station_id"
+    t.integer "code"
+    t.string "main"
+    t.string "description"
+    t.datetime "begins"
     t.index ["weather_station_id"], name: "index_weather_alerts_on_weather_station_id"
   end
 

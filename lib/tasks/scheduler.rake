@@ -1,16 +1,40 @@
+desc "All tasks that need to be run once per hour"
+task :hourly_tasks => :environment do
+  puts "Running hourly tasks...."
+  # current weather download and creation of measurements
+  Rake::Task["weather:download_current"].invoke
+  # forecast download and creation of any alerts
+  Rake::Task["weather:check_forecast"].invoke
+  puts "Done!"
+end
+
+desc "All tasks that need to be run once per day"
+task :daily_tasks => :environment do
+  puts "Running daily tasks...."
+  # summarize weather for last 24 hrs and calculate PET
+  Rake::Task["weather:summarize_last_24hrs"].invoke
+  # updated planted status
+  Rake::Task["plants:check_planted"].invoke
+  # generate waterings
+  Rake::Task["plants:calculate_water_requirements"].invoke
+  puts "Done!"
+end
+
+## PLANTS
 namespace :plants do
-  desc "once per day update the crop coefficient/water deficit/waterings for each plant in the DB"
+  desc "update the crop coefficient/water deficit/waterings for each plant in the DB"
   task :calculate_water_requirements => :environment do
     puts "Calculating plant water requirements..."
     Plant.all.each do |plant|
-      plant.update_crop_coeff
-      plant.update_water_deficit
-      plant.generate_watering
+      status1 = plant.update_crop_coeff
+      status2 = plant.update_water_deficit
+      status3 = plant.generate_watering
+      puts "\tPlant ID #{plant.id}: crop-coeff...#{status1} water-deficit...#{status2} watering...#{status3}"
     end
     puts "Done!"
   end
 
-  desc "once per day check if plants have been planted"
+  desc "for each plant in the DB, update planted status if the plant date is before today"
   task :check_planted => :environment do
     puts "Checking if plants have been planted..."
     Plant.all.each do |plant|
@@ -18,38 +42,49 @@ namespace :plants do
     end
     puts "Done!"
   end
-
 end
 
+## WEATHER
 namespace :weather do
-  desc "every hour download current weather data for each weather station in the DB"
-  task :download_hourly => :environment do
+  desc "download current weather data for each weather station in the DB and create measurement instances"
+  task :download_current => :environment do
     puts "Downloading weather data and storing measurements..."
     WeatherStation.all.each do |station|
-      puts "\tQuerying #{station.name}..."
+      print "\tQuerying #{station.name}... "
       data = station.download_current_weather
       meas = Measurement.new(data)
       meas.weather_station = station
-      meas.save!
-      # also update the stats
-      station.calculate_24hr_stats
+      puts "downloaded-ok...#{meas.save}"
+    end
+    puts "Done!"
+  end
+
+  desc "download forecast for each weather station in the DB and check if any alerts need to be generated"
+  task :check_forecast => :environment do
+    puts "Downloading forecast and generating alerts..."
+    WeatherStation.all.each do |station|
+      print "\tQuerying #{station.name}... "
+      any_alerts = station.check_forecast_for_alerts
+      puts "any-alerts...#{any_alerts}"
     end
     puts "Done!"
   end
 
   desc "once per day summarize the last 24hrs of weather measurements for each weather station in the DB"
-  task :summarize_daily => :environment do
+  task :summarize_last_24hrs => :environment do
     puts "Summarizing weather for last 24 hrs..."
     WeatherStation.all.each do |station|
+      print "\tWorking on #{station.name}... "
       # update stats then calculate PET
-      station.calculate_24hr_stats
-      station.calculate_24hr_pet
+      status1 = station.calculate_24hr_stats
+      status2 = station.calculate_24hr_pet
+      puts "calculate_24hr_stats...#{status1} calculate_24hr_pet...#{status2}"
     end
     puts "Done!"
   end
 end
 
-
+## EXPORTING DB
 namespace :db do
   desc "export the DB to csv files for quicker re-seeding"
   task :export => :environment do
@@ -80,8 +115,7 @@ namespace :db do
   end
 end
 
-
-# supporting code
+# supporting code for exporting DB to CSV
 require 'csv'
 
 def export_model_to_csv(model_class, csv_file)

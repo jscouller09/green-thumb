@@ -22,7 +22,9 @@ class WeatherStationsController < ApplicationController
     alert_messages = []
     active_alerts = policy_scope(WeatherAlert).where("dismissed = ? AND apply_until >= ?", false, DateTime.now())
     active_alerts.each do |alert|
-      alert_messages << alert.message
+      from = alert.begins.strftime("%l:%M %P %A, %b %e")
+      to = alert.apply_until.strftime("%l:%M %P %A, %b %e")
+      alert_messages << "#{alert.message} forcast from #{from} to #{to}. Protect your fragile plants!"
     end
     @alerts = alert_messages.join("&nbsp&nbsp&nbsp&nbsp&nbsp")
 
