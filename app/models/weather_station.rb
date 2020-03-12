@@ -317,7 +317,7 @@ class WeatherStation < ApplicationRecord
       data_to_keep[:sunset] = DateTime.strptime((data[:sys][:sunset] + tz).to_s,'%s')
     end
     data_to_keep[:timestamp] = DateTime.strptime((data[:dt] + tz).to_s,'%s')
-    data_to_keep[:timezone_UTC_offset] = DateTime.strptime(tz.to_s,'%s').strftime("#{tz.negative? ? '-' : '+'}%H%M")
+    data_to_keep[:timezone_UTC_offset] = DateTime.strptime(tz.to_s,'%s').strftime("#{tz.negative? ? '-' : ''}%H%M").to_i
     data_to_keep[:temp_c] = data[:main][:temp]
     data_to_keep[:temp_feels_like_c] = data[:main][:feels_like]
     data_to_keep[:humidity_perc] = data[:main][:humidity]

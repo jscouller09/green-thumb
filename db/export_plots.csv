@@ -1,0 +1,8 @@
+id,garden_id,name,shape,length_mm,width_mm,x,y,shady_spots,rooting_depth_mm,soil_type,created_at,updated_at,length_m,width_m,grid_cell_size_mm
+1,1,Front garden,rectangle,1000,2000,,,,,,2020-03-12 11:06:51 UTC,2020-03-12 11:06:51 UTC,1.0,2.0,10
+2,1,Veggie patch,rectangle,1000,1000,,,,,,2020-03-12 11:06:52 UTC,2020-03-12 11:06:52 UTC,1.0,1.0,10
+3,1,Back garden,rectangle,500,1500,,,,,,2020-03-12 11:06:52 UTC,2020-03-12 11:06:52 UTC,0.5,1.5,10
+4,2,Veggie patch,rectangle,1000,1500,,,,,,2020-03-12 11:06:52 UTC,2020-03-12 11:06:52 UTC,1.0,1.5,10
+5,2,Squash,rectangle,2000,2000,,,,,,2020-03-12 11:06:53 UTC,2020-03-12 11:06:53 UTC,2.0,2.0,10
+6,2,Sunny front garden,rectangle,3000,3500,,,,,,2020-03-12 11:06:53 UTC,2020-03-12 11:06:53 UTC,3.0,3.5,10
+7,3,Greensies,rectangle,2000,4000,,,,,,2020-03-12 11:06:54 UTC,2020-03-12 11:06:54 UTC,2.0,4.0,10

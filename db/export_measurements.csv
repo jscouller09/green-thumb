@@ -1,0 +1,2 @@
+id,timestamp,sunrise,sunset,timezone_UTC_offset,temp_c,humidity_perc,pressure_hPa,wind_speed_mps,wind_direction_deg,cloudiness_perc,rain_1h_mm,rain_3h_mm,snow_1h_mm,snow_3h_mm,code,main,description,icon,weather_station_id,created_at,updated_at,temp_feels_like_c,wind_direction
+2,2020-03-12 07:15:22 UTC,2020-03-12 07:11:29 UTC,2020-03-12 18:55:58 UTC,-2000,-4.14,79,1022,3.1,40,90,0.0,0.0,0.0,0.0,804,Clouds,overcast clouds,04d,6077251,2020-03-12 11:20:20 UTC,2020-03-12 11:20:20 UTC,-9.14,NE

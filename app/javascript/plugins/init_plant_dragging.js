@@ -76,13 +76,37 @@ const update_plant_counts=(plant_counts=null, plant_icons=null) => {
   if (plant_list) {
     if (plant_counts == null) {
       plant_counts=JSON.parse(plant_list.dataset.plant_counts);
+      // replace any underscores in the plant names
+      Object.keys(plant_counts).forEach(plant_type => {
+        let new_key = plant_type.replace(/_/gi," ");
+        if (new_key != plant_type) {
+          plant_counts[new_key] = plant_counts[plant_type];
+          delete plant_counts[plant_type];
+        }
+      });
     }
     if (plant_icons == null) {
       plant_icons=JSON.parse(plant_list.dataset.plant_icons)
+      // replace any underscores in the plant names
+      Object.keys(plant_icons).forEach(plant_type => {
+        let new_key = plant_type.replace(/_/gi," ");
+        if (new_key != plant_type) {
+          plant_icons[new_key] = plant_icons[plant_type];
+          delete plant_icons[plant_type];
+        }
+      });
     }
 
     // update the UL with the count of each plant type
     plant_list.innerHTML = "";
+    if (Object.keys(plant_counts).length === 0) {
+      let list_element = document.createElement('li');
+      list_element.classList.add('plant-group');
+      let p_element = document.createElement('p');
+      p_element.innerText = "You don't have any plants in the plot yet. Choose a plant to get started!";
+      list_element.appendChild(p_element);
+      plant_list.appendChild(list_element);
+    }
     // make a new list entry with the count and icon for each plant type
     Object.keys(plant_counts).forEach(plant_type => {
       let list_element = document.createElement('li');
@@ -300,11 +324,11 @@ const init_ineractjs=(plant) => {
       wheelbarrow.style.width = `${plant_size}px`;
       current_width = plant_size;
     }
-    // position plant in center of wheelbarrow area
-    plant.y = Math.round(-current_height/grid_size);
+    plant.y = Math.round(-current_height/grid_size - grid_size);
     // console.log(grid_size, grid_cols, plant_size/grid_size, Math.round(current_width/2/grid_size));
-    let wb_width = current_width/grid_size
-    plant.x = Math.round(grid_cols - wb_width + (plant_size/grid_size));
+    //let wb_width = current_width/grid_size
+    //plant.x = Math.round(grid_cols - wb_width + (plant_size/grid_size));
+    plant.x = Math.round(grid_cols - (plant_size/grid_size));
   }
 
   // store inital positions
