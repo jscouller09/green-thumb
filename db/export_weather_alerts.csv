@@ -1,4 +1,2 @@
-id,message,dismissed,apply_until,created_at,updated_at,weather_station_id
-1,Snow storm is coming,false,2020-09-13 00:00:00 UTC,2020-03-12 11:07:01 UTC,2020-03-12 11:07:01 UTC,7910036
-2,Ice rain on the way! Protect your crop,false,2020-09-08 00:00:00 UTC,2020-03-12 11:07:01 UTC,2020-03-12 11:07:01 UTC,7910036
-3,Heat wave.. Keep your plants cool...,false,2020-09-13 00:00:00 UTC,2020-03-12 11:07:01 UTC,2020-03-12 11:07:01 UTC,7910036
+id,message,dismissed,apply_until,created_at,updated_at,weather_station_id,code,main,description,begins
+1,potential frosts,false,2020-03-16 10:00:00 UTC,2020-03-12 18:17:07 UTC,2020-03-12 18:17:07 UTC,6077251,0,Clouds,broken clouds,2020-03-13 16:00:00 UTC
