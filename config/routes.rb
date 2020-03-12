@@ -39,7 +39,7 @@ Rails.application.routes.draw do
 
   #IMPORTANT - See current weather, forecast and alerts
   resources 'weather_stations', only: [:index, :show] do
-    patch 'weather_alert/:id/dismissed', to: 'weather_alerts#mark_as_dismissed', as: :dismissed_alert
+    patch 'dismissed', to: 'weather_alerts#mark_as_dismissed', as: :dismissed_alert
   end
 
   # #NICE TO HAVE - Display all conversations and create a message

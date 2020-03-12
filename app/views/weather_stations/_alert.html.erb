@@ -1,5 +1,8 @@
 <% unless @alerts.empty? %>
   <div class="weather-alert">
+    <%= link_to weather_station_dismissed_alert_path(@station), method: :patch, class: 'dismiss_alert' do %>
+      <i class="las la-times"></i>
+    <% end %>
      <div class="marquee">
       <div class="marquee-text">
         <strong>Alert</strong>: <%= @alerts.html_safe %>
