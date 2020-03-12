@@ -6,6 +6,8 @@ h1{
   }
 }
 
+
+
 .plot-overview {
   display: flex;
   justify-content: space-between;
@@ -57,16 +59,16 @@ h1{
 }
 
 #wheelbarrow {
-  flex: initial;
+  background-color: hsl(118, 17%, 81%);
+  border: 1px dashed $gray;
   flex-grow: 1;
+  flex: initial;
+  font-family: special elite;
   margin-left: 12px;
   margin-bottom: 12px;
-  background-color: $md-green;
-  padding: 8px;
-  border: 1px dashed $gray;
-  border-radius: 5px;
   max-width: 100%;
   min-width: 120px;
+  padding: 8px;
 
   p{
     text-align: center;
@@ -161,7 +163,7 @@ h1{
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto;
   grid-gap: 12px;
 }
