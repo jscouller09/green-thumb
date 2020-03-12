@@ -12,6 +12,11 @@
             <%= image_tag("icons/#{plant_type.icon}", id: "plot-card-icon" ) %>
             <div id="ammount_L">
               <span class="info-water"><%= plant_type.name %>:</span><span><%= total_water.round(1) %> L</span>
+             <span>
+               <%= link_to "Water", plot_plant_type_watered_path(@plot.id, plant_type.id),
+                  method: "PATCH",
+                  data: { modal_confirm: "You're sure that #{plant_type.name} is all watered?"}, class: "garden-button" %>
+             </span>
             </div>
           </button>
         <% end %>
