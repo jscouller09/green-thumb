@@ -42,10 +42,12 @@
 
             <% if index == 0 %>
               <div class="weather-card carousel-item active" style="border-left: 16px solid <%= weather_border %>; backface-visibility: inherit;">
-                <h3 id="weather-card-headline"><%= day %></h3>
+                <div id="weather-card-headline">
+                  <h3 ><%= day %></h3>
+                  <div class="weather-desc"><%= "#{data[:description]}" %></div>
+                </div>
                 <div class="forecast-card-text">
                   <div><%= image_tag "weather_icons/#{data[:icon]}.png" %></div>
-                    <div class="weather-desc"><%= "#{data[:description]}" %></div>
                     <div class="forecast-temp">
                       <div class="max-temp"> <p><%= "#{data[:temp_c_max].round(1)}°C" %></p></div>
                       <div class="min-temp"><p><%= "#{data[:temp_c_min].round(1)}°C" %></p></div>
@@ -60,10 +62,12 @@
               </div>
             <% else %>
               <div class="weather-card carousel-item" style="border-left: 16px solid <%= weather_border %>; backface-visibility: inherit;">
-                <h3 id="weather-card-headline"><%= day %></h3>
+                <div id="weather-card-headline">
+                  <h3><%= day %></h3>
+                    <div class="weather-desc"><%= "#{data[:description]}" %></div>
+                </div>
                 <div class="forecast-card-text">
                   <div><%= image_tag "weather_icons/#{data[:icon]}.png" %></div>
-                  <div class="weather-desc"><%= "#{data[:description]}" %></div>
                   <div class="forecast-temp">
                     <div class="max-temp"><p><%="#{data[:temp_c_max].round(1)}°C" %></p></div>
                     <div class="min-temp"><p><%= "#{data[:temp_c_min].round(1)}°C" %></p></div>

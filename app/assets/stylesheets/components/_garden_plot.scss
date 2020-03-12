@@ -117,8 +117,9 @@ h1{
     }
     &.needs-water {
       // turquoise equivalent with filters
+      filter: invert(82%) sepia(21%) saturate(788%) hue-rotate(165deg) brightness(95%) contrast(108%);
       // for plants to water
-      filter: invert(87%) sepia(16%) saturate(441%) hue-rotate(128deg) brightness(102%) contrast(99%);
+      // filter: invert(87%) sepia(16%) saturate(441%) hue-rotate(128deg) brightness(102%) contrast(99%);
     }
     &.highlight {
       // red-orange equivalent with filters
