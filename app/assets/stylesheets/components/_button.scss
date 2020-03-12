@@ -109,7 +109,23 @@
     text-decoration: none;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   }
+}
 
+.garden-new-btn{
+  align-items: center;
+  border-radius: 5px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  background-color: $md-green;
+  padding: 12px;
+  a {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  &:hover {
+    color: $green;
+    text-decoration: none;
+  }
 }
 
 #add-task-plus {
