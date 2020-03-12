@@ -1,9 +1,9 @@
 .weather-alert{
-  background-color: $red;
   color: white;
-  padding: 8px;
   text-align: left;
-  margin-bottom: 8px;
+  background-color: $red;
+  position: relative;
+  padding: 16px 0px 8px 0px;
 
   p{
     margin-bottom: 0px;
@@ -15,6 +15,19 @@
       white-space:nowrap;
       display:inline;
       width:auto;
+    }
+  }
+  .dismiss_alert{
+    color: $lt-green;
+    opacity: 0.7;
+    text-decoration: none;
+    position: absolute;
+    top:-2px;
+    right: 4px;
+    &:hover{
+    text-decoration: none;
+    opacity: 1;
+    font-weight: bolder;
     }
   }
 }
