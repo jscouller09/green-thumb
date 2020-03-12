@@ -20,7 +20,8 @@ class WeatherStationsController < ApplicationController
   #GET  /weather_stations/:id
   def show
     alert_messages = []
-    policy_scope(WeatherAlert).where(dismissed: false).each do |alert|
+    active_alerts = policy_scope(WeatherAlert).where("dismissed = ? AND apply_until >= ?", false, DateTime.now())
+    active_alerts.each do |alert|
       alert_messages << alert.message
     end
     @alerts = alert_messages.join("&nbsp&nbsp&nbsp&nbsp&nbsp")
