@@ -12,7 +12,7 @@
        <%= simple_form_for (task) do |form| %>
         <%= form.input :description %>
         <%= form.input :due_date, as: :string, input_html: {value: Date.today, class: "datepicker"} %>
-        <%= form.input :priority %>
+        <%= form.input :priority, collection: ["Low", "Medium", "High"] %>
         <%= form.button :submit, "Update!", class: "garden-button", id: "update button" %>
       <% end %>
       </div>
