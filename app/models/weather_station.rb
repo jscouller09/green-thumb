@@ -2,10 +2,10 @@ require 'open-uri'
 
 class WeatherStation < ApplicationRecord
   # associations
-  has_many :measurements
+  has_many :measurements, dependent: :destroy
   has_many :gardens
   has_many :users, through: :gardens
-  has_many :weather_alerts
+  has_many :weather_alerts, dependent: :destroy
 
   # validations
   validates :name, presence: true
@@ -325,18 +325,20 @@ class WeatherStation < ApplicationRecord
     data = JSON.parse(serialised_data, symbolize_names: true)
     # check if this station exists in the DB or not
     begin
-      WeatherStation.find(data[:id])
-    rescue ActiveRecord::RecordNotFound
+      stn = self.find(data[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      puts e.message
+      puts "Station not in DB, making new one...."
       # build weather station instance, save to DB and return it
-      return WeatherStation.create(id: data[:id],
-                                   name: data[:name],
-                                   country: data[:sys][:country],
-                                   lat: data[:coord][:lat],
-                                   lon: data[:coord][:lon])
-    else
-      # weather station exists, use it
-      return WeatherStation.find(data[:id])
+      stn = self.new(id: data[:id],
+                     name: data[:name],
+                     country: data[:sys][:country],
+                     lat: data[:coord][:lat],
+                     lon: data[:coord][:lon])
+      stn.save
+      return stn
     end
+    return stn
   end
 
   private

@@ -55,6 +55,11 @@ class GardensController < ApplicationController
       # call final validation on garden before saving
       if @garden.save
         flash[:notice] = 'Created new garden!'
+        # download current weather and store measurement
+        data = @garden.weather_station.download_current_weather
+        meas = Measurement.new(data)
+        meas.weather_station = @garden.weather_station
+        meas.save!
         # go to garden show page
         redirect_to garden_path(@garden)
       else

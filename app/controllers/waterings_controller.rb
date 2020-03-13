@@ -3,21 +3,32 @@ class WateringsController < ApplicationController
 
   # GET /waterings
   def watering_overview
-    @waterings = policy_scope(Watering)
-    @garden = policy_scope(Garden).first
-    @plots = []
-    @garden.plots.each do |plot|
-      plot.waterings.map do |watering|
-        @plots << plot unless watering.done?
+    gardens = policy_scope(Garden)
+    @garden = gardens.first unless gardens.empty?
+    @plots = @garden.plots unless @garden.nil?
+    if gardens.empty?
+      # render the garden index page with an option to create a new garden
+      render 'gardens/index'
+    elsif @plots.nil? || @plots.empty?
+      # if there are no plots go to the garden show page so you can create a plot
+      render "gardens/show"
+    else
+      @waterings = policy_scope(Watering)
+      # filter plots to be only those requiring water
+      @plots = []
+      @garden.plots.each do |plot|
+        plot.waterings.map do |watering|
+          @plots << plot unless watering.done?
+        end
+        @plots.uniq!
       end
-      @plots.uniq!
-    end
-    @main_plant_img = @garden.plots.map do |plot|
-      unless plot.plant_types.empty?
-        main_plant = plot.plant_types.group(:id).count.max.first
-        PlantType.find(main_plant).photo_url
-      else
-        "green-thumb/logo_vztasz"
+      @main_plant_img = @garden.plots.map do |plot|
+        unless plot.plant_types.empty?
+          main_plant = plot.plant_types.group(:id).count.max.first
+          PlantType.find(main_plant).photo_url
+        else
+          "green-thumb/logo_vztasz"
+        end
       end
     end
   end
