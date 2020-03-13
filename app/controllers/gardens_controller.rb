@@ -21,7 +21,8 @@ class GardensController < ApplicationController
     # Display image for the plant that the plot has the most of
     @main_plant_img = @plots.map do |plot|
       unless plot.plant_types.empty?
-        main_plant = plot.plant_types.group(:id).count.max.first
+        # find the id of the most common plant in your garden
+        main_plant = plot.plant_types.group(:id).count.max_by {|k, v| v}.first
         PlantType.find(main_plant).photo_url
       else
         "green-thumb/logo_vztasz"
