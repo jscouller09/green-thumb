@@ -222,9 +222,10 @@ class WeatherStation < ApplicationRecord
     vpd = e_s - e_a
 
     # WIND
-    # calculate 2m high windspeed assuming measured at 10m from surface
+    # calculate 2m high windspeed assuming measured at 2m from surface
     adj_windspeed = lambda { |u, y| u * (4.87 / Math.log(67.8*y - 5.42)) }
-    u_2 = adj_windspeed.call(self.avg_wind_speed_24_hr_mps, 10.0)
+    # u_2 = adj_windspeed.call(self.avg_wind_speed_24_hr_mps, 10.0)
+    u_2 = adj_windspeed.call(self.avg_wind_speed_24_hr_mps, 2.0)
 
     # NET RADIATION
     # julian day
