@@ -114,7 +114,7 @@ class PlantsController < ApplicationController
     pdate = new_plant[:plant_date]
     # how long does the plant take to be ready?
     t = new_plant.plant_life_days
-    new_task_buy = Task.new(description: "Buy your #{new_plant.plant_type.name}'s seeds",
+    new_task_buy = Task.new(description: "Buy your #{new_plant.plant_type.name} seeds",
                                 due_date: (new_plant[:plant_date] - 1),
                                 user_id: current_user.id,
                                 plant_id: new_plant.id)

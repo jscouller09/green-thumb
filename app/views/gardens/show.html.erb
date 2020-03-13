@@ -5,7 +5,7 @@
 </div>
 
 <div class="list">
-  <% if @plots.empty? %>
+  <% if @plots.nil? || @plots.empty? %>
     <!-- Let the user know they don't have any plots -->
     <p>Sorry! You don't have any plots yet</p>
   <% else %>
