@@ -285,8 +285,12 @@ const add_plant_to_plot=(plant) => {
   // thumbnail.style.backgroundImage = `url("https://res.cloudinary.com/dm6mj1qp1/image/upload/v1583325509/${plant.photo_url}")`;
   thumbnail.style.backgroundImage = `url("${plant.icon}")`;
 
-  // add event listener for double click on icon
-  thumbnail.addEventListener('dblclick', (event) => {
+  // add event listener for double click on icon (plot show page only)
+  let event_trigger = 'click';
+  if (plant.watering == null) {
+    event_trigger = 'dblclick';
+  }
+  thumbnail.addEventListener(event_trigger, (event) => {
     // want to operate on parent div of thumbnail icon that was clicked
     if (plant.watering >= 0) {
       // has watering info, so on watering dashboard
