@@ -51,8 +51,30 @@
   text-align: left;
   min-width: 100px;
 }
-#ammount_L {
-  width: 50%;
+// #ammount_L {
+//   width: 50%;
+//   display:flex;
+//   justify-content: space-between;
+//   align-content: center;
+// }
+
+.watering-ammount-L {
+  div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   display:flex;
   justify-content: space-between;
+   align-items: center;
+
+
+}
+
+#wtr-btn {
+  margin: 0;
+  display: flex;
+  flex-shrink: 2;
+  min-width: 80px;
 }
