@@ -72,6 +72,10 @@
   .active {
     border: none;
     background: none;
+    outline: none;
+  }
+  &:focus, &:active {
+    outline: none;
   }
 }
 
@@ -92,11 +96,9 @@
   h1 {
     font-size: 54px;
   }
-  &:hover {
+  &:target, &:hover, &:focus {
     border: none;
-  }
-  &:target {
-    border: none;
+    outline: none;
   }
 }
 .sign-up-button{
