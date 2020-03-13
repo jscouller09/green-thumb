@@ -91,12 +91,15 @@ class WateringsController < ApplicationController
     @plant_type = @plot.plant_types.find(params[:plant_type_id])
     # select all the plant of that plant-type that need water
     # @waterings_plant_type = @plant_type.plants.map { |plant| plant.waterings.select { done ==false }
-    @waterings_to_update = Watering.joins(:plant).where(
+    @waterings_to_update = @plot.waterings.joins(:plant).where(
       done: false,
       plants: { plant_type_id: @plant_type.id }
     )
     # update all the plant of this plant type
-    @waterings_to_update.each {|watering| watering.update(done: true)}
+    watering_ids = @waterings_to_update.map { |watering| watering.id }
+    @waterings_to_update.update_all(done: true)
+    # after watering, update the plant water deficit
+    UpdateWaterDeficitJob.perform_later({waterings: watering_ids})
     redirect_to plot_waterings_path
   end
 
@@ -107,7 +110,7 @@ class WateringsController < ApplicationController
     plot = watering.plant.plot
     watering.update(done: true)
     # after watering, update the plant water deficit
-    watering.update_plant_water_deficit
+    UpdateWaterDeficitJob.perform_later({waterings: [watering.id]})
     # redirect to plot waterings
     redirect_to plot_waterings_path(plot)
   end
@@ -116,13 +119,12 @@ class WateringsController < ApplicationController
   def complete_plot_watering
     plot = Plot.find(params[:plot_id])
     authorize plot
-    waterings = plot.waterings
-    waterings.each do |watering|
-      watering.update(done: true)
-      # after watering, update the plant water deficit
-      watering.update_plant_water_deficit
-    end
-      redirect_to plot_waterings_path
+    waterings = plot.waterings.where(done: false)
+    watering_ids = waterings.map { |watering| watering.id }
+    waterings.update_all(done: true)
+    # after watering, update the plant water deficit
+    UpdateWaterDeficitJob.perform_later({waterings: watering_ids})
+    redirect_to plot_waterings_path
   end
 
   private
