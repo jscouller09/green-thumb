@@ -5,6 +5,8 @@ ruby '2.6.5'
 gem 'geocoder'
 gem 'pundit'
 gem 'cloudinary', '~> 1.12.0'
+gem 'sidekiq'
+gem 'sidekiq-failures', '~> 1.0'
 
 # from template
 gem 'bootsnap', require: false
