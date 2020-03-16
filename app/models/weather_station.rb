@@ -110,7 +110,7 @@ class WeatherStation < ApplicationRecord
     forecast = download_3hrly_5d_forecast
     # get current alerts and the codes associated with them
     alert_ids = self.weather_alerts.where("apply_until >= ?", DateTime.now()).select(:id).map { |a| a.id }
-    alert_codes = alert_codes = alert_ids.map { |a| WeatherAlert.find(a).code }
+    alert_codes = alert_ids.map { |a| WeatherAlert.find(a).code }
     # go through each predicition in the forecast over the next 3 days = 72 hrs = 24x3hr intervals
     forecast.first(24).each do |prediction|
       # convert timestamp to UTC
@@ -137,12 +137,12 @@ class WeatherStation < ApplicationRecord
         # add alert to list of alerts
         if new_alert && new_alert.save
           alert_ids << new_alert.id
-          alert_codes << new_alert.code
+          alert_codes << new_alert.grouped_code
         end
       else
         # this code exists, update the applies until to the current timestamp
         # find most recent alert for this code
-        alert_id = alert_ids[alert_codes.rindex(code)]
+        alert_id = alert_ids[alert_codes.rindex(grouped_code)]
         alert = WeatherAlert.find(alert_id)
         # update the apply_until timestamp
         alert.update(apply_until: timestamp_UTC)
@@ -155,7 +155,7 @@ class WeatherStation < ApplicationRecord
         # add alert to list of alerts
         if new_alert && new_alert.save
           alert_ids << new_alert.id
-          alert_codes << new_alert.code
+          alert_codes << new_alert.grouped_code
         end
         else
           # already have a frost predicted, update the applies until to the current timestamp
