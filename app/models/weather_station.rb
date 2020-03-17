@@ -6,6 +6,7 @@ class WeatherStation < ApplicationRecord
   has_many :gardens
   has_many :users, through: :gardens
   has_many :weather_alerts, dependent: :destroy
+  has_many :daily_summaries, dependent: :destroy
 
   # validations
   validates :name, presence: true
@@ -21,6 +22,8 @@ class WeatherStation < ApplicationRecord
   validates :elevation_m,
             numericality: { allow_nil: true }
   validates :tot_rain_24_hr_mm,
+            numericality: { allow_nil: true, greater_than_or_equal_to: 0.0 }
+  validates :tot_snow_24_hr_mm,
             numericality: { allow_nil: true, greater_than_or_equal_to: 0.0 }
   validates :tot_pet_24_hr_mm,
             numericality: { allow_nil: true, greater_than_or_equal_to: 0.0 }
@@ -198,6 +201,7 @@ class WeatherStation < ApplicationRecord
     yesterday = DateTime.now.utc - 24.hours
     self.timestamp = self.measurements.where("created_at >= ?", yesterday).select(:timestamp).last[:timestamp]
     self.tot_rain_24_hr_mm = self.measurements.where("created_at >= ?", yesterday).sum(:rain_1h_mm)
+    self.tot_snow_24_hr_mm = self.measurements.where("created_at >= ?", yesterday).sum(:snow_1h_mm)
     self.min_temp_24_hr_c = self.measurements.where("created_at >= ?", yesterday).minimum(:temp_c)
     self.avg_temp_24_hr_c = self.measurements.where("created_at >= ?", yesterday).average(:temp_c)
     self.max_temp_24_hr_c = self.measurements.where("created_at >= ?", yesterday).maximum(:temp_c)
@@ -267,6 +271,9 @@ class WeatherStation < ApplicationRecord
 
     self.tot_pet_24_hr_mm = et_0
     self.save
+
+    # also create an instance of daily_summary
+    DailySummary.create(weather_station_id: self)
   end
 
   def weather_summary

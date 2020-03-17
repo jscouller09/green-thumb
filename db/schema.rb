@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_12_160640) do
+ActiveRecord::Schema.define(version: 2020_03_17_160422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,23 @@ ActiveRecord::Schema.define(version: 2020_03_12_160640) do
   create_table "conversations", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "daily_summaries", force: :cascade do |t|
+    t.datetime "timestamp"
+    t.float "tot_rain_24_hr_mm"
+    t.float "tot_pet_24_hr_mm"
+    t.float "tot_snow_24_hr_mm"
+    t.float "min_temp_24_hr_c"
+    t.float "avg_temp_24_hr_c"
+    t.float "max_temp_24_hr_c"
+    t.float "avg_humidity_24_hr_perc"
+    t.float "avg_wind_speed_24_hr_mps"
+    t.float "avg_pressure_24_hr_hPa"
+    t.bigint "weather_station_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["weather_station_id"], name: "index_daily_summaries_on_weather_station_id"
   end
 
   create_table "gardens", force: :cascade do |t|
@@ -93,6 +110,8 @@ ActiveRecord::Schema.define(version: 2020_03_12_160640) do
     t.datetime "updated_at", null: false
     t.float "temp_feels_like_c"
     t.string "wind_direction"
+    t.bigint "daily_summary_id"
+    t.index ["daily_summary_id"], name: "index_measurements_on_daily_summary_id"
     t.index ["weather_station_id"], name: "index_measurements_on_weather_station_id"
   end
 
@@ -239,9 +258,12 @@ ActiveRecord::Schema.define(version: 2020_03_12_160640) do
     t.float "avg_pressure_24_hr_hPa"
     t.float "avg_temp_24_hr_c"
     t.datetime "timestamp"
+    t.float "tot_snow_24_hr_mm"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "daily_summaries", "weather_stations"
+  add_foreign_key "measurements", "daily_summaries"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users"
   add_foreign_key "weather_alerts", "weather_stations"

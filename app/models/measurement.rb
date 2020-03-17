@@ -1,6 +1,7 @@
 class Measurement < ApplicationRecord
   # associations
   belongs_to :weather_station
+  belongs_to :daily_summary, optional: true
 
   # validations
   validates_associated :weather_station
