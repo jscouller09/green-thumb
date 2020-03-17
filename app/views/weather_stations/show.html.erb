@@ -9,8 +9,8 @@
   <!-- Station name and country -->
   <div class="current-weather">
     <div class="weather-header">
-      <div><%= "#{@current[:timestamp].strftime("%l:%M %P %A, %b %e")}" %></div>
       <h3 id="weather-station-headline"><%= "#{@station.name}, #{@station.country}" %></h3>
+      <div><%= "#{@current[:timestamp].strftime("%l:%M %P %A, %b %e")}" %></div>
       <div class="weather-description"><%= "#{@current[:description]}" %></div>
     </div>
 
