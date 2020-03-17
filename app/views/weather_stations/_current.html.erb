@@ -13,8 +13,8 @@
   <div class="weather-card-temperature">
     <div class="weather-icon"><%= image_tag "weather_icons/#{data[:icon]}.png" %></div>
       <div class="temperature">
-        <p class= "current-temp"><%= "#{data[:temp_c]}°C" %></p>
-        <p class="feel-like"><%= "Feels like: #{data[:temp_feels_like_c]}°C" %></p>
+        <p class= "current-temp"><%= "#{data[:temp_c].round(1)}°C" %></p>
+        <p class="feel-like"><%= "Feels like: #{data[:temp_feels_like_c].round(1)}°C" %></p>
       </div>
   </div>
     <div id="weather-card-text">
@@ -22,12 +22,12 @@
         <p> <%= image_tag 'weather_icons/dawn.svg'%> <%="#{data[:sunrise].strftime("%l:%M %P")}" %></p>
         <p><%= image_tag 'weather_icons/sunset.svg'%> <%= "#{data[:sunset].strftime("%l:%M %P")}" %></p>
       </div>
-      <p><%= "Humidity: #{data[:humidity_perc]}%" %></p>
+      <p><%= "Humidity: #{data[:humidity_perc].round(0)}%" %></p>
       <!-- <div><%= "Pressure (hPa): #{data[:pressure_hPa]}" %></div> -->
       <p><%= "Wind: #{data[:wind_direction]} #{(data[:wind_speed_mps]*3.6).round(0)} km/h" %></p>
-      <p><%= "Rain last 3 hrs: #{data[:rain_3h_mm].round(1)} mm" %></p>
-      <% unless data[:snow_3h_mm].zero? %>
-        <div><%= "Snow last 3 hrs: #{data[:snow_3h_mm].round(1)} mm" %></p>
+      <p><%= "Rain last 24 hrs: #{data[:tot_rain_24_hr_mm].nil? ? 0.0 : data[:tot_rain_24_hr_mm].round(1)} mm" %></p>
+      <% unless data[:tot_snow_24_hr_mm].nil? || data[:tot_snow_24_hr_mm].zero? %>
+        <p><%= "Snow last 24 hrs: #{data[:tot_snow_24_hr_mm].round(1)} mm" %></p>
       <% end %>
   </div>
 </div>
