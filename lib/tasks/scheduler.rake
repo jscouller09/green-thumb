@@ -1,22 +1,26 @@
 desc "All tasks that need to be run once per hour"
 task :hourly_tasks => :environment do
   puts "Running hourly tasks...."
+  ActiveRecord::Base.logger.level = 1
   # current weather download and creation of measurements
   Rake::Task["weather:download_current"].invoke
   # forecast download and creation of any alerts
   Rake::Task["weather:check_forecast"].invoke
+  ActiveRecord::Base.logger.level = 0
   puts "Done!"
 end
 
 desc "All tasks that need to be run once per day"
 task :daily_tasks => :environment do
   puts "Running daily tasks...."
+  ActiveRecord::Base.logger.level = 1
   # summarize weather for last 24 hrs and calculate PET
   Rake::Task["weather:summarize_last_24hrs"].invoke
   # updated planted status
   Rake::Task["plants:check_planted"].invoke
   # generate waterings
   Rake::Task["plants:calculate_water_requirements"].invoke
+  ActiveRecord::Base.logger.level = 0
   puts "Done!"
 end
 
@@ -94,6 +98,8 @@ namespace :db do
     export_model_to_csv(WeatherStation, 'export_weather_stations.csv')
     puts "Exporting measurements..."
     export_model_to_csv(Measurement, 'export_measurements.csv')
+    puts "Exporting daily summaries..."
+    export_model_to_csv(DailySummary, 'export_daily_summaries.csv')
     puts "Export weather alerts..."
     export_model_to_csv(WeatherAlert, 'export_weather_alerts.csv')
     puts "Exporting climate zones..."

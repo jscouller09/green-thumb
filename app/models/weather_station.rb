@@ -3,10 +3,13 @@ require 'open-uri'
 class WeatherStation < ApplicationRecord
   # associations
   has_many :measurements, dependent: :destroy
-  has_many :gardens
-  has_many :users, through: :gardens
   has_many :weather_alerts, dependent: :destroy
   has_many :daily_summaries, dependent: :destroy
+  has_many :gardens, dependent: :destroy
+  has_many :users, through: :gardens
+  has_many :plots, through: :gardens
+  has_many :plants, through: :plots
+  has_many :waterings, through: :plants
 
   # validations
   validates :name, presence: true
@@ -140,7 +143,7 @@ class WeatherStation < ApplicationRecord
         # add alert to list of alerts
         if new_alert && new_alert.save
           alert_ids << new_alert.id
-          alert_codes << new_alert.grouped_code
+          alert_codes << new_alert.code
         end
       else
         # this code exists, update the applies until to the current timestamp
@@ -149,6 +152,8 @@ class WeatherStation < ApplicationRecord
         alert = WeatherAlert.find(alert_id)
         # update the apply_until timestamp
         alert.update(apply_until: timestamp_UTC)
+        # update the begin timestamp
+        alert.update(begins: [DateTime.now, alert.begins].max)
       end
       # check if we need to generate a frost alert
       if prediction[:temp_c] <= 1.0
@@ -158,7 +163,7 @@ class WeatherStation < ApplicationRecord
         # add alert to list of alerts
         if new_alert && new_alert.save
           alert_ids << new_alert.id
-          alert_codes << new_alert.grouped_code
+          alert_codes << new_alert.code
         end
         else
           # already have a frost predicted, update the applies until to the current timestamp
@@ -167,6 +172,8 @@ class WeatherStation < ApplicationRecord
           alert = WeatherAlert.find(alert_id)
           # update the apply_until timestamp
           alert.update(apply_until: timestamp_UTC)
+          # update the begin timestamp
+          alert.update(begins: [DateTime.now, alert.begins].max)
         end
       end
     end
@@ -199,7 +206,11 @@ class WeatherStation < ApplicationRecord
   def calculate_24hr_stats
     # get all measurements for the current station from last 24 hrs
     yesterday = DateTime.now.utc - 24.hours
-    self.timestamp = self.measurements.where("created_at >= ?", yesterday).select(:timestamp).last[:timestamp]
+    # convert timestamp to UTC
+    last_measurement = self.measurements.where("created_at >= ?", yesterday).last
+    tz = last_measurement[:timezone_UTC_offset]
+    timestamp_UTC = last_measurement[:timestamp].change(offset: tz[0] == "-" ? tz : "+#{tz}")
+    self.timestamp = timestamp_UTC
     self.tot_rain_24_hr_mm = self.measurements.where("created_at >= ?", yesterday).sum(:rain_1h_mm)
     self.tot_snow_24_hr_mm = self.measurements.where("created_at >= ?", yesterday).sum(:snow_1h_mm)
     self.min_temp_24_hr_c = self.measurements.where("created_at >= ?", yesterday).minimum(:temp_c)
@@ -270,16 +281,35 @@ class WeatherStation < ApplicationRecord
     et_0 = et_0_numerator / et_0_denomenator
 
     self.tot_pet_24_hr_mm = et_0
-    self.save
+    status1 = self.save
 
     # also create an instance of daily_summary
-    DailySummary.create(weather_station_id: self)
+    summary = DailySummary.new(weather_station: self)
+    status2 = summary.save
+
+    # return status of saves
+    status1 && status2
   end
 
   def weather_summary
     # get current data
     summary = {}
     summary[:now] = download_current_weather
+    # store current weather as a measurement instance
+    meas = Measurement.new(summary[:now])
+    meas.weather_station =  self
+    meas.save
+    # get stats for last 24hrs
+    summary[:now][:timestamp] = timestamp
+    summary[:now][:tot_rain_24_hr_mm] = tot_rain_24_hr_mm
+    summary[:now][:tot_pet_24_hr_mm] = tot_pet_24_hr_mm
+    summary[:now][:tot_snow_24_hr_mm] = tot_snow_24_hr_mm
+    summary[:now][:min_temp_24_hr_c] = min_temp_24_hr_c
+    summary[:now][:avg_temp_24_hr_c] = avg_temp_24_hr_c
+    summary[:now][:max_temp_24_hr_c] = max_temp_24_hr_c
+    summary[:now][:avg_humidity_24_hr_perc] = avg_humidity_24_hr_perc
+    summary[:now][:avg_wind_speed_24_hr_mps] = avg_wind_speed_24_hr_mps
+    summary[:now][:avg_pressure_24_hr_hPa] = avg_pressure_24_hr_hPa
     # get forecast data
     forecast = download_3hrly_5d_forecast
     # seperate data into measurements for different days

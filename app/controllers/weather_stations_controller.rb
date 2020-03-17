@@ -34,10 +34,6 @@ class WeatherStationsController < ApplicationController
     weather = @station.weather_summary
     # unpack current weather and forecast
     @current = weather[:now]
-    # store current weather as a measurement instance
-    meas = Measurement.new(@current)
-    meas.weather_station =  @station
-    meas.save
     # note forecast shown is only next 3 days (excluding today)
     # could change later so forecast for remainder of today is shown also?
     @forecast = {}
