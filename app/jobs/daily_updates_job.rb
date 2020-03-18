@@ -22,6 +22,8 @@ class DailyUpdatesJob < ApplicationJob
         # assign measurements the correct daily summary
         station.measurements.where("created_at >= ?", yesterday).update_all(daily_summary_id: summary.id)
       end
+      # clear plots associated with this weather station
+      station.plots.each { |plot| plot.clear_wheelbarrow }
       # check plants associated with this weather station
       status_planted = []
       status_crop = []
