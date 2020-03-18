@@ -208,7 +208,9 @@ class WeatherStation < ApplicationRecord
     yesterday = DateTime.now.utc - 24.hours
     measurements = self.measurements.where("created_at >= ?", yesterday).order(created_at: :asc)
     # convert timestamp to UTC
-    self.timestamp = measurements.last.timestamp_UTC
+    last_measurement = measurements.last
+    tz = last_measurement[:timezone_UTC_offset]
+    self.timestamp = last_measurement.timestamp.change(offset: tz[0] == "-" ? tz : "+#{tz}")
     # min and max temperature are straightforward
     self.min_temp_24_hr_c = measurements.minimum(:temp_c)
     self.max_temp_24_hr_c = measurements.maximum(:temp_c)
