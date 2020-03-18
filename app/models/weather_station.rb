@@ -3,9 +3,13 @@ require 'open-uri'
 class WeatherStation < ApplicationRecord
   # associations
   has_many :measurements, dependent: :destroy
-  has_many :gardens
-  has_many :users, through: :gardens
   has_many :weather_alerts, dependent: :destroy
+  has_many :daily_summaries, dependent: :destroy
+  has_many :gardens, dependent: :destroy
+  has_many :users, through: :gardens
+  has_many :plots, through: :gardens
+  has_many :plants, through: :plots
+  has_many :waterings, through: :plants
 
   # validations
   validates :name, presence: true
@@ -21,6 +25,8 @@ class WeatherStation < ApplicationRecord
   validates :elevation_m,
             numericality: { allow_nil: true }
   validates :tot_rain_24_hr_mm,
+            numericality: { allow_nil: true, greater_than_or_equal_to: 0.0 }
+  validates :tot_snow_24_hr_mm,
             numericality: { allow_nil: true, greater_than_or_equal_to: 0.0 }
   validates :tot_pet_24_hr_mm,
             numericality: { allow_nil: true, greater_than_or_equal_to: 0.0 }
@@ -137,7 +143,7 @@ class WeatherStation < ApplicationRecord
         # add alert to list of alerts
         if new_alert && new_alert.save
           alert_ids << new_alert.id
-          alert_codes << new_alert.grouped_code
+          alert_codes << new_alert.code
         end
       else
         # this code exists, update the applies until to the current timestamp
@@ -146,6 +152,8 @@ class WeatherStation < ApplicationRecord
         alert = WeatherAlert.find(alert_id)
         # update the apply_until timestamp
         alert.update(apply_until: timestamp_UTC)
+        # update the begin timestamp
+        alert.update(begins: [DateTime.now, alert.begins].max)
       end
       # check if we need to generate a frost alert
       if prediction[:temp_c] <= 1.0
@@ -155,7 +163,7 @@ class WeatherStation < ApplicationRecord
         # add alert to list of alerts
         if new_alert && new_alert.save
           alert_ids << new_alert.id
-          alert_codes << new_alert.grouped_code
+          alert_codes << new_alert.code
         end
         else
           # already have a frost predicted, update the applies until to the current timestamp
@@ -164,6 +172,8 @@ class WeatherStation < ApplicationRecord
           alert = WeatherAlert.find(alert_id)
           # update the apply_until timestamp
           alert.update(apply_until: timestamp_UTC)
+          # update the begin timestamp
+          alert.update(begins: [DateTime.now, alert.begins].max)
         end
       end
     end
@@ -196,14 +206,48 @@ class WeatherStation < ApplicationRecord
   def calculate_24hr_stats
     # get all measurements for the current station from last 24 hrs
     yesterday = DateTime.now.utc - 24.hours
-    self.timestamp = self.measurements.where("created_at >= ?", yesterday).select(:timestamp).last[:timestamp]
-    self.tot_rain_24_hr_mm = self.measurements.where("created_at >= ?", yesterday).sum(:rain_1h_mm)
-    self.min_temp_24_hr_c = self.measurements.where("created_at >= ?", yesterday).minimum(:temp_c)
-    self.avg_temp_24_hr_c = self.measurements.where("created_at >= ?", yesterday).average(:temp_c)
-    self.max_temp_24_hr_c = self.measurements.where("created_at >= ?", yesterday).maximum(:temp_c)
-    self.avg_humidity_24_hr_perc = self.measurements.where("created_at >= ?", yesterday).average(:humidity_perc)
-    self.avg_wind_speed_24_hr_mps = self.measurements.where("created_at >= ?", yesterday).average(:wind_speed_mps)
-    self.avg_pressure_24_hr_hPa = self.measurements.where("created_at >= ?", yesterday).average(:pressure_hPa)
+    measurements = self.measurements.where("created_at >= ?", yesterday).order(created_at: :asc)
+    # convert timestamp to UTC
+    last_measurement = measurements.last
+    tz = last_measurement[:timezone_UTC_offset]
+    self.timestamp = last_measurement.timestamp.change(offset: tz[0] == "-" ? tz : "+#{tz}")
+    # min and max temperature are straightforward
+    self.min_temp_24_hr_c = measurements.minimum(:temp_c)
+    self.max_temp_24_hr_c = measurements.maximum(:temp_c)
+    # for totals/averages need to consider timing of measurements
+    cur_ts = measurements.first.timestamp
+    last_ts = measurements.first.timestamp
+    total_ts = 0
+    total_rain = 0.0
+    total_snow = 0.0
+    avg_t = 0.0
+    avg_h = 0.0
+    avg_w = 0.0
+    avg_p = 0.0
+    measurements.each do |meas|
+      # for total rainfall and snowfall, only add if 1 hr apart to avoid double ups
+      if meas.timestamp >= cur_ts + 58.minutes
+        # measurements are approx 1 hour apart, add total rainfall and snow
+        total_rain += meas.rain_1h_mm
+        total_snow += meas.snow_1h_mm
+        # update last timestamp
+        cur_ts = meas.timestamp
+      end
+      # for average measurements, weight by duration between measurements
+      delta_t_ms = meas.timestamp - last_ts
+      total_ts += delta_t_ms
+      avg_t += delta_t_ms * meas.temp_c
+      avg_h += delta_t_ms * meas.humidity_perc
+      avg_w += delta_t_ms * meas.wind_speed_mps
+      avg_p += delta_t_ms * meas.pressure_hPa
+      last_ts = meas.timestamp
+    end
+    self.tot_rain_24_hr_mm = total_rain
+    self.tot_snow_24_hr_mm = total_snow
+    self.avg_temp_24_hr_c = avg_t / total_ts
+    self.avg_humidity_24_hr_perc = avg_h / total_ts
+    self.avg_wind_speed_24_hr_mps = avg_w / total_ts
+    self.avg_pressure_24_hr_hPa = avg_p / total_ts
     self.save
   end
 
@@ -273,6 +317,23 @@ class WeatherStation < ApplicationRecord
     # get current data
     summary = {}
     summary[:now] = download_current_weather
+    # store current weather as a measurement instance
+    meas = Measurement.new(summary[:now])
+    meas.weather_station =  self
+    meas.save
+    # update stats for last 24hrs
+    calculate_24hr_stats
+    calculate_24hr_pet
+    # get stats for last 24hrs
+    summary[:now][:tot_rain_24_hr_mm] = self.tot_rain_24_hr_mm
+    summary[:now][:tot_pet_24_hr_mm] = self.tot_pet_24_hr_mm
+    summary[:now][:tot_snow_24_hr_mm] = self.tot_snow_24_hr_mm
+    summary[:now][:min_temp_24_hr_c] = self.min_temp_24_hr_c
+    summary[:now][:avg_temp_24_hr_c] = self.avg_temp_24_hr_c
+    summary[:now][:max_temp_24_hr_c] = self.max_temp_24_hr_c
+    summary[:now][:avg_humidity_24_hr_perc] = self.avg_humidity_24_hr_perc
+    summary[:now][:avg_wind_speed_24_hr_mps] = self.avg_wind_speed_24_hr_mps
+    summary[:now][:avg_pressure_24_hr_hPa] = self.avg_pressure_24_hr_hPa
     # get forecast data
     forecast = download_3hrly_5d_forecast
     # seperate data into measurements for different days
@@ -420,13 +481,22 @@ class WeatherStation < ApplicationRecord
 
   def format_response(data = {})
     data_to_keep = {}
+    # timezone offset is supplied in seconds, convert to hh:mm offset
     tz = data[:timezone]
     unless data[:sys][:sunrise].nil?
       data_to_keep[:sunrise] = DateTime.strptime((data[:sys][:sunrise] + tz).to_s,'%s')
       data_to_keep[:sunset] = DateTime.strptime((data[:sys][:sunset] + tz).to_s,'%s')
     end
     data_to_keep[:timestamp] = DateTime.strptime((data[:dt] + tz).to_s,'%s')
-    data_to_keep[:timezone_UTC_offset] = DateTime.strptime(tz.to_s,'%s').strftime("#{tz.negative? ? '-' : ''}%H%M")
+    if tz.negative?
+      # offset is behind UTC
+      temp_date = DateTime.strptime((-tz).to_s,'%s')
+      data_to_keep[:timezone_UTC_offset] = temp_date.strftime("-%H:%M")
+    else
+      # offset is ahead of UTC
+      temp_date = DateTime.strptime(tz.to_s,'%s')
+      data_to_keep[:timezone_UTC_offset] = temp_date.strftime("%H:%M")
+    end
     data_to_keep[:temp_c] = data[:main][:temp]
     data_to_keep[:temp_feels_like_c] = data[:main][:feels_like]
     data_to_keep[:humidity_perc] = data[:main][:humidity]

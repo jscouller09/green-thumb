@@ -9,3 +9,6 @@ id,user_id,plant_id,description,due_date,completed,priority,created_at,updated_a
 8,2,,Turn over the new vegetable patch,2020-03-21,false,low,2020-03-12 11:06:59 UTC,2020-03-12 11:06:59 UTC
 9,3,,Turn over the new vegetable patch,2020-03-21,false,low,2020-03-12 11:06:59 UTC,2020-03-12 11:06:59 UTC
 10,6,,test,,false,,2020-03-12 12:28:43 UTC,2020-03-12 12:28:43 UTC
+14,2,29,Harvest your Asparagus planted on 16 Mar,2020-11-01,false,low,2020-03-16 21:51:55 UTC,2020-03-16 21:51:55 UTC
+15,2,29,Plant your Asparagus,2020-03-16,false,high,2020-03-16 21:51:55 UTC,2020-03-16 21:51:55 UTC
+16,2,29,Buy your Asparagus seeds,2020-03-15,false,high,2020-03-16 21:51:55 UTC,2020-03-16 21:51:55 UTC

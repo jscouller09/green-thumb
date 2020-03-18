@@ -1,2 +1,6 @@
 id,message,dismissed,apply_until,created_at,updated_at,weather_station_id,code,main,description,begins
 1,potential frosts,false,2020-03-16 10:00:00 UTC,2020-03-12 18:17:07 UTC,2020-03-12 18:17:07 UTC,6077251,0,Clouds,broken clouds,2020-03-13 16:00:00 UTC
+2,snow or sleet,false,2020-03-19 09:00:00 UTC,2020-03-16 17:26:03 UTC,2020-03-16 17:31:01 UTC,2640729,6000,Snow,snow,2020-03-19 06:00:00 UTC
+3,snow or sleet,false,2020-03-18 10:00:00 UTC,2020-03-17 16:17:53 UTC,2020-03-17 16:17:53 UTC,6077251,6000,Snow,snow,2020-03-18 10:00:00 UTC
+5,potential frosts,false,2020-03-20 03:00:00 UTC,2020-03-17 16:23:25 UTC,2020-03-17 16:23:25 UTC,2640729,0,Clouds,overcast clouds,2020-03-20 03:00:00 UTC
+4,potential frosts,false,2020-03-20 07:00:00 UTC,2020-03-17 16:23:25 UTC,2020-03-17 17:13:30 UTC,6077251,0,Clouds,broken clouds,2020-03-18 19:00:00 UTC

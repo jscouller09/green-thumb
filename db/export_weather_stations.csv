@@ -1,4 +1,4 @@
-id,name,country,lat,lon,created_at,updated_at,elevation_m,tot_rain_24_hr_mm,tot_pet_24_hr_mm,min_temp_24_hr_c,max_temp_24_hr_c,avg_humidity_24_hr_perc,avg_wind_speed_24_hr_mps,avg_pressure_24_hr_hPa,avg_temp_24_hr_c,timestamp
-7910036,Christchurch City,NZ,-43.645779,172.745865,2020-03-12 11:06:47 UTC,2020-03-12 11:59:15 UTC,72.0,0.0,,10.17,10.17,81.0,2.1,1027.0,10.17,2020-03-13 00:51:13 UTC
-6077251,Montreal-Est,CA,45.632019,-73.5075,2020-03-12 11:06:47 UTC,2020-03-12 11:59:16 UTC,19.0,0.0,,-4.17,-4.17,79.0,4.1,1022.0,-4.17,2020-03-12 07:57:38 UTC
-2640729,Oxford,GB,51.75,-1.26,2020-03-12 12:29:31 UTC,2020-03-12 12:29:31 UTC,71.0,,,,,,,,,
+id,name,country,lat,lon,created_at,updated_at,elevation_m,tot_rain_24_hr_mm,tot_pet_24_hr_mm,min_temp_24_hr_c,max_temp_24_hr_c,avg_humidity_24_hr_perc,avg_wind_speed_24_hr_mps,avg_pressure_24_hr_hPa,avg_temp_24_hr_c,timestamp,tot_snow_24_hr_mm
+7910036,Christchurch City,NZ,-43.645779,172.745865,2020-03-12 11:06:47 UTC,2020-03-17 17:13:42 UTC,72.0,0.0,0.507179367878354,2.12,2.61,97.2,0.86,1022.0,2.368,2020-03-18 06:13:30 UTC,0.0
+6077251,Montreal-Est,CA,45.632019,-73.5075,2020-03-12 11:06:47 UTC,2020-03-17 17:21:40 UTC,19.0,7.64,0.250249577532143,1.4,1.96,99.4,6.4,1013.0,1.624,2020-03-17 13:10:49 UTC,3.06
+2640729,Oxford,GB,51.75,-1.26,2020-03-12 12:29:31 UTC,2020-03-17 17:21:40 UTC,71.0,0.0,1.27987684388477,11.56,11.94,84.6,7.1,1025.0,11.788,2020-03-17 17:09:47 UTC,0.0

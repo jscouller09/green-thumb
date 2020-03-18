@@ -25,15 +25,17 @@ class Plant < ApplicationRecord
     # only run if we have a specified plant date and the plant is not planted
     unless self.plant_date.nil? || self.planted
       # plants with plant dates before today are automatically planted
-      self.update(planted: self.plant_date < Date.today)
+      return self.update(planted: self.plant_date < Date.today)
+    else
+      return false
     end
   end
 
   def generate_watering
     # only run if the plant is planted and we have a plant date
     if self.plant_date && self.planted
-      # if water deficit exceeds 2 mm, generate a watering
-      if self.water_deficit_mm > 2.0
+      # if water deficit exceeds 2 mm and it is not snowing, generate a watering
+      if self.water_deficit_mm > 2.0 && self.plot.garden.weather_station.tot_snow_24_hr_mm == 0.0
         # assume maximum watering per event is 20.0 mm for drainage reasons
         mm_irrig = [self.water_deficit_mm, 20.0].min
         # first check if there is already an incomplete watering we want to add to

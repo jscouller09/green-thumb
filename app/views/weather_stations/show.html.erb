@@ -9,8 +9,8 @@
   <!-- Station name and country -->
   <div class="current-weather">
     <div class="weather-header">
-      <div><%= "#{@current[:timestamp].strftime("%l:%M %P %A, %b %e")}" %></div>
       <h3 id="weather-station-headline"><%= "#{@station.name}, #{@station.country}" %></h3>
+      <div><%= "#{@current[:timestamp].strftime("%l:%M %P %A, %b %e")}" %></div>
       <div class="weather-description"><%= "#{@current[:description]}" %></div>
     </div>
 
@@ -29,17 +29,16 @@
         </ol>
         <div class="carousel-inner">
           <% @forecast.each_with_index do | (day, data), index | %>
-              <% if data[:temp_c_avg].round(1) > 24 %>
+            <% if data[:temp_c_avg] > 24 %>
               <!-- hot -->
               <% weather_border = "#FA520A" %>
-              <% elsif data[:temp_c_avg].round(1) < 10 %>
-                <!-- cold -->
-                  <% weather_border = "#B9F5F2" %>
-              <% else %>
-                <!-- Medium -->
+            <% elsif data[:temp_c_avg] < 10 %>
+              <!-- cold -->
+              <% weather_border = "#B9F5F2" %>
+            <% else %>
+              <!-- Medium -->
               <% weather_border = "#8FD694" %>
-
-              <% end %>
+            <% end %>
 
             <% if index == 0 %>
               <div class="weather-card carousel-item active" style="border-left: 16px solid <%= weather_border %>; backface-visibility: inherit;">
@@ -54,7 +53,7 @@
                       <div class="min-temp"><p><%= "#{data[:temp_c_min].round(1)}°C" %></p></div>
                     </div>
                   <p><%= "Rain: #{data[:rain_mm_tot].round(1)} mm" %></p>
-                  <% unless data[:snow_mm_tot].nil? %>
+                  <% unless data[:snow_mm_tot].nil? || data[:snow_mm_tot].zero? %>
                     <p><%= "Snow: #{data[:snow_mm_tot].round(1)} mm" %></p>
                   <% end %>
                   <p><%= "Avg humidity: #{data[:humidity_perc_avg].round(0)}%" %></p>
@@ -74,7 +73,7 @@
                     <div class="min-temp"><p><%= "#{data[:temp_c_min].round(1)}°C" %></p></div>
                   </div>
                   <p><%= "Rain: #{data[:rain_mm_tot].round(1)} mm" %></p>
-                  <% unless data[:snow_mm_tot].nil? %>
+                  <% unless data[:snow_mm_tot].nil? || data[:snow_mm_tot].zero? %>
                     <p><%= "Snow: #{data[:snow_mm_tot].round(1)} mm" %></p>
                   <% end %>
                   <p><%= "Avg humidity: #{data[:humidity_perc_avg].round(0)}%" %></p>

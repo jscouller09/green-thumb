@@ -1,23 +1,47 @@
 desc "All tasks that need to be run once per hour"
 task :hourly_tasks => :environment do
-  puts "Running hourly tasks...."
-  # current weather download and creation of measurements
-  Rake::Task["weather:download_current"].invoke
-  # forecast download and creation of any alerts
-  Rake::Task["weather:check_forecast"].invoke
-  puts "Done!"
+  # puts "Running hourly tasks...."
+  # ActiveRecord::Base.logger.level = 1
+  # # current weather download and creation of measurements
+  # Rake::Task["weather:download_current"].invoke
+  # # forecast download and creation of any alerts
+  # Rake::Task["weather:check_forecast"].invoke
+  # ActiveRecord::Base.logger.level = 0
+  # puts "Done!"
+  next_hour = DateTime.now.beginning_of_hour + 1.hour
+  HourlyUpdatesJob.set(wait_until: next_hour).perform_later
+  # HourlyUpdatesJob.perform_now
+  puts "Hourly tasks scheduled at #{next_hour} for all stations..."
 end
 
 desc "All tasks that need to be run once per day"
 task :daily_tasks => :environment do
-  puts "Running daily tasks...."
-  # summarize weather for last 24 hrs and calculate PET
-  Rake::Task["weather:summarize_last_24hrs"].invoke
-  # updated planted status
-  Rake::Task["plants:check_planted"].invoke
-  # generate waterings
-  Rake::Task["plants:calculate_water_requirements"].invoke
-  puts "Done!"
+  # puts "Running daily tasks...."
+  # ActiveRecord::Base.logger.level = 1
+  # # summarize weather for last 24 hrs and calculate PET
+  # Rake::Task["weather:summarize_last_24hrs"].invoke
+  # # updated planted status
+  # Rake::Task["plants:check_planted"].invoke
+  # # generate waterings
+  # Rake::Task["plants:calculate_water_requirements"].invoke
+  # ActiveRecord::Base.logger.level = 0
+  # puts "Done!"
+  WeatherStation.all.each do |station|
+    # set update to be 8:30 am for local time of each weather station
+    t = Date.today
+    st_time = DateTime.new(t.year, t.month, t.day, 8, 30)
+    # apply UTC offset
+    last_measurement = station.measurements.last
+    tz = last_measurement[:timezone_UTC_offset]
+    st_time = st_time.change(offset: tz[0] == "-" ? tz : "+#{tz}")
+    # make sure set time is in the future (i.e. if already past, schedule tomorrow)
+    while st_time.past?
+      st_time += 24.hours
+    end
+    DailyUpdatesJob.set(wait_until: st_time).perform_later({id: station.id})
+    # DailyUpdatesJob.perform_now({id: station.id})
+    puts "Daily tasks set at #{st_time} for #{station.name}..."
+  end
 end
 
 ## PLANTS
@@ -94,6 +118,8 @@ namespace :db do
     export_model_to_csv(WeatherStation, 'export_weather_stations.csv')
     puts "Exporting measurements..."
     export_model_to_csv(Measurement, 'export_measurements.csv')
+    puts "Exporting daily summaries..."
+    export_model_to_csv(DailySummary, 'export_daily_summaries.csv')
     puts "Export weather alerts..."
     export_model_to_csv(WeatherAlert, 'export_weather_alerts.csv')
     puts "Exporting climate zones..."
