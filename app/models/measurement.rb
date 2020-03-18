@@ -27,4 +27,8 @@ class Measurement < ApplicationRecord
   validates :snow_1h_mm, numericality: { greater_than_or_equal_to: 0 }
   validates :snow_3h_mm, numericality: { greater_than_or_equal_to: 0 }
 
+  def timestamp_UTC
+    tz = self.timezone_UTC_offset
+    self.timestamp.change(offset: tz[0] == "-" ? tz : "+#{tz}")
+  end
 end

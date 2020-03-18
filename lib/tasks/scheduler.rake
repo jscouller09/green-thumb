@@ -1,27 +1,42 @@
 desc "All tasks that need to be run once per hour"
 task :hourly_tasks => :environment do
-  puts "Running hourly tasks...."
-  ActiveRecord::Base.logger.level = 1
-  # current weather download and creation of measurements
-  Rake::Task["weather:download_current"].invoke
-  # forecast download and creation of any alerts
-  Rake::Task["weather:check_forecast"].invoke
-  ActiveRecord::Base.logger.level = 0
-  puts "Done!"
+  # puts "Running hourly tasks...."
+  # ActiveRecord::Base.logger.level = 1
+  # # current weather download and creation of measurements
+  # Rake::Task["weather:download_current"].invoke
+  # # forecast download and creation of any alerts
+  # Rake::Task["weather:check_forecast"].invoke
+  # ActiveRecord::Base.logger.level = 0
+  # puts "Done!"
+  next_hour = DateTime.now.beginning_of_hour + 1.hour
+  HourlyUpdatesJob.set(wait_until: next_hour).perform_later
 end
 
 desc "All tasks that need to be run once per day"
 task :daily_tasks => :environment do
-  puts "Running daily tasks...."
-  ActiveRecord::Base.logger.level = 1
-  # summarize weather for last 24 hrs and calculate PET
-  Rake::Task["weather:summarize_last_24hrs"].invoke
-  # updated planted status
-  Rake::Task["plants:check_planted"].invoke
-  # generate waterings
-  Rake::Task["plants:calculate_water_requirements"].invoke
-  ActiveRecord::Base.logger.level = 0
-  puts "Done!"
+  # puts "Running daily tasks...."
+  # ActiveRecord::Base.logger.level = 1
+  # # summarize weather for last 24 hrs and calculate PET
+  # Rake::Task["weather:summarize_last_24hrs"].invoke
+  # # updated planted status
+  # Rake::Task["plants:check_planted"].invoke
+  # # generate waterings
+  # Rake::Task["plants:calculate_water_requirements"].invoke
+  # ActiveRecord::Base.logger.level = 0
+  # puts "Done!"
+  WeatherStation.all.each do |station|
+    # set update to be 7 am for local time of each weather station
+    t = Date.today
+    set_time = DateTime.new(t.year, t.month, t.day, 7)
+    # apply UTC offset
+    last_measurement = station.measurements.last
+    tz = last_measurement[:timezone_UTC_offset]
+    set_time = set_time.change(offset: tz[0] == "-" ? tz : "+#{tz}")
+    # make sure set time is in the future (i.e. if already after 7am, schedule tomorrow)
+    set_time += 24.hours if set_time < DateTime.now
+    # DailyUpdatesJob.set(wait_until: set_time).perform_later(station.id)
+    binding.pry
+  end
 end
 
 ## PLANTS

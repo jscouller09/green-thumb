@@ -4,6 +4,7 @@ class HourlyUpdatesJob < ApplicationJob
   def perform(*args)
     # get hourly measurements and forecast updates
     puts "Starting hourly tasks at #{DateTime.now}..."
+    ActiveRecord::Base.logger.level = 1
     WeatherStation.all.each do |station|
       print "\tQuerying #{station.name}..."
       # get current data
@@ -17,6 +18,7 @@ class HourlyUpdatesJob < ApplicationJob
       print "any-alerts:#{any_alerts}..."
       puts "done!"
     end
+    ActiveRecord::Base.logger.level = 0
     puts "Finished hourly tasks at #{DateTime.now}!"
   end
 end

@@ -208,10 +208,7 @@ class WeatherStation < ApplicationRecord
     yesterday = DateTime.now.utc - 24.hours
     measurements = self.measurements.where("created_at >= ?", yesterday).order(created_at: :asc)
     # convert timestamp to UTC
-    last_measurement = measurements.last
-    tz = last_measurement[:timezone_UTC_offset]
-    timestamp_UTC = last_measurement[:timestamp].change(offset: tz[0] == "-" ? tz : "+#{tz}")
-    self.timestamp = timestamp_UTC
+    self.timestamp = measurements.last.timestamp_UTC
     # min and max temperature are straightforward
     self.min_temp_24_hr_c = measurements.minimum(:temp_c)
     self.max_temp_24_hr_c = measurements.maximum(:temp_c)
@@ -311,20 +308,7 @@ class WeatherStation < ApplicationRecord
     et_0 = et_0_numerator / et_0_denomenator
 
     self.tot_pet_24_hr_mm = et_0
-    status1 = self.save
-
-    # also create an instance of daily_summary
-    summary = DailySummary.new(weather_station: self)
-    status2 = summary.save
-    if status2
-      # get all measurements for the current station from last 24 hrs
-      yesterday = DateTime.now.utc - 24.hours
-      # assign measurements the correct daily summary
-      self.measurements.where("created_at >= ?", yesterday).update_all(daily_summary_id: summary.id)
-    end
-
-    # return status of saves
-    status1 && status2
+    self.save
   end
 
   def weather_summary
@@ -339,16 +323,15 @@ class WeatherStation < ApplicationRecord
     calculate_24hr_stats
     calculate_24hr_pet
     # get stats for last 24hrs
-    summary[:now][:timestamp] = timestamp
-    summary[:now][:tot_rain_24_hr_mm] = tot_rain_24_hr_mm
-    summary[:now][:tot_pet_24_hr_mm] = tot_pet_24_hr_mm
-    summary[:now][:tot_snow_24_hr_mm] = tot_snow_24_hr_mm
-    summary[:now][:min_temp_24_hr_c] = min_temp_24_hr_c
-    summary[:now][:avg_temp_24_hr_c] = avg_temp_24_hr_c
-    summary[:now][:max_temp_24_hr_c] = max_temp_24_hr_c
-    summary[:now][:avg_humidity_24_hr_perc] = avg_humidity_24_hr_perc
-    summary[:now][:avg_wind_speed_24_hr_mps] = avg_wind_speed_24_hr_mps
-    summary[:now][:avg_pressure_24_hr_hPa] = avg_pressure_24_hr_hPa
+    summary[:now][:tot_rain_24_hr_mm] = self.tot_rain_24_hr_mm
+    summary[:now][:tot_pet_24_hr_mm] = self.tot_pet_24_hr_mm
+    summary[:now][:tot_snow_24_hr_mm] = self.tot_snow_24_hr_mm
+    summary[:now][:min_temp_24_hr_c] = self.min_temp_24_hr_c
+    summary[:now][:avg_temp_24_hr_c] = self.avg_temp_24_hr_c
+    summary[:now][:max_temp_24_hr_c] = self.max_temp_24_hr_c
+    summary[:now][:avg_humidity_24_hr_perc] = self.avg_humidity_24_hr_perc
+    summary[:now][:avg_wind_speed_24_hr_mps] = self.avg_wind_speed_24_hr_mps
+    summary[:now][:avg_pressure_24_hr_hPa] = self.avg_pressure_24_hr_hPa
     # get forecast data
     forecast = download_3hrly_5d_forecast
     # seperate data into measurements for different days
@@ -496,13 +479,22 @@ class WeatherStation < ApplicationRecord
 
   def format_response(data = {})
     data_to_keep = {}
+    # timezone offset is supplied in seconds, convert to hh:mm offset
     tz = data[:timezone]
     unless data[:sys][:sunrise].nil?
       data_to_keep[:sunrise] = DateTime.strptime((data[:sys][:sunrise] + tz).to_s,'%s')
       data_to_keep[:sunset] = DateTime.strptime((data[:sys][:sunset] + tz).to_s,'%s')
     end
     data_to_keep[:timestamp] = DateTime.strptime((data[:dt] + tz).to_s,'%s')
-    data_to_keep[:timezone_UTC_offset] = DateTime.strptime(tz.to_s,'%s').strftime("#{tz.negative? ? '-' : ''}%H:%M")
+    if tz.negative?
+      # offset is behind UTC
+      temp_date = DateTime.strptime((-tz).to_s,'%s')
+      data_to_keep[:timezone_UTC_offset] = temp_date.strftime("-%H:%M")
+    else
+      # offset is ahead of UTC
+      temp_date = DateTime.strptime(tz.to_s,'%s')
+      data_to_keep[:timezone_UTC_offset] = temp_date.strftime("%H:%M")
+    end
     data_to_keep[:temp_c] = data[:main][:temp]
     data_to_keep[:temp_feels_like_c] = data[:main][:feels_like]
     data_to_keep[:humidity_perc] = data[:main][:humidity]

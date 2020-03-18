@@ -1,16 +1,28 @@
 class DailyUpdatesJob < ApplicationJob
   queue_as :default
 
-  def perform(*args)
-    puts "Starting daily tasks at #{DateTime.now}..."
-    WeatherStation.all.each do |station|
-      print "\tWorking on #{station.name}..."
+  def perform(args={})
+    if args[:id]
+      ActiveRecord::Base.logger.level = 1
+      station = WeatherStation.find(args[:id])
+      puts "Starting daily tasks for #{station.name} at #{DateTime.now}..."
+
       # update 24hr stats
       status_24hr_stats = station.calculate_24hr_stats
       print "24hr-stats:#{status_24hr_stats}..."
       # update PET calculation
       status_24hr_pet = station.calculate_24hr_pet
       print "24hr-pet:#{status_24hr_pet}..."
+      # create daily summary
+      summary = DailySummary.new(weather_station: station)
+      status_summary = summary.save
+      print "summary:#{status_summary}..."
+      if status_summary
+        # get all measurements for the current station from last 24 hrs
+        yesterday = DateTime.now.utc - 24.hours
+        # assign measurements the correct daily summary
+        station.measurements.where("created_at >= ?", yesterday).update_all(daily_summary_id: summary.id)
+      end
       # check plants associated with this weather station
       status_planted = []
       status_crop = []
@@ -32,7 +44,9 @@ class DailyUpdatesJob < ApplicationJob
       print "deficit:#{status_crop.any?}..."
       print "watering:#{status_watering.any?}..."
       puts "done!"
+
+      puts "Finished daily tasks at #{DateTime.now}!"
+      ActiveRecord::Base.logger.level = 0
     end
-    puts "Finished daily tasks at #{DateTime.now}!"
   end
 end
