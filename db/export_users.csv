@@ -1,8 +1,0 @@
-id,email,encrypted_password,reset_password_token,reset_password_sent_at,remember_created_at,created_at,updated_at,admin,first_name,last_name,mentor
-1,admin@greenthumb.rocks,$2a$11$sg5TEuzf5OSK9hoHpxtKDuYkiYFAqwrGvCd3aOyphMQX.JIXmFqA6,,,,2020-03-12 11:06:49 UTC,2020-03-12 11:06:49 UTC,true,Garden,Guru,false
-2,tom.bombadil@lotr.com,$2a$11$EwlJ2tBq5YqZYZ6e8ZsACO7aWi1Th3DGwmsvFwMaQABmDV8/mISla,,,,2020-03-12 11:06:49 UTC,2020-03-12 11:06:49 UTC,false,Tom,Bombadil,true
-3,sam.gamgee@lotr.com,$2a$11$r.mgKBmGtjoahyJ3DQhDROTTe4crx08sYnVOqW5JXMg4lx3KfAQi.,,,,2020-03-12 11:06:49 UTC,2020-03-12 11:06:49 UTC,false,Samwise,Gamgee,false
-4,frodon.sacquet@lotr.com,$2a$11$bhlikoen2YRpcJbwg.Lw6eZYV2dlG6aUcB7RdvARb2IVohitrIMDS,,,,2020-03-12 11:06:49 UTC,2020-03-12 11:06:49 UTC,false,Frodon,Sacquet,true
-5,merry.brandybuck@lotr.com,$2a$11$4AOJmKbk9IbwxYs94O7KXuhL/gA1KYA4yg78JaXON5R4hTgkEjB.S,,,,2020-03-12 11:06:49 UTC,2020-03-12 11:06:49 UTC,false,Merry,Brandybuck,false
-6,john.mclane@die.com,$2a$11$wGws8zNhBnMAEhgO6.fH/.whl.JFR7Hl0OEEDhWQIj3SLXYTxd2Ta,,,,2020-03-12 11:06:49 UTC,2020-03-12 11:06:49 UTC,true,John,Mclane,true
-7,brad.pitt@hollywood.com,$2a$11$DQTTEbvP9BfHSMNXJ9TvPOSW5xz.B6Rc94Ufl86Z0RY2Ei3S6cwo6,,,,2020-03-12 11:06:50 UTC,2020-03-12 11:06:50 UTC,false,Brad,Pitt,false
