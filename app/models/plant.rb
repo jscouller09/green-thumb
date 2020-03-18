@@ -25,7 +25,9 @@ class Plant < ApplicationRecord
     # only run if we have a specified plant date and the plant is not planted
     unless self.plant_date.nil? || self.planted
       # plants with plant dates before today are automatically planted
-      self.update(planted: self.plant_date < Date.today)
+      return self.update(planted: self.plant_date < Date.today)
+    else
+      return false
     end
   end
 
