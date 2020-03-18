@@ -10,6 +10,7 @@ task :hourly_tasks => :environment do
   # puts "Done!"
   next_hour = DateTime.now.beginning_of_hour + 1.hour
   HourlyUpdatesJob.set(wait_until: next_hour).perform_later
+  puts "Hourly tasks scheduled at #{next_hour} for all stations..."
 end
 
 desc "All tasks that need to be run once per day"
@@ -27,15 +28,17 @@ task :daily_tasks => :environment do
   WeatherStation.all.each do |station|
     # set update to be 7 am for local time of each weather station
     t = Date.today
-    set_time = DateTime.new(t.year, t.month, t.day, 7)
+    st_time = DateTime.new(t.year, t.month, t.day, 7)
     # apply UTC offset
     last_measurement = station.measurements.last
     tz = last_measurement[:timezone_UTC_offset]
-    set_time = set_time.change(offset: tz[0] == "-" ? tz : "+#{tz}")
+    st_time = st_time.change(offset: tz[0] == "-" ? tz : "+#{tz}")
     # make sure set time is in the future (i.e. if already after 7am, schedule tomorrow)
-    set_time += 24.hours if set_time < DateTime.now
-    # DailyUpdatesJob.set(wait_until: set_time).perform_later(station.id)
-    binding.pry
+    while st_time.past?
+      st_time += 24.hours
+    end
+    DailyUpdatesJob.set(wait_until: st_time).perform_later({id: station.id})
+    puts "Daily tasks set at #{st_time} for #{station.name}..."
   end
 end
 
