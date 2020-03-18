@@ -26,6 +26,7 @@
       <!-- <div><%= "Pressure (hPa): #{data[:pressure_hPa]}" %></div> -->
       <p><%= "Wind: #{data[:wind_direction]} #{(data[:wind_speed_mps]*3.6).round(0)} km/h" %></p>
       <p><%= "Rain last 24 hrs: #{data[:tot_rain_24_hr_mm].nil? ? 0.0 : data[:tot_rain_24_hr_mm].round(1)} mm" %></p>
+      <p><%= "PET last 24 hrs: #{data[:tot_pet_24_hr_mm].nil? ? 0.0 : data[:tot_pet_24_hr_mm].round(1)} mm" %></p>
       <% unless data[:tot_snow_24_hr_mm].nil? || data[:tot_snow_24_hr_mm].zero? %>
         <p><%= "Snow last 24 hrs: #{data[:tot_snow_24_hr_mm].round(1)} mm" %></p>
       <% end %>

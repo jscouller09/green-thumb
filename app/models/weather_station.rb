@@ -212,17 +212,43 @@ class WeatherStation < ApplicationRecord
     tz = last_measurement[:timezone_UTC_offset]
     timestamp_UTC = last_measurement[:timestamp].change(offset: tz[0] == "-" ? tz : "+#{tz}")
     self.timestamp = timestamp_UTC
-    # for totals need to only add measurements that are 1 hr apart to avoid double ups
-    binding.pry
-    self.tot_rain_24_hr_mm = measurements.sum(:rain_1h_mm)
-    self.tot_snow_24_hr_mm = measurements.sum(:snow_1h_mm)
+    # min and max temperature are straightforward
     self.min_temp_24_hr_c = measurements.minimum(:temp_c)
     self.max_temp_24_hr_c = measurements.maximum(:temp_c)
-    # for averages need to weight by period of time between measurements
-    self.avg_temp_24_hr_c = measurements.average(:temp_c)
-    self.avg_humidity_24_hr_perc = measurements.average(:humidity_perc)
-    self.avg_wind_speed_24_hr_mps = measurements.average(:wind_speed_mps)
-    self.avg_pressure_24_hr_hPa = measurements.average(:pressure_hPa)
+    # for totals/averages need to consider timing of measurements
+    cur_ts = measurements.first.timestamp
+    last_ts = measurements.first.timestamp
+    total_ts = 0
+    total_rain = 0.0
+    total_snow = 0.0
+    avg_t = 0.0
+    avg_h = 0.0
+    avg_w = 0.0
+    avg_p = 0.0
+    measurements.each do |meas|
+      # for total rainfall and snowfall, only add if 1 hr apart to avoid double ups
+      if meas.timestamp >= cur_ts + 58.minutes
+        # measurements are approx 1 hour apart, add total rainfall and snow
+        total_rain += meas.rain_1h_mm
+        total_snow += meas.snow_1h_mm
+        # update last timestamp
+        cur_ts = meas.timestamp
+      end
+      # for average measurements, weight by duration between measurements
+      delta_t_ms = meas.timestamp - last_ts
+      total_ts += delta_t_ms
+      avg_t += delta_t_ms * meas.temp_c
+      avg_h += delta_t_ms * meas.humidity_perc
+      avg_w += delta_t_ms * meas.wind_speed_mps
+      avg_p += delta_t_ms * meas.pressure_hPa
+      last_ts = meas.timestamp
+    end
+    self.tot_rain_24_hr_mm = total_rain
+    self.tot_snow_24_hr_mm = total_snow
+    self.avg_temp_24_hr_c = avg_t / total_ts
+    self.avg_humidity_24_hr_perc = avg_h / total_ts
+    self.avg_wind_speed_24_hr_mps = avg_w / total_ts
+    self.avg_pressure_24_hr_hPa = avg_p / total_ts
     self.save
   end
 
@@ -311,6 +337,7 @@ class WeatherStation < ApplicationRecord
     meas.save
     # update stats for last 24hrs
     calculate_24hr_stats
+    calculate_24hr_pet
     # get stats for last 24hrs
     summary[:now][:timestamp] = timestamp
     summary[:now][:tot_rain_24_hr_mm] = tot_rain_24_hr_mm
