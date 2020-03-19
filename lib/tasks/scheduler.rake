@@ -42,6 +42,10 @@ task :daily_tasks => :environment do
     # DailyUpdatesJob.perform_now({id: station.id})
     puts "Daily tasks set at #{st_time} for #{station.name}..."
   end
+
+  # do cleanup tasks
+  CleanupJob.perform_later
+  # CleanupJob.perform_now
 end
 
 ## PLANTS
